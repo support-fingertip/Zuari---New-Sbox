@@ -57,10 +57,10 @@
         <members>*</members>
         <name>CustomTab</name>
     </types>
-    <types>
+  <!--  <types>
         <members>*</members>
         <name>CustomLabel</name>
-    </types>
+    </types> -->
     <types>
         <members>*</members>
         <name>CustomMetadata</name>
