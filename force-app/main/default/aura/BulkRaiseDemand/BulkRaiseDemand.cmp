@@ -1,0 +1,132 @@
+<aura:component controller="BulkRaiseDemandController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global">
+    <aura:attribute name="inc" type="String" />
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    <aura:attribute name="masterPaymentScheduleId" type="String" />
+    <aura:attribute name="bookingRecords" type="Booking__c[]" />
+    <aura:attribute name="showNextCmp" type="boolean" default="false" />
+    <aura:registerEvent name="raiseDemandEvent" type="c:raiseDemandEvent"/>
+    <aura:attribute name="paymentScheduleId" type="Id" />
+    <aura:attribute name="Bookid" type="Id" />
+    <aura:attribute name="Leadid" type="id"/>
+    <aura:attribute name="showRaiseAll" type="Boolean" default="false"/>
+    <aura:attribute name="files" type="List" default="[]" />
+    <aura:attribute name="selectedRecords" type="List" default="[]" />
+    <aura:attribute name="selectedFileIds" type="List" default="[]" />
+    <aura:attribute name="filesIDS" type="List" />
+    <!--<aura:handler name="fileUploadEvent" event="c:fileUploadEvent" action="{!c.handleFileUpload}" />-->
+    <aura:attribute name="allChecked" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <lightning:card >
+        <!--<u> <b> <h1 class="slds-text-align_center slds-text-heading_large">Booking Records</h1> </b></u><br/>
+        <div class="slds-p-horizontal_x-large">
+            <c:photoUploadComponent recordId="{!v.recordId}" filesIds="{!v.filesIDS}"/>
+        </div><br/>-->
+        <div class="slds-p-around_small">
+            <lightning:button 
+                              label="Raise All" 
+                              onclick="{!c.raiseAllDemands}" 
+                              variant="brand"/><br/>
+        </div>
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <lightning:input type="checkbox" label="Select All" 
+                     checked="{!v.allChecked}" 
+                     onchange="{!c.toggleSelectAll}" />
+                        </th>
+                    <th scope="col">S/No</th>
+                    <th scope="col">Booking</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Unit Name</th>
+                    <!--<th scope="col">Tower</th>
+                    <th scope="col">Block</th>-->
+                    <th scope="col">Current Milestone Amount</th>
+                    <th scope="col">Previous Pendings</th>
+                    <th scope="col">Received Amount</th>
+                    <th scope="col">Grand Total</th>
+                    <th scope="col">Raise Demand</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.bookingRecords}" var="bookingWrapper" indexVar="index">
+                    <tr>
+                        <td data-label="Select">
+                            <lightning:input type="checkbox" 
+                                             aura:id="bookingCheckbox" 
+                                             value="{!bookingWrapper}"
+                                             onchange="{!c.toggleCheckbox}"
+                                             checked="{!bookingWrapper.selected}"
+                                             disabled="{!or(empty(bookingWrapper.booking.Email__c),bookingWrapper.demandRaised)}"
+                                             name="{!index}"/>
+                        </td>
+                        <td data-label="S/No">{!index + 1}</td>
+                        <td data-label="Booking">
+                            <a href="{!'/lightning/r/Booking__c/' + bookingWrapper.booking.Id + '/view'}" target="_blank">
+                                {!bookingWrapper.booking.Name}
+                            </a>
+                        </td>
+                        <td>
+                            <td data-label="Lead Name">{!bookingWrapper.booking.S__c}. {!bookingWrapper.booking.Applicant_Name__c}</td>        
+                        </td>
+                        <td data-label="Email">{!bookingWrapper.booking.Email__c}</td>
+                        <td data-label="Project">{!bookingWrapper.booking.Project1__r.Name}</td>
+                        <td data-label="Unit Name">
+                            <a href="{!'/lightning/r/Plot__c/' + bookingWrapper.unitid + '/view'}" target="_blank">
+                                {!bookingWrapper.booking.Plot__r.Name}
+                            </a>
+                        </td>
+                       <!-- <td data-label="Unit Name">
+                            <a href="{!'/lightning/r/Block__c/' + bookingWrapper.towerId + '/view'}" target="_blank">
+                                {!bookingWrapper.tower}
+                            </a>
+                        </td>
+                        <td data-label="block" style="text-align:center;">{!bookingWrapper.block}</td>
+                        <td data-label="Include Interest" style="text-align:center;"> 
+                            <div class="slds-form-element">
+                                <label class="slds-checkbox_toggle slds-grid">
+                                    <input type="checkbox" name="checkbox-toggle-16" checked="{!bookingWrapper.includeIntrest == 'true'}" onchange="{!c.handleToggleChange}" data-booking-index="{!index}"/>
+                                    <span id="checkbox-toggle-16" class="slds-checkbox_faux_container">
+                                        <span class="slds-checkbox_faux"></span>
+                                        <span class="slds-checkbox_on">Include</span>
+                                        <span class="slds-checkbox_off">Exclude</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>-->
+                        <td data-label="Total Amount" style="text-align:center;">{!bookingWrapper.totalPaymentAmount}</td>
+                        <td data-label="Total Amount" style="text-align:center;">{!bookingWrapper.previousDemandRaisedPending}</td>
+                        <td data-label="Total Amount" style="text-align:center;">{!bookingWrapper.totalAmountPaid}</td>
+                        <td data-label="Total Amount" style="text-align:center;">{!bookingWrapper.grandTotal}</td>
+                        <td data-label="Raise Demand">
+                            <lightning:button 
+                                              label="Raise Demand" 
+                                              onclick="{!c.raiseDemand}" 
+                                              variant="brand"
+                                              disabled="{!or(empty(bookingWrapper.booking.Email__c),bookingWrapper.demandRaised)}"
+                                              value="{!bookingWrapper}" />
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        <aura:if isTrue="{!v.showNextCmp}">
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                        <c:RaiseDemandLetter recordId="{!v.Bookid}" visible="{!v.showNextCmp}"/> 
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </aura:if>
+    </lightning:card>
+    <aura:if isTrue="{!v.showRaiseAll}">
+        <c:RaiseAllModalPopup selectedRecords="{!v.selectedRecords}" selectedFileIds="{!v.selectedFileIds}" showPopup="{!v.showRaiseAll}"/>
+    </aura:if>
+</aura:component>

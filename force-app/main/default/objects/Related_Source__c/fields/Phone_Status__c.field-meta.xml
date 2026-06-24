@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Status__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(NOT(ISBLANK(TEXT(Phone_Verification_Status__c))),
+CASE( Phone_Verification_Status__c,
+&apos;Valid&apos;, IMAGE(&apos;/resource/1571315899000/tdc_tsw__resource_sms_file/img/ValidPhone.png&apos;,&apos;Valid&apos;),
+&apos;Invalid&apos;, IMAGE(&apos;/resource/1571315899000/tdc_tsw__resource_sms_file/img/InvalidPhone.png&apos;,&apos;Invalid&apos;), Result__c) + &apos; &apos; + BR() + Verified_Phone__c ,IMAGE(&apos;/resource/tdc_tsw__resource_sms_file/img/Notverified1.png&apos;,&apos;Not Verified Yet&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Phone Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

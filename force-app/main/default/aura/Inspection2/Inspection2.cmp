@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<lightning:button label="Open Inspection Modal" onclick="{!c.navigateToInspectionPage}" />
+
+</aura:component>

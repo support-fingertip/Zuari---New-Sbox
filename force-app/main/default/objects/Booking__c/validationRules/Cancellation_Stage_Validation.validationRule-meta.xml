@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancellation_Stage_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(!Is_Cancelled__c,ISPICKVAL(Stage__c, &apos;Cancellation&apos;) )</errorConditionFormula>
+    <errorMessage>Stage cannot be changed to cancelled, Please request for cancellation</errorMessage>
+</ValidationRule>

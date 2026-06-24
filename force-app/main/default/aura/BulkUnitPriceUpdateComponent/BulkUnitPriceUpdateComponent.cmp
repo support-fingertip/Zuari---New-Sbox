@@ -1,0 +1,224 @@
+<aura:component controller="UnitPriceChangeController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:actionOverride,force:lightningQuickActionWithoutHeader" access="global" >
+    
+    <!-- Override Standard Salesforce Quick Action Modal Styling -->
+    <aura:html tag="style">
+        /* Make modal wider and centered */
+        .slds-modal__container {
+            width: 75% !important;
+            max-width: 900px !important;
+            min-width: 600px !important;
+            margin: 0 auto !important;
+        }
+        
+        /* Remove default padding to allow our custom component to touch the edges */
+        .cuf-content {
+            padding: 0 !important;
+        }
+        .slds-p-around--medium {
+            padding: 0 !important;
+        }
+        
+        /* Remove default modal scrolling to let our custom body handle it */
+        .slds-modal__content {
+            overflow: hidden !important;
+            height: auto !important;
+            max-height: none !important;
+            border-radius: 0.25rem !important;
+        }
+    </aura:html>
+    
+    <!-- Attributes -->
+    <aura:attribute name="users" type="object[]" />
+    <aura:attribute name="userId" type="String" />
+    <aura:attribute name="NextUserId" type="String" />
+    <aura:attribute name="SEId" type="String" />
+    <aura:attribute name="showUsers" type="boolean" default="false"/>
+    <aura:attribute name="showFilter" type="boolean" default="false"/>
+    <aura:attribute name="showFilterDate" type="boolean" default="false"/>
+    <aura:attribute name="showupcoming" type="boolean" default="false"/>
+    
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="allroutes" type="object[]" default="[]"/>
+    <aura:attribute name="searchText" type="string" default=""/>
+    <aura:attribute name="matchUsers" type="object[]" default="[]"/>
+    <aura:handler name="change" value="{!v.searchText}" action="{!c.searchText}"></aura:handler> 
+    
+    <aura:attribute name="searchText2" type="string" default=""/>
+    <aura:attribute name="matchUsers2" type="object[]" default="[]"/>
+    <aura:handler name="change" value="{!v.searchText2}" action="{!c.searchText2}"></aura:handler> 
+    
+    <aura:attribute name="mydata3" type="Object"/>
+    <aura:attribute name="mycolumns3" type="List"/>
+    <aura:attribute name="mydata4" type="Object"/>
+    <aura:attribute name="mycolumns4" type="List"/>
+    <aura:attribute name="selectedRowsCount4" type="Integer" default="0"/>
+    <aura:attribute name="selectedUsers" type="List" default="[]"/>
+    <aura:attribute name="selectedRows" type="List" default="[]"/>
+    
+    <aura:attribute name="project" type="List" default="[]"/>
+    <aura:attribute name="fieldMap" type="Map"/>
+    <aura:attribute name="fieldMap5" type="Map"/>
+    <aura:attribute name="towerNameText" type="string"/>
+    
+    <aura:attribute name="lead" type="Plot__c" default="{'sobjectType':'Plot__c', 
+                                                     'BHK_Type__c': '','Project__c': '','Property_Type__c': '','Block__c': ''}"/>
+    <aura:attribute name="CreatedDate" type="string" default=""/>
+    <aura:attribute name="FilterCreatedDate" type="string" default=""/> 
+    <aura:attribute name="statusFilter" type="string" default=""/>
+    <aura:attribute name="projectName" type="string" default=""/>
+    <aura:attribute name="bhkType" type="string" default=""/>
+    <aura:attribute name="leadSource" type="string" default=""/>
+    <aura:attribute name="unitStatus" type="string" default=""/>
+    <aura:attribute name="wingValue" type="string" default=""/>
+    <aura:attribute name="towervalue" type="string" default=""/>
+    <aura:attribute name="FromCreatedDateFilter" type="date" default=""/>
+    <aura:attribute name="ToCreatedDateFilter" type="date" default=""/>
+    <aura:attribute name="fieldMap1" type="Map"/>
+    <aura:attribute name="fieldMap2" type="Map"/>
+    <aura:attribute name="fieldMap3" type="Map"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    
+    <!-- WRAP CONTENT IN A FLEX CONTAINER -->
+    <div class="upc-container">
+        
+        <!-- CUSTOM HEADER -->
+        <div class="upc-modal-header">
+            <div class="upc-header-row">
+                <lightning:icon iconName="standard:record_update" size="medium" class="slds-m-right_small"/>
+                <div>
+                    <h2 class="upc-heading">Unit Price Change</h2>
+                    <p class="upc-subheading">Bulk update base price for selected units</p>
+                </div>
+            </div>
+            <div class="upc-close-btn">
+                <lightning:buttonIcon iconName="utility:close" 
+                                      alternativeText="Close" 
+                                      variant="bare-inverse" 
+                                      size="large"
+                                      onclick="{!c.closeModal}"/>
+            </div>
+        </div>
+        
+        <!-- BODY -->
+        <div class="upc-modal-body">
+            
+            <!-- STEP 1: FILTERS -->
+            <div class="upc-step-section">
+                <div class="upc-step-badge">1</div>
+                <span class="upc-step-label">Filter Units</span>
+            </div>
+            <div class="slds-box slds-box_x-small slds-m-bottom_medium upc-filter-card">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-3 slds-p-bottom_small">
+                        <lightning:select aura:id="bhkPicklist" value="{!v.lead.BHK_Type__c}" onchange="{!c.handleOnChange}" name="bhkPicklist" label="BHK Type">
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.fieldMap}" var="i" indexVar="key">
+                                <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.lead.BHK_Type__c}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-p-bottom_small">
+                        <lightning:select aura:id="wingPicklist" value="{!v.lead.Wing__c}" onchange="{!c.handleOnChange}" name="blockPicklist" label="Wing">
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.fieldMap3}" var="i" indexVar="key">
+                                <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.lead.Wing__c}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-p-bottom_small">
+                        <lightning:select aura:id="unitStatusPicklist" value="{!v.lead.Status__c}" onchange="{!c.handleOnChange}" name="leadSourcePicklist" label="Unit Status">
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.fieldMap2}" var="i" indexVar="key">
+                                <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.lead.Status__c}" />
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- STEP 2: SELECT UNITS -->
+            <aura:if isTrue="{!v.showUsers}">
+                <aura:if isTrue="{!and(v.mydata3 != '',v.mydata3 != null)}">
+                    <div class="upc-step-section">
+                        <div class="upc-step-badge">2</div>
+                        <span class="upc-step-label">Select Units</span>
+                        <span class="upc-count-badge">{!v.mydata3.length} found</span>
+                    </div>
+                    <div class="upc-selection-info slds-m-bottom_x-small">
+                        <lightning:icon iconName="utility:rows" size="xx-small" class="slds-m-right_xx-small"/>
+                        <aura:if isTrue="{!v.selectedRowsCount4 > 0}">
+                            <span><strong>{!v.selectedRowsCount4}</strong> unit(s) selected</span>
+                            <aura:set attribute="else">
+                                <span class="slds-text-color_weak">Select units from below</span>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <div class="upc-table-wrapper slds-m-bottom_medium">
+                        <lightning:datatable aura:id="lgtngCmp"
+                                             keyField="id"
+                                             data="{!v.mydata3}"
+                                             columns="{!v.mycolumns3}"
+                                             onrowaction="{!c.handleRowAction3}"
+                                             onrowselection="{!c.updateSelectedText4}"
+                                             selectedRows="{!v.selectedRows}"
+                                             showRowNumberColumn="true"/>
+                    </div>
+                </aura:if>
+                
+                <!-- STEP 3: ENTER PRICE -->
+                <aura:if isTrue="{!(v.selectedRowsCount4 != 0)}">
+                    <div class="upc-step-section">
+                        <div class="upc-step-badge">3</div>
+                        <span class="upc-step-label">Set New Base Price</span>
+                    </div>
+                    <div class="slds-box slds-box_x-small upc-price-card slds-m-bottom_medium">
+                        <div class="slds-grid slds-wrap slds-grid_vertical-align-end slds-gutters">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:input value="{!v.searchText2}" 
+                                                 aura:id="enter-search" 
+                                                 name="enter-search" 
+                                                 label="New Base Price (Rate per Sq. Ft.)" 
+                                                 type="number" 
+                                                 formatter="decimal"
+                                                 step="0.01"
+                                                 min="1"
+                                                 messageWhenValueMissing="Please enter a unit price" 
+                                                 messageWhenRangeUnderflow="Price must be greater than 0"
+                                                 required="true"
+                                                 class="upc-price-input"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="upc-info-pill">
+                                    <lightning:icon iconName="utility:info" size="xx-small" class="slds-m-right_xx-small"/>
+                                    Updating <strong class="slds-m-horizontal_xxx-small">{!v.selectedRowsCount4}</strong> unit(s)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aura:if>
+            </aura:if>
+
+            <!-- SPINNER -->
+            <aura:if isTrue="{!v.spinner}">
+                <div class="upc-spinner-overlay">
+                    <lightning:spinner size="large" variant="brand" alternativeText="Loading..." />
+                </div>
+            </aura:if>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="upc-modal-footer">
+            <lightning:button label="Cancel" variant="neutral" onclick="{!c.closeModal}" class="slds-m-right_small"/>
+            <aura:if isTrue="{!(v.selectedRowsCount4 != 0)}">
+                <lightning:button label="Update Unit Price" 
+                                  variant="brand" 
+                                  onclick="{!c.changeBeatOwner}" 
+                                  iconName="utility:check"
+                                  iconPosition="left"
+                                  class="upc-update-btn"/>
+            </aura:if>
+        </div>
+    </div>
+    
+</aura:component>

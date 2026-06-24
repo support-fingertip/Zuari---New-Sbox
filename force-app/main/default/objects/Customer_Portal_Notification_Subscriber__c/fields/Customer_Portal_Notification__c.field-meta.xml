@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Portal_Notification__c</fullName>
+    <label>Customer Portal Notification</label>
+    <referenceTo>Customer_Portal_Notification__c</referenceTo>
+    <relationshipLabel>Customer Portal Notification Subscribers</relationshipLabel>
+    <relationshipName>Customer_Portal_Notification_Subscribers</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

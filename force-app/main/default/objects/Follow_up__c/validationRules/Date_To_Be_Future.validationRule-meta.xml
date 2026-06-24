@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_To_Be_Future</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    !ISBLANK(Next_Follow_Up_Date__c),
+    Next_Follow_Up_Date__c &lt; NOW()
+)</errorConditionFormula>
+    <errorDisplayField>Next_Follow_Up_Date__c</errorDisplayField>
+    <errorMessage>Please select a future date</errorMessage>
+</ValidationRule>

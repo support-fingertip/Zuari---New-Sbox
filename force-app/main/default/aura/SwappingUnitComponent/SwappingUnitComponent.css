@@ -1,0 +1,15 @@
+.THIS .completed-row {
+    background-color: #ffcccc;
+}
+.THIS .red-dot {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: #ff0000; 
+    border-radius: 50%; 
+    margin-left: 5px; 
+}
+.THIS .to-be-merged-text {
+    margin-left: 5px; 
+   
+}

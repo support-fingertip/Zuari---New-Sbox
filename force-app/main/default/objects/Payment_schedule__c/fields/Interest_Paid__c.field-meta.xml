@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Paid__c</fullName>
+    <label>Interest Paid</label>
+    <summarizedField>Receipt_Line_Item__c.Received_Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Receipt_Line_Item__c.Payment_Type__c</field>
+        <operation>equals</operation>
+        <value>Interest</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Receipt_Line_Item__c.Payment_schedule__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

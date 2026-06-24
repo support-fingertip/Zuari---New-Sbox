@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Handover_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Stage__c, &quot;Hand Over&quot;),
+    RecordType.DeveloperName = &quot;Apartment&quot;,
+    OR(
+        ISBLANK(GF_bedroom_No_of_Keys__c),
+        ISBLANK(GF_bedroom_Key_No__c),
+        ISBLANK(Kitchen_No_Of_Keys__c),
+        ISBLANK(Kitchen_Key_No__c),
+        ISBLANK(Main_Door_No_of_Keys__c),
+        ISBLANK(Main_Door__c),
+        ISBLANK(Shaft_room_Key_No__c),
+        ISBLANK(Servant_room_Key_No__c),
+        ISBLANK(Terrace_door_Key_No__c),
+        ISBLANK(Terrace_store_room_Key_No__c),
+        ISBLANK(FF_children_bedroom_Key_No__c),
+        ISBLANK(FF_Master_bedroom_Key_No__c),
+        ISBLANK(Staircase_store_Key_No__c),
+        ISBLANK(GF_green_area_Key_No__c),
+        ISBLANK(GF_green_area_No_Of_Keys__c),
+        ISBLANK(Staircase_store_No_Of_Keys__c),
+        ISBLANK(FF_Master_bedroom_No_Of_Keys__c),
+        ISBLANK(FF_children_bedroom_No_Of_Keys__c),
+        ISBLANK(Shaft_room_No_Of_Keys__c),
+        ISBLANK(Servant_room_No_Of_Keys__c),
+        ISBLANK(Terrace_door_No_Of_Keys__c),
+        ISBLANK(Terrace_store_room_No_Of_Keys__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>All key-related fields must be filled before changing Stage to Handover.</errorMessage>
+</ValidationRule>

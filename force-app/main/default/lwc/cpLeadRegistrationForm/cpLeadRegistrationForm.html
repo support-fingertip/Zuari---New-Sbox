@@ -1,0 +1,255 @@
+<template>
+    <!-- ================= MAIN SCREEN ================= -->
+    <template if:false={showThankYouScreen}>
+
+        <!-- ================= FORM SECTION ================= -->
+        <template if:true={showForm}>
+            <div class="form-container">
+                <lightning-card class="cp-card">
+                    <div class="cp-logo-wrap">
+                        <img src={logoUrl} alt="Logo" class="header-logo" />
+                    </div>
+
+                    <!-- HEADER -->
+                    <div slot="title">
+                        <div class="header-content">
+                            <lightning-icon
+                                icon-name="standard:lead"
+                                size="small"
+                                class="header-icon">
+                            </lightning-icon>
+                            <h1 class="slds-text-heading_medium">
+                                Zuari Infraworld Channel Partner Lead Registration Form
+                            </h1>
+                        </div>
+                    </div>
+
+                    <div class="slds-p-horizontal_large slds-p-vertical_medium" style="background-color: antiquewhite;">
+
+                        <!-- INFO TEXT -->
+                        <p class="slds-text-body_regular slds-text-color_weak slds-m-bottom_large">
+                            Enter PAN, validate, then fill lead details and click Submit.
+                        </p>
+
+                        <!-- ALERT -->
+                        <template if:true={showAlert}>
+                            <div class={alertClass} role="alert">
+                                <lightning-icon
+                                    icon-name={alertIcon}
+                                    size="small"
+                                    variant="inverse"
+                                    class="slds-m-right_small">
+                                </lightning-icon>
+                                <h2>{alertMessage}</h2>
+                                <button
+                                    class="slds-button slds-button_icon slds-notify__close"
+                                    onclick={closeAlert}>
+                                    <lightning-icon
+                                        icon-name="utility:close"
+                                        size="x-small"
+                                        variant="inverse">
+                                    </lightning-icon>
+                                </button>
+                            </div>
+                        </template>
+
+                        <!-- ================= PAN SECTION ================= -->
+                        <template if:false={panValidated}>
+                            <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                                <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                                    <lightning-icon icon-name="utility:identity" size="x-small"
+                                        class="slds-m-right_x-small"></lightning-icon>
+                                    PAN Verification
+                                </h2>
+
+                                <lightning-input
+                                    label="PAN Number"
+                                    value={pan}
+                                    onchange={handlePanChange}
+                                    required
+                                    max-length="10"
+                                    pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                    message-when-pattern-mismatch="Please enter a valid PAN (e.g., ABCDE1234F)">
+                                </lightning-input>
+
+                                <div class="slds-text-align_center slds-m-top_large slds-m-bottom_medium">
+                                    <lightning-button
+                                        label={validateButtonLabel}
+                                        variant="brand"
+                                        icon-name="utility:check"
+                                        class="submit-button"
+                                        disabled={isValidating}
+                                        onclick={handleValidatePan}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- ================= LEAD DETAILS ================= -->
+                        <template if:true={panValidated}>
+                            <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                                <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                                    <lightning-icon icon-name="utility:lead" size="x-small"
+                                        class="slds-m-right_x-small"></lightning-icon>
+                                    Lead Details
+                                </h2>
+
+                                <div class="slds-grid slds-wrap slds-gutters">
+
+                                    <!-- Name (Required) -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-input
+                                            label="Name"
+                                            name="Name"
+                                            value={leadData.Name}
+                                            onchange={handleInputChange}
+                                            required>
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Project (Required) -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-combobox
+                                            label="Project"
+                                            name="Allocated_Project__c"
+                                            value={leadData.Allocated_Project__c}
+                                            options={projectOptions}
+                                            onchange={handleComboboxChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-input
+                                            type="email"
+                                            label="Email"
+                                            name="Email"
+                                            value={leadData.Email}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Country Code (Required) - Picklist from Lead field -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-combobox
+                                            label="Country"
+                                            name="Country_Code__c"
+                                            value={leadData.Country_Code__c}
+                                            options={countryCodeOptions}
+                                            onchange={handleComboboxChange}
+                                            required>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <!-- Phone (Required) -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-input
+                                            type="tel"
+                                            label="Phone"
+                                            name="Phone__c"
+                                            value={leadData.Phone__c}
+                                            onchange={handleInputChange}
+                                            required>
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Secondary Phone -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-input
+                                            type="tel"
+                                            label="Secondary Phone"
+                                            name="Secondary_Phone__c"
+                                            value={leadData.Secondary_Phone__c}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Secondary Email -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-input
+                                            type="email"
+                                            label="Secondary Email"
+                                            name="Secondary_Email__c"
+                                            value={leadData.Secondary_Email__c}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Unit Preference -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-combobox
+                                            label="Unit Preference"
+                                            name="Unit_Preference__c"
+                                            value={leadData.Unit_Preference__c}
+                                            options={unitPreferenceOptions}
+                                            onchange={handleComboboxChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <!-- Budget -->
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                        <lightning-combobox
+                                            label="Budget"
+                                            name="Budget__c"
+                                            value={leadData.Budget__c}
+                                            options={budgetOptions}
+                                            onchange={handleComboboxChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                </div>
+
+                                <div class="slds-text-align_center slds-m-top_large slds-m-bottom_medium">
+                                    <lightning-button
+                                        label={submitButtonLabel}
+                                        variant="brand"
+                                        icon-name="utility:check"
+                                        class="submit-button"
+                                        disabled={isSubmitting}
+                                        onclick={handleSubmit}>
+                                    </lightning-button>
+
+                                    <lightning-button
+                                        class="slds-m-left_small"
+                                        label="Back"
+                                        variant="neutral"
+                                        onclick={handleBack}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </lightning-card>
+            </div>
+        </template>
+    </template>
+
+    <!-- ================= THANK YOU SCREEN ================= -->
+    <template if:true={showThankYouScreen}>
+        <div class="slds-align_absolute-center slds-p-around_xx-large">
+            <lightning-card>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon
+                        icon-name="utility:success"
+                        size="large"
+                        variant="success">
+                    </lightning-icon>
+
+                    <h1 class="slds-text-heading_large slds-m-top_medium">
+                        Thank You!
+                    </h1>
+
+                    <p class="slds-m-top_small">
+                        Your <b>Lead</b> is registered successfully.
+                    </p>
+
+                    <p class="slds-text-color_weak slds-m-top_small">
+                        Our team will review and proceed further.
+                    </p>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+</template>

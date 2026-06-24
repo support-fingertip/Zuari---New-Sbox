@@ -1,0 +1,16 @@
+<apex:page showHeader="false">
+    <apex:includeLightning />
+    <div id="lightningvf" />
+<script src="https://yourExperienceDomain/experienceURL/lightning/lightning.out.js"></script>
+<script>
+    $Lightning.use("c:CP_Form", function() {
+        $Lightning.createComponent("c:channelPartnerForm",
+                                   { label : "Accept" },
+                                   "lightningvf",
+                                   function(cmp) {
+                                       console.log("button was created");
+                                   }
+                                  );
+    });
+</script>
+</apex:page>

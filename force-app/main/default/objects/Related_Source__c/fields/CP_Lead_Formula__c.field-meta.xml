@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CP_Lead_Formula__c</fullName>
+    <description>Formula Field For Checking Is the Parent Lead Secondary Source is Channel partner</description>
+    <formula>ISPICKVAL( SLead__r.Lead_source__c  , &quot;Channel Partner&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>CP Lead Formula</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

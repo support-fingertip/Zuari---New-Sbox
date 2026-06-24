@@ -1,0 +1,94 @@
+<template>
+    <lightning-card title="Lead Extension" icon-name="utility:date_time">
+        <div class="slds-p-around_medium">
+            <template if:true={loading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+
+            <template if:false={loading}>
+                <div class="slds-grid slds-wrap slds-gutters_x-small slds-m-bottom_small">
+                    <div class="slds-col slds-size_1-of-2">
+                        <p class="slds-text-title">Expiry Date</p>
+                        <p class="slds-text-heading_small">{state.expiryDate}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <p class="slds-text-title">Window (days)</p>
+                        <p class="slds-text-heading_small">{windowSummary}</p>
+                    </div>
+                </div>
+
+                <template if:true={hasStatus}>
+                    <div class="slds-box slds-theme_shade slds-m-bottom_small">
+                        <p><strong>Status:</strong> {state.status}</p>
+                        <template if:true={state.requestedDays}>
+                            <p><strong>Requested:</strong> {state.requestedDays} day(s)</p>
+                        </template>
+                        <template if:true={state.requestedByName}>
+                            <p><strong>Requested by:</strong> {state.requestedByName}</p>
+                        </template>
+                        <template if:true={state.approverName}>
+                            <p><strong>Approver:</strong> {state.approverName}</p>
+                        </template>
+                        <template if:true={state.decisionNotes}>
+                            <p><strong>Notes:</strong> {state.decisionNotes}</p>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- RM request form -->
+                <template if:true={showRequestForm}>
+                    <lightning-input
+                        type="number"
+                        label="Extension Days"
+                        min="1"
+                        step="1"
+                        value={inputDays}
+                        onchange={handleDaysChange}
+                        class="slds-m-bottom_small">
+                    </lightning-input>
+                    <lightning-textarea
+                        label="Reason (optional)"
+                        value={inputReason}
+                        onchange={handleReasonChange}
+                        class="slds-m-bottom_small">
+                    </lightning-textarea>
+                    <lightning-button
+                        variant="brand"
+                        label="Submit for Approval"
+                        onclick={handleSubmit}
+                        disabled={submitting}>
+                    </lightning-button>
+                </template>
+
+                <!-- TL approval form -->
+                <template if:true={showDecisionForm}>
+                    <lightning-textarea
+                        label="Decision Notes"
+                        value={inputNotes}
+                        onchange={handleNotesChange}
+                        class="slds-m-bottom_small">
+                    </lightning-textarea>
+                    <lightning-button
+                        variant="success"
+                        label="Approve"
+                        onclick={handleApprove}
+                        disabled={submitting}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+                    <lightning-button
+                        variant="destructive"
+                        label="Reject"
+                        onclick={handleReject}
+                        disabled={submitting}>
+                    </lightning-button>
+                </template>
+
+                <template if:true={isPendingForOther}>
+                    <p class="slds-text-color_weak slds-m-top_small">
+                        Awaiting decision from {state.approverName}.
+                    </p>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

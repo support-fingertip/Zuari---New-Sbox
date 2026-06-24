@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Number</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+    NOT(ISBLANK(Primary_Phone__c)) &amp;&amp;
+    NOT(REGEX(Primary_Phone__c, &quot;^[0-9]{10}$&quot;)),
+
+    NOT(ISBLANK(Alternate_Contact_No__c)) &amp;&amp;
+    NOT(REGEX(Alternate_Contact_No__c, &quot;^[0-9]{10}$&quot;))
+)</errorConditionFormula>
+    <errorMessage>Enter a valid 10-digit Primary Phone number.</errorMessage>
+</ValidationRule>

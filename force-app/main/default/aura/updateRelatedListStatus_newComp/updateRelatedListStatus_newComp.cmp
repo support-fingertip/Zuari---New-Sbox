@@ -1,0 +1,153 @@
+<aura:component controller="RelatedSourceStatusController"
+                implements="force:appHostable,force:hasRecordId,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="leadStatus" type="String" />
+    <aura:attribute name="currentLeadStatus" type="String" />
+    <aura:attribute name="statusOrder" type="List" default="[]"/>
+    <aura:attribute name="addNotes" type="string" default=""/>
+    <aura:attribute name="scheduleDate" type="Date" />
+    <aura:attribute name="followUpDate" type="Date" />
+    <aura:attribute name="rating" type="String" />
+    <aura:attribute name="unqualfiedReason" type="List" />
+    <aura:attribute name="recordTypeName" type="String"/>
+    <aura:attribute name="statusOptions" type="List"/>
+    
+    <aura:attribute name="selectedReason" type="String"/>
+    <aura:attribute name="selectedOpenReason" type="String"/>
+    <aura:attribute name="unqualifiedReasons" type="List"/>
+    <aura:attribute name="closedLostReasons" type="List"/>
+    <aura:attribute name="openReasons" type="List"/>
+    <aura:attribute name="AllocatedReasons" type="List"/>
+    <aura:attribute name="selectedAllocatedReason" type="String"/>
+    <aura:attribute name="comment" type="String" default=''/>
+    <aura:attribute name="isOpen" type="Boolean" default="true"/>
+    <aura:attribute name="showDetailReason" type="Boolean" default="false"/>
+    <aura:attribute name="leadQualitys" type="String[]"/>
+    <aura:attribute name="showLeadQuality" type="Boolean" default="false"/>
+    <aura:attribute name="selectedquality" type="String"/>
+    <aura:attribute name="isSubmitting" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <div class="slds-modal slds-fade-in-open" tabindex="-1" role="dialog">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Update Related Source Status</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    
+                    <lightning:select label="Related Source Status" value="{!v.leadStatus}" onchange="{!c.handleStatusChange}" required="true">
+                        <option value="">-- Select Status --</option>
+                        <aura:iteration items="{!v.statusOptions}" var="status">
+                            <option value="{!status}">{!status}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <aura:if isTrue="{!v.leadStatus == 'RNR' || v.leadStatus == 'Pre Sales Follow Up'}">
+                        <lightning:textarea label="Subject" value="{!v.comment}" required="false"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.leadStatus == 'Sales Follow up' || v.leadStatus == 'Sales RNR' || v.leadStatus == 'SV Completed' || v.leadStatus == 'Negotiation'}">
+                        <lightning:textarea label="Subject" value="{!v.comment}" required="false"/>
+                    </aura:if>
+                    
+                    <aura:if isTrue="{!v.leadStatus == 'Unqualified'}">
+                        <lightning:select name="unqualifiedPicklist" label="Unqualified Reason" value="{!v.selectedReason}" onchange="{!c.handleReasonChange}" required="true">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.unqualifiedReasons}" var="reason">
+                                <option value="{!reason}">{!reason}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </aura:if>
+                    <aura:if isTrue="{!v.leadStatus == 'Closed Lost' || v.leadStatus == 'Rejected' || v.leadStatus == 'Request for Rejection'|| v.leadStatus == 'Pre-Sales Unqualified'|| v.leadStatus == 'Pre-Sales Closed Lost'}">
+                        <lightning:select name="closedlostPicklist" label="Rejected Reason" value="{!v.selectedReason}" onchange="{!c.handleclosedReasonChange}">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.closedLostReasons}" var="reason">
+                                <option value="{!reason}">{!reason}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                        
+                        <aura:if isTrue="{!v.showDetailReason}">
+                            <lightning:textarea label="Reasons in Detail" value="{!v.comment}" required="true"/>
+                        </aura:if>
+                    </aura:if>
+                    
+                    <aura:if isTrue="{!v.leadStatus == 'Open'}">
+                        <lightning:select name="closedlostPicklist" label="Open Reason" value="{!v.selectedOpenReason}" onchange="{!c.handleclosedReasonChange}">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.openReasons}" var="oreason">
+                                <option value="{!oreason}">{!oreason}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </aura:if>
+                    <aura:if isTrue="{!v.leadStatus == 'Allocated'}">
+                        <lightning:select name="closedlostPicklist" label="Allocated Reason" value="{!v.selectedAllocatedReason}" onchange="{!c.handleclosedReasonChange}">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.AllocatedReasons}" var="oreason">
+                                <option value="{!oreason}">{!oreason}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </aura:if>
+                    
+                    <!-- Schedule Date: shown for any status NOT in the 4 terminal ones.
+                         For Site Visit Schedule this represents the SITE VISIT date.
+                         For every other non-terminal status it doubles as the follow-up date. -->
+                   <aura:if isTrue="{!
+    and(
+        v.leadStatus != '',
+        and(
+            and(
+                v.leadStatus != 'Request for Rejection',
+                v.leadStatus != 'Rejected'
+            ),
+            and(
+                and(
+                    v.leadStatus != 'Pre-Sales Unqualified',
+                    v.leadStatus != 'Pre-Sales Closed Lost'
+                ),
+                and(
+                    v.leadStatus != 'Closed Lost',
+                    v.leadStatus != 'Unqualified'
+                )
+            )
+        )
+    )
+}">
+    <lightning:input
+        type="dateTime"
+        label="Schedule Date"
+        value="{!v.scheduleDate}"
+        required="true"
+        messageWhenValueMissing="Schedule Date is required."
+    />
+</aura:if> 
+                    <!-- Follow Up Date: shown ONLY for Site Visit Schedule, so a follow-up is tracked
+                         independently of the actual site visit date. -->
+                    <aura:if isTrue="{!v.leadStatus == 'Site Visit Schedule' }">
+                        <lightning:input type="dateTime" label="Follow Up Date" value="{!v.followUpDate}" required="true" messageWhenValueMissing="Follow Up Date is required." />
+                    </aura:if>
+                    
+                    <lightning:input label="Last Note" type="textarea" value="{!v.addNotes}" required="true"/>
+                    
+                    <aura:if isTrue="{!v.showLeadQuality}">
+                        <lightning:select name="leadqualitypicklist" label="Lead Quality" value="{!v.selectedquality}" onchange="{!c.handlequalityChange}">
+                            <option value="">-- None --</option>
+                            <aura:iteration items="{!v.leadQualitys}" var="quality">
+                                <option value="{!quality}">{!quality}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </aura:if>
+                    
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.handleCancel}"/>
+                    <lightning:button variant="brand" label="Submit" disabled="{!v.isSubmitting}" onclick="{!c.handleSubmit}"/>
+                </footer>
+                
+            </div>
+        </div>
+    </aura:if>
+    
+</aura:component>

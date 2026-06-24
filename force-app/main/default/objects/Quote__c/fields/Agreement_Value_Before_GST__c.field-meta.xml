@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agreement_Value_Before_GST__c</fullName>
+    <formula>IF(
+   RecordType.Name = &apos;Apartments&apos;,
+
+    /* APARTMENT - Full Calculation */
+(Rate_per_sqft__c * Super_Built_UpArea__c )+
+(Unit__r.Floor_Rise_Charge__c * Super_Built_UpArea__c) +
+(Unit__r.East_Facing_Charges__c * Super_Built_UpArea__c) +
+(Unit__r.Corner_Charges__c * Super_Built_UpArea__c) +
+(Unit__r.Road_View_Charges__c * Super_Built_UpArea__c )+
+(Unit__r.ORR_View_Charges__c * Super_Built_UpArea__c) +
+(Unit__r.Garden_View_Charges__c * Super_Built_UpArea__c) +
+(Unit__r.Clubhouse_Charges__c) +
+(Unit__r.Water_Electricity_Charges__c) +
+(Unit__r.Car_Parking__c),
+
+    /* PLOT - Simple Calculation */
+    Base_Value__c + Total_Infrastructure_Charges__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Agreement Value Before GST</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

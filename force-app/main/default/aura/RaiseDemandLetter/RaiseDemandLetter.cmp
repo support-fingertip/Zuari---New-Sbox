@@ -1,0 +1,50 @@
+<aura:component controller="RaiseDemandEmailController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="paymentScheduleId" type="Id" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="vfPage" type="string" />
+    <aura:attribute name="showPdf" type="boolean" default="false" />
+    <aura:attribute name="canRaiseDemand" type="boolean" default="false" />
+    
+    <aura:attribute name="Bookid" type="Id" />
+    <aura:attribute name="includeInterest" type="String" default="false"/>
+    <aura:attribute name="ObjName" type="String" />
+    <aura:attribute name="recId" type="id"/>
+    <aura:attribute name="visible" type="Boolean" default="false"/>
+    <aura:attribute name="disableVar" type="boolean" default="false"/>
+    <aura:attribute name="fromBulkDemand" type="boolean" default="false" />
+    <aura:attribute name="bookingRecords" type="Booking__c[]" />
+    
+    <aura:attribute name="recordIdsList" type="List" />
+    <aura:attribute name="emailContentMap" type="Map" />
+    <aura:attribute name="contentDocumentIdsMap" type="Map" />
+    
+    <aura:html tag="style">
+        .panel.slds-modal > .modal-container {
+        width: 75%;
+        max-width: 70rem;
+        }
+    </aura:html>
+    
+    <section class="slds-modal slds-fade-in-open">
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">DEMAND LETTER</h2>
+            
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <br/>
+            <iframe src="{!'/apex/apex/Demand_Invoice?Id=' + v.recordId }" width="100%" height="500px;" frameBorder="0"/> 
+        </div>
+        
+        
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.close}">Cancel</button>
+            
+        <aura:if isTrue="{!v.canRaiseDemand == true}">
+ 
+            <button class="slds-button slds-button_brand" onclick="{!c.sendEmail}" >Send Email</button>
+        </aura:if>
+        </footer>
+    </section>
+    
+</aura:component>

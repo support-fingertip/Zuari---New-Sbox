@@ -1,0 +1,54 @@
+<apex:page standardController="Booking__c" showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0">
+
+    <div style="font-family: 'Times New Roman', Times, serif; width: 760px; margin: 40px auto; background: #fff; border: 1.2px solid #222; padding: 40px 46px 32px 46px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+        
+        <p style="text-align: center; font-size: 1.75em; font-weight: 700; text-transform: uppercase; color: #1a1a1a; border-bottom: 4px solid #000; letter-spacing: 2px; margin-bottom: 20px; margin-top: 20px; padding-bottom: 5px;">
+            CONSENT LETTER
+        </p>
+        
+        <p style="font-size: 1.1em; margin-top: 20px; margin-bottom: 20px; text-align: right;">
+            Date: <apex:outputText value="{0,date,MM/dd/yyyy}"><apex:param value="{!TODAY()}" /></apex:outputText><br/>
+            Place: Bangalore
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            This is the FULL AND FINAL SETTLEMENT LETTER executed between <strong>Mr. Mahadevaswamy G</strong>, Resident at # 168/4, 2<sup>nd</sup> Cross, 11<sup>th</sup> Main, Saraswathipuram, -570009 (hereafter referred to as "First Party" and includes my/our administrators, heirs, successors, etc.) and <strong>ZUARI INFRAWORLD INDIA LIMITED</strong> 
+            (CIN No. U45309KA2007PLC043161) a public limited company registered under the Companies Act, 1956 having its registered and Corporate Office at Adventz Center, 1st Floor, No.28, Union Street, off Cubbon Road, Bengaluru 560 001 
+            (hereafter referred to as "Second Party") as follows:
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            The First Party had booked unit No: <strong> {!Booking__c.Plot__r.Name} </strong> in sector Brindavan Serenity at Zuari Garden City, and accordingly paid Rs.51,000/- for unit as booking amount vide application dated : <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText>.
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            Thereafter the First Party was unable to arrange funds for payment of the remaining consideration and First Party has cancelled the aforesaid booking and requested for refund of the entire money paid.
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            Subsequently both the parties have arrived at a settlement, for the refund of Rs.51,000/- (Rupees Fifty One Thousand) as full and final settlement amount, <strong>against cancellation of the unit</strong> to the First Party.
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            The First Party has given his/her free consent to the settlement and states that now nothing remains due and payable to the First Party.
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            The First Party admits, acknowledges and undertakes that it shall not demand or claim any amount or unit from the Second Party in future and the Second Party is entitled to deal with and dispose of the unit in any manner whatsoever as deemed fit by the Second Party. Henceforth he will not go for any legal claims against the Second Party in future.
+        </p>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px; line-height: 1.6;">
+            <strong>Further First Party undertakes that neither the First Party nor its family members, heirs, executors, administrators, successors, assigns, etc are left with any right, title, interest, claim, demand, etc. against the Second Party i.e. Zuari Infraworld India Ltd.</strong>
+        </p>
+        <br/>
+        <div>
+   <table style="width: 100%; border: none;">
+  <tr>
+    <td style="border: none; padding: 50px;text-align:left;">1<sup>st</sup> &nbsp;Party</td>
+    <td style="border: none; padding: 30px;text-align:center;">2<sup>nd</sup> &nbsp;Party</td>
+    
+  </tr>
+</table>
+  </div>       
+    </div>
+</apex:page>

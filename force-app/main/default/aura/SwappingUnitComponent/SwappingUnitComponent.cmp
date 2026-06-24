@@ -1,0 +1,119 @@
+<aura:component controller="SwappingUnitController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutHeader" access="global" >
+    
+    <aura:attribute name="plots" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="OppRecord" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="matchplots" type="Object[]" default="[]"/>
+    <aura:attribute name="searchText1" type="string" default=""/>
+    <aura:attribute name="showCostSheet" type="Boolean" default="False" />
+    <aura:attribute name="Showfields" type="Boolean" default="False" />
+    <aura:attribute name="quoteId" type="string" default=""/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="flatNumber" type="String" />
+    <aura:attribute name="FlatCost" type="Decimal" default="0.00"/>
+    <aura:attribute name="GrandTotal" type="Decimal"/>
+    <aura:attribute name="oppPlot" type="Quote__c"  default="{}"/>
+    <aura:attribute name="paymentType" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="paymentTypePicklist" type="String[]" />
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="RecTypeId" type="String"/>
+    <aura:attribute name="showNextCmp" type="boolean" default="false" />
+    <aura:attribute name="showPaymentSchCmp" type="Boolean" default="false" />
+    <aura:attribute name="paymentSchedules" type="Payment_schedule__c[]"/>
+    <aura:attribute name = "CustompaymentSchedules" type="object[]"/>
+    <aura:attribute name="RecivedAmountTotal" type="Decimal" default="0.00"/>
+    <aura:attribute name="totalPercent" type="Decimal" default="0.00"/>
+    <aura:attribute name="GrandTotalwithGST" type="Decimal" default="0.00"/>
+    
+    <aura:handler name="change" value="{!v.searchText1}" action="{!c.searchText1}"></aura:handler>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    <aura:html tag="style">
+        .slds-modal__container{ 
+        max-width: 80rem !important;
+        width:80% !important;
+        } 
+        
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .closeIcon{
+        display:none;
+        }
+        .slds-col{
+        margin-left:5px;
+        }
+    </aura:html >
+    
+    <aura:if isTrue="{!Not(v.showNextCmp)}"> 
+        <header class="slds-modal__header">
+            <lightning:buttonIcon iconName="utility:close"
+                                  onclick="{! c.closeModel }"
+                                  alternativeText="close"
+                                  variant="bare-inverse"
+                                  class="slds-modal__close"/>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Swap Unit</h2>
+        </header>
+       <div style="padding:15px;">
+        <lightning:recordEditForm recordId="{!v.recordId}" onsuccess="{!c.handleSuccess}" objectApiName="Booking__c">
+            <lightning:messages />
+            <label class="slds-form-element__label" for="unique-id-of-input">&nbsp;&nbsp;Current Unit</label>
+            <lightning:inputField variant='label-hidden' fieldName="Plot__c" disabled="true"/>
+        </lightning:recordEditForm>
+        </div> 
+        <div class="slds-grid slds-wrap slds-grid_pull-padded-x-medium">
+            
+            <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                <div class="slds-combobox_container">
+                    <div class="{!not(empty(v.matchplots)) ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click' }" aura:id="open">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                            <lightning:input value="{!v.searchText1}" aura:id="field1" name="enter-search" label="Select Swap Unit Number" type="search" required="true" id="combobox-id-1" aria-autocomplete="list" aria-controls="listbox-id-1" aria-expanded="false" aria-haspopup="listbox" autoComplete="off" role="combobox" placeholder="Search..."/>                                      
+                        </div>
+                        <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <aura:if isTrue="{!v.matchplots}">
+                                    <aura:iteration items="{!v.matchplots}" var="item">
+                                        <li role="presentation" class="slds-listbox__item">
+                                            <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <span class="slds-icon_container slds-icon-standard-account">
+                                                        <lightning:icon iconName="standard:user" size="xx-small"/>&nbsp;
+                                                    </span>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <div class="slds-lookup__result-text" data-id="{!item.Id}" onclick="{!c.update1 }">
+                                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                                                        <!--<span class="slds-listbox__option-meta slds-listbox__option-meta_entity">Account • Burlington, NC</span>-->
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </aura:iteration> 
+                                </aura:if>      
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+    </aura:if> 
+    <div class="slds-modal__footer">
+        
+        <div class="slds-align_absolute-center slds-p-top_small "></div>
+        
+        <lightning:button variant="brand" label="Close" title="Brand action" onclick="{!c.closeModel}" />
+        <lightning:button  variant="brand" label="Save" title="Brand action" onclick="{!c.doSave}" />
+        
+    </div>
+</aura:component>

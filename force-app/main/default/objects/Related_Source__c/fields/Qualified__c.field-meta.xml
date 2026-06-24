@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Qualified__c</fullName>
+    <formula>AND(
+    !ISPICKVAL(Lead_status1__c, &apos;Closed Lost&apos;),
+    !ISPICKVAL(Lead_status1__c, &apos;Unqualified&apos;),
+    !ISPICKVAL(Lead_status1__c, &apos;Rejected&apos;)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Qualified</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

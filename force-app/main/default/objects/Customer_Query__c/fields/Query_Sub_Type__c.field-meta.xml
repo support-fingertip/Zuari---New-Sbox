@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Query_Sub_Type__c</fullName>
+    <label>Query Sub Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Booking Form</fullName>
+                <default>false</default>
+                <label>Booking Form</label>
+            </value>
+            <value>
+                <fullName>Payment</fullName>
+                <default>false</default>
+                <label>Payment</label>
+            </value>
+            <value>
+                <fullName>Booking form Copy</fullName>
+                <default>false</default>
+                <label>Booking form Copy</label>
+            </value>
+            <value>
+                <fullName>Allotment letter Copy</fullName>
+                <default>false</default>
+                <label>Allotment letter Copy</label>
+            </value>
+            <value>
+                <fullName>Welcome letter Copy</fullName>
+                <default>false</default>
+                <label>Welcome letter Copy</label>
+            </value>
+            <value>
+                <fullName>Invoice Copy</fullName>
+                <default>false</default>
+                <label>Invoice Copy</label>
+            </value>
+            <value>
+                <fullName>Receipt Copy</fullName>
+                <default>false</default>
+                <label>Receipt Copy</label>
+            </value>
+            <value>
+                <fullName>Sale Agreement Copy</fullName>
+                <default>false</default>
+                <label>Sale Agreement Copy</label>
+            </value>
+            <value>
+                <fullName>Unit floor plan/Master Plan</fullName>
+                <default>false</default>
+                <label>Unit floor plan/Master Plan</label>
+            </value>
+            <value>
+                <fullName>Statement of Account</fullName>
+                <default>false</default>
+                <label>Statement of Account</label>
+            </value>
+            <value>
+                <fullName>Interest Report</fullName>
+                <default>false</default>
+                <label>Interest Report</label>
+            </value>
+            <value>
+                <fullName>Sale Deed Copy</fullName>
+                <default>false</default>
+                <label>Sale Deed Copy</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

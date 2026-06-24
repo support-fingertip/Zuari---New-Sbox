@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Record_In_Approval__c</fullName>
+    <formula>OR(
+ISPICKVAL(Cancellation_Status__c, &quot;Pending&quot;),
+ISPICKVAL(Swap_Unit_Status__c, &quot;Pending&quot;),
+				ISPICKVAL(Approval_status__c, &quot;Pending&quot;),
+				ISPICKVAL(Time_Extension_Approval_Status__c, &quot;Pending&quot;)  
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Record In Approval</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

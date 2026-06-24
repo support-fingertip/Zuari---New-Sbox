@@ -1,0 +1,160 @@
+<template>
+    <div class="form-container">
+        <!-- Thank You Screen -->
+        <template if:true={showThankYou}>
+            <div class="slds-box slds-theme_shade sr-card slds-text-align_center slds-p-around_large">
+                <img src={logoUrl} alt="Zuari Infraworld" class="header-logo slds-m-bottom_medium" />
+                <h1 class="slds-text-heading_large slds-m-bottom_medium" style="color: #0b5cab;">Thank You!</h1>
+                <p class="slds-text-body_regular">
+                    Your visit has been registered successfully with Zuari Infraworld. Our team will get in touch with you shortly.
+                </p>
+            </div>
+        </template>
+
+        <!-- Registration Form -->
+        <template if:false={showThankYou}>
+            <div class="slds-box sr-card">
+                <!-- Header -->
+                <div class="slds-text-align_center slds-m-bottom_large">
+                    <img src={logoUrl} alt="Zuari Infraworld" class="header-logo slds-m-bottom_small" />
+                    <h1 class="slds-text-heading_large form-title">Zuari Infraworld Security Register Form</h1>
+                </div>
+
+                <!-- Alert Banner -->
+                <template if:true={showAlert}>
+                    <div class={alertClass} role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <lightning-icon icon-name={alertIcon} alternative-text="alert" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <h2>{alertMessage}</h2>
+                    </div>
+                </template>
+
+                <!-- Personal Information -->
+                <div class="slds-box section-box slds-m-bottom_medium">
+                    <h2 class="section-header slds-text-heading_small slds-m-bottom_medium">Personal Information</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input type="text" label="Visitor Name" name="Security_Register_Name__c"
+                                value={formData.Security_Register_Name__c} onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input type="tel" label="Phone" name="Phone__c"
+                                value={formData.Phone__c} onchange={handleInputChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input type="email" label="Email" name="Email__c"
+                                value={formData.Email__c} onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input type="tel" label="Secondary Phone" name="Secondary_Phone__c"
+                                value={formData.Secondary_Phone__c} onchange={handleInputChange}
+                                pattern="[6-9][0-9]{9}"
+                                message-when-pattern-mismatch="Please enter a valid 10-digit Indian mobile number starting with 6-9.">
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input type="email" label="Secondary Email" name="Secondary_Email__c"
+                                value={formData.Secondary_Email__c} onchange={handleInputChange}>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Location Details -->
+                <div class="slds-box section-box slds-m-bottom_medium">
+                    <h2 class="section-header slds-text-heading_small slds-m-bottom_medium">Location Details</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <!--
+                            User picks Country from dropdown.
+                            handleCountryChange auto-fills:
+                              Country__c      = country name (label)
+                              Country_Code__c = country code (value, e.g. +91)
+                        -->
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-combobox
+                                label="Country"
+                                name="Country_Code__c"
+                                value={formData.Country_Code__c}
+                                options={countryCodeOptions}
+                                onchange={handleCountryChange}
+                                placeholder="-- Select Country --"
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Auto-populated read-only country code -->
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-input
+                                type="text"
+                                label="Country Code"
+                                value={formData.Country_Code__c}
+                                readonly>
+                            </lightning-input>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Project Preferences -->
+                <div class="slds-box section-box slds-m-bottom_medium">
+                    <h2 class="section-header slds-text-heading_small slds-m-bottom_medium">Project Preferences</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-combobox label="Project Name" name="Project_Name__c"
+                                value={formData.Project_Name__c} options={projectNameOptions}
+                                onchange={handleInputChange} required>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-combobox label="Budget" name="Budget__c"
+                                value={formData.Budget__c} options={budgetOptions}
+                                onchange={handleInputChange} required>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 field-col">
+                            <lightning-combobox label="Unit Preference" name="Unit_Preference__c"
+                                value={formData.Unit_Preference__c} options={unitPreferenceOptions}
+                                onchange={handleInputChange} required>
+                            </lightning-combobox>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="slds-box section-box slds-m-bottom_large">
+                    <h2 class="section-header slds-text-heading_small slds-m-bottom_medium">Additional Information</h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 field-col">
+                            <lightning-textarea label="Remarks" name="Remarks__c"
+                                value={formData.Remarks__c} onchange={handleInputChange}>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="slds-text-align_center submit-btn-container">
+                    <lightning-button variant="brand" label={saveButtonLabel}
+                        onclick={handleSave} disabled={isLoading} class="submit-btn">
+                    </lightning-button>
+                </div>
+
+            </div>
+        </template>
+    </div>
+</template>

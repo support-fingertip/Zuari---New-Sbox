@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <assignments>
+        <name>user_Assignment</name>
+        <label>user Assignment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>userId</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_user.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_STM2</targetReference>
+        </connector>
+    </assignments>
+    <description>It will Assign STM2 user for ZGT Channel Parnter Lead</description>
+    <environments>Default</environments>
+    <interviewLabel>Assigne STM2 User {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Assigne STM2 User</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_user</name>
+        <label>Get user</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>user_Assignment</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Username</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>lokesh.a@adventz.com</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Once Channel Parnter Lead Created then it will assign STM2</description>
+        <name>Update_STM2</name>
+        <label>Update STM2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Lead_status1__c</field>
+            <value>
+                <stringValue>Pre-Sales New Enquiry</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <stringValue>012OS000000L2hxYAC</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>STM2__c</field>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_user</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Allocated_Project__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Zuari Gangothri Tribhuja</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Source_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Channel partner</stringValue>
+            </value>
+        </filters>
+        <object>Related_Source__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>userId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

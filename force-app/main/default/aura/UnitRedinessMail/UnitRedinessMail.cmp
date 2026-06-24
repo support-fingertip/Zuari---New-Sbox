@@ -1,0 +1,51 @@
+<aura:component controller="WelcomeMailController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" 
+                access="global">
+    <aura:attribute name="emailContent" type="String" />
+    <aura:attribute name="recepients" type="String" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="files" type="List" />
+    <aura:attribute name="filesIDS" type="List" />
+    <aura:handler name="fileUploadEvent" event="c:fileUploadEvent" action="{!c.handleFileUpload}" />
+
+    <aura:html tag="style">
+        .slds-modal__container { 
+            max-width: 50rem !important;
+            width: 75% !important;
+        } 
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content {
+            height: unset !important;
+            max-height: unset !important;
+        }
+        .closeIcon {
+            display: none;
+        }
+        .slds-col {
+            margin-left: 15px;
+        }
+        .custom-textarea {
+            --sds-c-textarea-sizing-min-height: 300px;
+        }
+    </aura:html>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <h1 style="font-size: 20px; color: lightblue;"><b>Zuari Unit Readiness Mail</b></h1>
+    </div>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div style="width: 100%; max-width: 700px; margin: 0 auto;">
+        <lightning:inputRichText class="custom-textarea" aura:id="emailContent"
+                            placeholder="Review and edit email content"
+                            value="{!v.emailContent}"   />
+        <c:photoUploadComponent recordId="{!v.recordId}" filesIds="{!v.filesIDS}" />
+        <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+            <ui:button class="custom-round-button slds-button slds-button--neutral" label="Cancel" press="{!c.Cancel}" />
+            <ui:button class="custom-round-button slds-button slds-button--brand" label="Send Email" press="{!c.sendEmail}" />
+        </div>
+    </div>
+</aura:component>

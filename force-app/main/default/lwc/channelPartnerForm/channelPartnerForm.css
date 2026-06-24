@@ -1,0 +1,187 @@
+/* =============================
+   Layout / Page
+============================= */
+.form-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.75rem 0.75rem 2rem;
+}
+
+/* Card feel */
+.cp-card {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* Top logo */
+.cp-logo-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem 0 0.25rem;
+}
+
+.header-logo {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Title row */
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+}
+
+.header-icon {
+    opacity: 0.9;
+}
+
+.header-content h1 {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+/* =============================
+   Sections (your slds-box blocks)
+============================= */
+.slds-box {
+    border-radius: 14px;
+    padding: 1.25rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #0b5cab; /* deeper, premium blue */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Make section spacing feel intentional */
+.slds-m-bottom_medium {
+    margin-bottom: 1rem !important;
+}
+
+/* =============================
+   Inputs - make them feel premium
+============================= */
+/* Works with SLDS form controls inside your component */
+:host {
+    --cp-radius: 12px;
+}
+
+/* Subtle focus experience */
+:host ::selection {
+    background: rgba(11, 92, 171, 0.18);
+}
+
+/* This affects native inputs used in upload section too */
+input.file-input {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #d8dde6;
+    border-radius: var(--cp-radius);
+    background: #fff;
+}
+
+/* =============================
+   Submit button
+============================= */
+.submit-button {
+    min-width: 220px;
+    font-weight: 700;
+}
+
+/* Center action area spacing */
+.slds-text-align_center.slds-m-top_large {
+    margin-top: 1.25rem !important;
+}
+
+/* =============================
+   Upload section
+============================= */
+.upload-section {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px dashed #cfd6dd;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        background-color: cadetblue;
+}
+
+.upload-section:hover {
+    border-color: #0b5cab;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.upload-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2e2e2e;
+}
+
+.upload-success {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #2e844a; /* Salesforce green */
+}
+
+/* =============================
+   Info / alert polish
+============================= */
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.85rem 0.95rem;
+    background: #f3f8ff;
+    border-left: 4px solid #0b5cab;
+    border-radius: 12px;
+}
+
+.slds-notify__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+/* =============================
+   Mobile
+============================= */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 0.5rem 0.5rem 1.5rem;
+    }
+
+    .slds-box {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .submit-button {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .header-logo {
+        width: 150px;
+    }
+}
+.slds-box.slds-theme_shade{
+        background-color: oldlace;
+}
+.slds-input{
+    background-color: lavender;
+}

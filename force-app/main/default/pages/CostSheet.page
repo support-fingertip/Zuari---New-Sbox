@@ -1,0 +1,224 @@
+<apex:page standardController="Quote__c" extensions="getQuoteData" showHeader="false" standardStylesheets="false"  applyBodyTag="false" applyHtmlTag="false" renderAs="pdf">
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            margin: 0;
+            padding: 0; 
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        table,
+            th,
+            td {
+                border: 1px #C0C0C0;
+            }
+        .left-align {
+            text-align: left;
+        }
+        .right-align {
+            text-align: right;
+        }
+        .center-align {
+            text-align: center;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .indent {
+            padding-left: 20px;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .border-all {
+            border: 1px solid black !important;
+        }
+        .no-border {
+            border: none !important;
+        }
+    </style>
+
+    <!-- Page 1 -->
+    
+   <b>  <table width="100%"   cellpadding="0" cellspacing="0" >
+                    <tr>
+                         <td style="font-size: 12px;text-align:left"> <img src="{!$Resource.Zuari}" width="150px" height="60" /></td>
+                        
+                         <td style="font-size: 12px;text-align:right"><img src="{!$Resource.ZuariPlotlogo}" width="150px" height="60" /></td>
+                        
+                         
+                       </tr>
+                  </table>
+     
+    <div style="text-align:center;" class="header">Plot Price Sheet</div>
+    </b>
+    <br/>
+              
+    <table width="100%" style="table-layout: fixed; border-collapse: separate; border-spacing: 0; margin-top: 0; border: 1px #C0C0C0" border="1">
+        <tr>
+            <td width="10%"></td>
+            <td width="70%">Plot No.</td>
+            <td width="20%" style="text-align:center;">{!Quote__c.Unit_Number__c}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td >Plot Area in Sqft</td>
+            <td style="text-align:center;">{!Quote__c.Super_Built_UpArea__c}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td >Plot Facing</td>
+            <td style="text-align:center;"> {!Quote__c.Unit_Facing_Direction__c}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td >Plot Type (Standard/Premium)</td>
+            <td style="text-align:center;">{!Quote__c.Unit__r.Plot_Type__c}</td>
+        </tr>
+    </table>
+    
+    <br/>
+    <table width="100%" style="table-layout: fixed; border-collapse: separate; border-spacing: 0; margin-top: 0; border: 1px solid black;" border="1">
+        <tr>
+            <td  style="text-align:center;" width="10%"><b>Sl.No</b></td>
+            <td width="70%"><b>Item Name</b></td>
+            <td width="20%" style="text-align:right;"></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;" width="10%">A</td>
+            <td width="70%">Base Rate - Rs./Sqft</td>
+            <td width="20%" style="text-align:right;">{!Quote__c.Rate_sq_Ft_Discount__c}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">B</td>
+            <td >Other Infrastructure Charges @ Rs.250/- Sqft</td>
+            <td style="text-align:right;">{!Quote__c.Infrastructure_Charges_per_sqft__c}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">C</td>
+            <td >Total Agreement Value</td>
+            <td style="text-align:right;"><apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!Quote__c.Agreement_Value_Before_GST__c}" /> </apex:outputText></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">D</td>
+            <td >Clubhouse Membership Charges</td>
+            <td style="text-align:right;">{!Quote__c.Clubhouse_Charges__c}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">E</td>
+            <td >Advance Maintenance Deposit @ Rs.2/Sqft X 12</td>
+            <td style="text-align:right;">{!Quote__c.Total_Maintenance_Amount__c}</td>
+        </tr>
+        <tr style="background-color:#f09e32">
+            <td></td>
+            <td ><b>Total Sale Consideration</b></td>
+            <td style="text-align:right;">
+              <apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!Quote__c.Agreement_Value_Before_GST__c 
+                        + Quote__c.Total_Maintenance_Amount__c 
+                        + Quote__c.Clubhouse_Charges__c}" /> </apex:outputText>
+              </td>
+        </tr>
+     <tr>
+         <td style="text-align:center;">F</td>
+            <td >18% GST on Other Infrastructure Charges (18% of B above)</td>
+            <td style="text-align:right;">{!Quote__c.GST_On_Infrastructure_Charges__c	}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">G</td>
+            <td >18% GST on Clubhouse Membership Charges (18% of D above)</td>
+            <td style="text-align:right;">{!Quote__c.GST_On_Club_House__c	}</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;">H</td>
+            <td >18% GST on Annual Maintenance Deposit (18% of E above)</td>
+            <td style="text-align:right;">{!Quote__c.GST_On_Maintenance__c		}</td>
+        </tr>
+         <tr style="background-color:#8ee4f5">
+             <td></td>
+             <td ><b>Total GST On Above Charges</b></td>
+            <td style="text-align:right;">{!(Quote__c.GST_On_Infrastructure_Charges__c + Quote__c.GST_On_Club_House__c + Quote__c.GST_On_Maintenance__c)}</td>
+        </tr>
+        <tr style="background-color:#8ef593">
+            <td></td>
+            <td ><b>Grand Total</b></td>
+            <td style="text-align:right;">
+               <apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!Quote__c.GRAND_TOTAL__c}" /> </apex:outputText>
+                               
+            </td>
+        </tr>
+        
+  
+    </table>
+     <table style="font-size: 14px;font-family: Arial Unicode MS;"
+       cellpadding="0"
+       cellspacing="0"
+       border="1"
+       width="100%">
+
+    <!-- Table Header -->
+    <tr style="text-align:center;">
+        <td><b>Sl No</b></td>
+        <td><b>Payment Stage</b></td>
+        <td><b>Percentage</b></td>
+        <!--<td><b>Amount</b></td>-->
+    </tr>
+
+    <!-- Payment Schedule Rows -->
+    <apex:repeat value="{!qout.Payment_Schedules__r}" var="p">
+    <apex:outputText rendered="{!!p.Is_Maintenance_Charges__c && !p.Is_Infrastructure_Charges__c && !p.Is_Clubhouse_Charges__c}" value="">
+        <tr>
+            <td align="center">{!p.S_No__c}</td>
+            <td>{!p.Name}</td>
+            <td align="center">
+                <apex:outputText value="{0, Number}">
+                    <apex:param value="{!p.Payment_percent__c}" />
+                </apex:outputText>
+            </td>
+        </tr>
+    </apex:outputText>
+</apex:repeat>
+
+    <!-- Total Row -->
+    <tr style="font-weight:bold;">
+        <td></td>
+        <td style="text-align:left;">Total</td>
+        <td style="text-align:center;">
+            <apex:outputText value="{0, Number}">
+                <apex:param value="{!totalPercent}" />
+            </apex:outputText>%
+        </td>
+      <!--  <td style="text-align:right;">
+            <apex:outputText value="{0, number, ###,###,###}">
+                <apex:param value="{!totalAmount}" />
+            </apex:outputText>
+        </td>-->
+    </tr>
+
+</table>
+                
+    <br/>
+    <table width="100%">
+        <tr>
+            <td colspan="2"><b>Note</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <ol style="margin: 0; padding-left: 20px;">
+                    <li>Infrastructure Charges, Club membership charges and annual advance maintenance deposit inclusive of GST will be paid by the customer at the time of completion/registration.</li>
+                    <li>Legal Charges on actual as on the date of registration payable by Customer.</li>
+                    <li>Plot Registration Charges as set by the competent authorities are additional to the grand total mentioned above and are payable by Customer.</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
+    
+   
+</apex:page>

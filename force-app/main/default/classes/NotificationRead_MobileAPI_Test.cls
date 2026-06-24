@@ -1,0 +1,81 @@
+@isTest
+private class NotificationRead_MobileAPI_Test {
+
+    @isTest
+    static void test_updateNotificationRead_FullCoverage() {
+        // 1. SETUP: Dynamic Unique Data
+        String seed = String.valueOf(System.now().getTime()) + String.valueOf(Math.abs(Crypto.getRandomInteger()));
+        
+        Channel_Partner__c cp = new Channel_Partner__c(Active__c = true);
+        setIfWriteable(cp, 'Name', 'CP' + seed);
+        setIfWriteable(cp, 'Email__c', 'read' + seed + '@test.com');
+        insert cp;
+        
+        // Re-query for auto-populated User_Id__c
+        cp = [SELECT Id, User_Id__c FROM Channel_Partner__c WHERE Id = :cp.Id];
+
+        Notification__c notif = new Notification__c();
+        insert notif;
+        
+        // Re-query for system-generated Name (e.g., NOTIF-0001)
+        notif = [SELECT Id, Name FROM Notification__c WHERE Id = :notif.Id];
+
+        // Create the Subscriber record (the record actually being updated to 'isRead')
+        Notification_Subscriber__c sub = new Notification_Subscriber__c(
+            Channel_Partner__c = cp.Id,
+            Notification__c = notif.Id,
+            isRead__c = false
+        );
+        insert sub;
+
+        // -----------------------------------------------------------------------
+        // EXECUTION PATHS
+        // -----------------------------------------------------------------------
+        Test.startTest();
+        
+        // Path A: SUCCESS (Mark notification as read)
+        NotificationRead_MobileAPI.notificationReqWrapper req = new NotificationRead_MobileAPI.notificationReqWrapper();
+        req.userId = cp.User_Id__c;
+        req.notificationId = new List<String>{ notif.Name };
+        
+        mock(JSON.serialize(req));
+        NotificationRead_MobileAPI.updateNotificationRead();
+
+        // Path B: VALIDATIONS (Missing Fields / Not Found)
+        mock(JSON.serialize(new Map<String, Object>{ 'userId' => '' }));
+        NotificationRead_MobileAPI.updateNotificationRead();
+
+        mock(JSON.serialize(new Map<String, Object>{ 
+            'userId' => 'FAKE-ID', 
+            'notificationId' => new List<String>{'FAKE-000'} 
+        }));
+        NotificationRead_MobileAPI.updateNotificationRead();
+
+        // Path C: EXCEPTIONS (Catch Block)
+        mock('{ "userId": "broken-json'); 
+        NotificationRead_MobileAPI.updateNotificationRead();
+        
+        Test.stopTest();
+    }
+
+    /* ========================= HELPERS ========================= */
+
+    private static void mock(String body) {
+        RestRequest req = new RestRequest();
+        req.requestUri = '/services/apexrest/NotificationReadAPI/';
+        req.httpMethod = 'POST';
+        req.requestBody = (body == null) ? null : Blob.valueOf(body);
+        RestContext.request = req;
+        RestContext.response = new RestResponse();
+    }
+
+    private static void setIfWriteable(SObject sob, String field, Object val) {
+        Map<String, Schema.SObjectField> fm = sob.getSObjectType().getDescribe().fields.getMap();
+        if (fm.containsKey(field)) {
+            Schema.DescribeFieldResult d = fm.get(field).getDescribe();
+            if (d.isCreateable() || d.isUpdateable()) {
+                sob.put(field, val);
+            }
+        }
+    }
+}

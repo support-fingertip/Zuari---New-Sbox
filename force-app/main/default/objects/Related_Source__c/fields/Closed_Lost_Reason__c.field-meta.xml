@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Lost_Reason__c</fullName>
+    <label>Rejected Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Budget</fullName>
+                <default>false</default>
+                <label>Budget</label>
+            </value>
+            <value>
+                <fullName>Location</fullName>
+                <default>false</default>
+                <label>Location</label>
+            </value>
+            <value>
+                <fullName>Casual Enquiry</fullName>
+                <default>false</default>
+                <label>Casual Enquiry</label>
+            </value>
+            <value>
+                <fullName>Unit Availability</fullName>
+                <default>false</default>
+                <label>Unit Availability</label>
+            </value>
+            <value>
+                <fullName>Dimension</fullName>
+                <default>false</default>
+                <label>Dimension</label>
+            </value>
+            <value>
+                <fullName>Vaastu Concern</fullName>
+                <default>false</default>
+                <label>Vaastu Concern</label>
+            </value>
+            <value>
+                <fullName>Loan Eligibility</fullName>
+                <default>false</default>
+                <label>Loan Eligibility</label>
+            </value>
+            <value>
+                <fullName>Duplicate Lead</fullName>
+                <default>false</default>
+                <label>Duplicate Lead</label>
+            </value>
+            <value>
+                <fullName>Already Allocated</fullName>
+                <default>false</default>
+                <label>Already Allocated</label>
+            </value>
+            <value>
+                <fullName>Booked With Competitor</fullName>
+                <default>false</default>
+                <label>Booked With Competitor</label>
+            </value>
+            <value>
+                <fullName>Interested In New Project</fullName>
+                <default>false</default>
+                <label>Interested In New Project</label>
+            </value>
+            <value>
+                <fullName>Interested in Plots/Villas/Commercial</fullName>
+                <default>false</default>
+                <label>Interested in Plots/Villas/Commercial</label>
+            </value>
+            <value>
+                <fullName>No Discount</fullName>
+                <default>false</default>
+                <label>No Discount</label>
+            </value>
+            <value>
+                <fullName>Non Contactable</fullName>
+                <default>false</default>
+                <label>Non Contactable</label>
+            </value>
+            <value>
+                <fullName>Not A Valid Customer</fullName>
+                <default>false</default>
+                <label>Not A Valid Customer</label>
+            </value>
+            <value>
+                <fullName>Not In Availability</fullName>
+                <default>false</default>
+                <label>Not In Availability</label>
+            </value>
+            <value>
+                <fullName>Not In Cost</fullName>
+                <default>false</default>
+                <label>Not In Cost</label>
+            </value>
+            <value>
+                <fullName>Not In Location</fullName>
+                <default>false</default>
+                <label>Not In Location</label>
+            </value>
+            <value>
+                <fullName>Not In Size</fullName>
+                <default>false</default>
+                <label>Not In Size</label>
+            </value>
+            <value>
+                <fullName>Postponed the Plan</fullName>
+                <default>false</default>
+                <label>Postponed the Plan</label>
+            </value>
+            <value>
+                <fullName>Vastu/Sunlight/Technical/Nala Issue</fullName>
+                <default>false</default>
+                <label>Vastu/Sunlight/Technical/Nala Issue</label>
+            </value>
+            <value>
+                <fullName>Looking For RTM</fullName>
+                <default>false</default>
+                <label>Looking For RTM</label>
+            </value>
+            <value>
+                <fullName>Not Interested</fullName>
+                <default>false</default>
+                <label>Not Interested</label>
+            </value>
+            <value>
+                <fullName>Wrong Number/Invalid Number</fullName>
+                <default>false</default>
+                <label>Wrong Number/Invalid Number</label>
+            </value>
+            <value>
+                <fullName>Not Enquired</fullName>
+                <default>false</default>
+                <label>Not Enquired</label>
+            </value>
+            <value>
+                <fullName>Delivery Timeline too long</fullName>
+                <default>false</default>
+                <label>Delivery Timeline too long</label>
+            </value>
+            <value>
+                <fullName>Frequently disconnecting</fullName>
+                <default>false</default>
+                <label>Frequently disconnecting</label>
+            </value>
+            <value>
+                <fullName>Client has Blocked</fullName>
+                <default>false</default>
+                <label>Client has Blocked</label>
+            </value>
+            <value>
+                <fullName>Reading message but not responding</fullName>
+                <default>false</default>
+                <label>Reading message but not responding</label>
+            </value>
+            <value>
+                <fullName>Not happy with Zuari</fullName>
+                <default>false</default>
+                <label>Not happy with Zuari</label>
+            </value>
+            <value>
+                <fullName>Looking for Payment Plan</fullName>
+                <default>false</default>
+                <label>Looking for Payment Plan</label>
+            </value>
+            <value>
+                <fullName>Model Apartment</fullName>
+                <default>false</default>
+                <label>Model Apartment</label>
+            </value>
+            <value>
+                <fullName>Booked with Channel Partner</fullName>
+                <default>false</default>
+                <label>Booked with Channel Partner</label>
+            </value>
+            <value>
+                <fullName>Needs More Discount or Looking for better deal</fullName>
+                <default>false</default>
+                <label>Needs More Discount or Looking for better deal</label>
+            </value>
+            <value>
+                <fullName>Test/ Mock Lead</fullName>
+                <default>false</default>
+                <label>Test/ Mock Lead</label>
+            </value>
+            <value>
+                <fullName>COVID19</fullName>
+                <default>false</default>
+                <label>COVID19</label>
+            </value>
+            <value>
+                <fullName>Lead older than 6 months</fullName>
+                <default>false</default>
+                <label>Lead older than 6 months</label>
+            </value>
+            <value>
+                <fullName>Dropped the Plan of Buying</fullName>
+                <default>false</default>
+                <label>Dropped the Plan of Buying</label>
+            </value>
+            <value>
+                <fullName>No Eligible for Bank Loan</fullName>
+                <default>false</default>
+                <label>No Eligible for Bank Loan</label>
+            </value>
+            <value>
+                <fullName>Unqualified</fullName>
+                <default>false</default>
+                <label>Unqualified</label>
+            </value>
+            <value>
+                <fullName>CP Clash</fullName>
+                <default>false</default>
+                <label>CP Clash</label>
+            </value>
+            <value>
+                <fullName>Rejecting Repeat Marketing Leads</fullName>
+                <default>false</default>
+                <label>Rejecting Repeat Marketing Leads</label>
+            </value>
+            <value>
+                <fullName>Junk Leads</fullName>
+                <default>false</default>
+                <label>Junk Leads</label>
+            </value>
+            <value>
+                <fullName>Request for Rejection</fullName>
+                <default>false</default>
+                <label>Request for Rejection</label>
+            </value>
+            <value>
+                <fullName>Booked With Zuari</fullName>
+                <default>false</default>
+                <label>Booked With Zuari</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

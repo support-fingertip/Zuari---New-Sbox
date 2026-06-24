@@ -1,0 +1,214 @@
+<apex:page renderAs="pdf" standardController="Booking__c" extensions="TPAController" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false">
+    <head>
+        <style>
+            @page {
+            size: A4;
+            margin: 50px 50px 50px 50px;
+            }
+            
+            body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+            }
+            
+            h2 {
+            text-align: center;
+            text-decoration: underline;
+            font-weight: bold;
+            margin-bottom: 20px;
+            }
+            
+            p {
+            text-align: justify;
+            margin-bottom: 10px;
+            }
+            
+            .center-text {
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            }
+            
+            .page-break {
+            page-break-before: always;
+            }
+        </style>
+    </head>
+    
+    <body style="font-size: 14px; margin-top:100px">
+        <!-- Page 1 -->
+        <div style="text-align: center; font-weight: bold; font-size: 18px;">
+            <span style="border-bottom: 1px solid black;">SPECIAL POWER OF ATTORNEY</span>
+        </div>
+        
+        <div style="height: 1em;"></div>
+        
+        <h3>KNOW ALL MEN BY THESE PRESENTS ON THE  &nbsp;<apex:outputText value="{0,date,EEEE, MMMM dd, yyyy}">
+            <apex:param value="{!TODAY()}"/>  THAT WE:</apex:outputText></h3>
+        
+        <table style="width:100%; border:0;">
+            <tr>
+                <td>{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}, </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>S/d/o {!Booking__c.Son_Daughter_Wife_of1__c}, </td>
+                <td>Aged about {!age} years,</td>
+            </tr>
+            <tr>
+                <td>Residing at {!Booking__c.Permanent_Address1__c}</td>
+            </tr>
+            <tr>
+                <td>(PAN No. {!Booking__c.PAN_Number__c}.</td>
+            </tr>
+            <tr>
+                <td>Adhaar No. {!Booking__c.Aadhar_No__c})</td>
+            </tr>
+        </table>
+        
+        <p style="text-align: justify; font-weight: bold; font-size: 16px;">
+            Hereinafter referred to as “Grantor” which expression shall mean and include their heirs, executors,
+            administrators, legal representatives and assigns of the FIRST PART.
+        </p>
+        
+        <p style="text-align: center; font-size: 16px;">And</p>
+        
+        <table style="width:100%; border:0;">
+            <tr>
+                <td>{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}, </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>S/d/o {!Booking__c.Son_Daughter_Wife_of1__c}, </td>
+            </tr>
+            <tr>
+                <td>Residing at {!Booking__c.Permanent_Address1__c}</td>
+            </tr>
+            <tr>
+                <td>(PAN No. {!Booking__c.PAN_Number__c}.</td>
+            </tr>
+            <tr>
+                <td>Adhaar No. {!Booking__c.Aadhar_No__c})</td>
+            </tr>
+        </table>
+        
+        <p style="text-align: justify; font-weight: bold; font-size: 16px;">
+            Hereinafter referred to as “Attorney” which expression shall mean and include his heirs, executors,
+            administrators, legal representatives and assigns of the SECOND PART.
+        </p>
+        
+        <p>The Party of the First Part states as under:</p>
+        
+        <p style="text-align: justify;">
+            I. WHEREAS, the Grantor with the intention to buy a ______, have entered into Agreement for Sale dated
+            &nbsp;<apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Agreement_Executed_Date__c}"/></apex:outputText> with Zuari Infraworld India Limited pertaining to Unit No. {!Booking__c.Plot__r.Name}, along with undivided share.
+            The Agreement to Sell dated &nbsp;<apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Agreement_Executed_Date__c}"/></apex:outputText> is entered into as regards
+            ___________________________________________ (Description the Property) more fully described in the Schedule
+            to this Instrument hereinafter referred to as the Schedule Property.
+        </p>
+        
+        <p style="text-align: justify;">
+            II. WHEREAS, the Parties of the Grantor has paid the consideration of Rs.  {!Booking__c.Quote__r.Total_Sales_Consideration__c}/- ( {!amountInWords})
+            at the time of executing the Agreement to Sell. And have also paid the subsequent installments according to
+            the payment schedule amounting to Rs. ________________.
+        </p>
+        
+        <p style="text-align: justify;">
+            III. WHEREAS, the Grantor has made payment of the entire sale consideration as per the Agreement to Sell
+            dated &nbsp;<apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Agreement_Executed_Date__c}"/></apex:outputText> and hence Zuari Infraworld India Limited is ready and willing to execute sale deed
+            immediately.
+        </p>
+        
+        <p style="text-align: justify;">
+            IV. WHEREAS, the Grantor is residing abroad due to employment obligations and is unable to travel and may
+            not be able to personally appear before the concerned jurisdictional Sub Registrar to get the Sale Deed
+            registered. Therefore, the Grantor is/are executing this Power of Attorney in favour of the Attorney to
+            appear, present and execute the Sale Deed before the concerned jurisdictional Sub Registrar Office and get
+            it registered in favour of the Grantor, solely for the purpose of purchase of the Schedule Property which is
+            signed by the Grantor herein..
+        </p>
+        
+        <p style="text-align: justify;">
+            NOW KNOW ALL AND THESE PRESENTS WITNESS that I/we the Grantor, for the above said limited purpose, hereby
+            make, ordain, nominate, constitute and appoint the {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} aged about {!age} years, S/o {!Booking__c.Son_Daughter_Wife_of1__c},
+            residing at {!Booking__c.Permanent_Address1__c}, bearing Aadhar No. {!Booking__c.Aadhar_No__c}, as our true and lawful
+            attorney, to execute or to do all or any of the following acts, deeds and things in relation to the above
+            said matter:
+        </p>
+        
+        <p style="text-align: justify;">
+            1. To appear and present the Sale Deed, as signed by the Grantor herein, for the purpose of registration
+            thereof before the concerned Sub Registrar Office, for and on behalf of the Grantor.
+        </p>
+        
+        <p style="text-align: justify;">
+            2. To appear, present, sign, execute and receive the above Sale Deed and all other forms and documents in
+            relation thereto, before the concerned Sub Registrar Office, for and on behalf of the Grantor and, if
+            required, to get the mutation recorded in favour of Grantor, with respect to purchase of the Schedule
+            Property, towards completion of the Sale Transaction in favour of the Grantor.
+        </p>
+        
+        <p style="text-align: justify;">
+            3. It is hereby expressly stated that the Attorney is not authorized to sell, transfer, or receive any
+            consideration whatsoever in respect of the Schedule Property, nor the Attorney is authorized to act for any
+            purpose other than the registration of the Sale Deed in favour of the Grantor, as specified hereinabove.
+        </p>
+        
+        <p style="text-align: justify;">
+            4. To generally do all such acts, deeds and things in connection with the above matters as the Attorney
+            thinks fit and proper for the aforesaid purpose.
+        </p>
+        
+        <p style="text-align: justify;">
+            And I/we hereby for myself/ourselves, our heirs, executors, administrators and legal representatives,
+            undertake, ratify and confirm, and agree to ratify and confirm all those acts, deeds, matters and things
+            done and/or cause to be done by the Attorney vide this Power of Attorney, shall be construed as acts, deed
+            matters and things done by the Grantor personally as if the Grantor itself were present and shall be binding
+            on the Grantor.
+        </p>
+        
+        <p style="text-align: justify;">
+            The Attorney has accepted these presents and has executed the present Power of Attorney.
+        </p>
+        
+        <br/>
+        
+        <p style="text-align: justify;">
+            IN WITNESS WHEREOF, We, _______________ and ____________________ have signed this deed of General Power of
+            Attorney on <apex:outputText value="{0,date,MM'/'dd'/'yyyy}"> <apex:param value="{!TODAY()}"/></apex:outputText>
+            in the presence of the following witnesses:
+        </p>
+        
+        <div style="text-align: center;">
+            SCHEDULE PROPERTY <br/>
+            Schedule ‘A’ Property <br/><br/>
+            Schedule ‘B’ Property
+        </div>
+        
+        <br/>
+        
+        <table style="border-collapse: collapse; border: none; width: 100%;">
+            <tr>
+                <td style="border: none; width: 40%;"></td>
+                <td style="border: none; width: 40%;"></td>
+                <td style="border: none; width: 55%;">Executant</td>
+            </tr>
+        </table>
+        
+        <br/><br/>
+        
+        <div style="text-align: right; width: 100%;">
+            Specimen signature of the Attorney
+        </div>
+        
+        <br/>
+        
+        <div style="text-align: left;">
+            Witnesses: <br/>
+            1. <br/><br/>
+            2.
+        </div>
+    </body>
+</apex:page>

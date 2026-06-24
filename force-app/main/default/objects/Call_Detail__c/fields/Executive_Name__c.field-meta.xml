@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Executive_Name__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(
+   Execuive_Number__c,
+   &quot;9606445618&quot;, &quot;Rahul&quot;,
+   &quot;9606445632&quot;, &quot;Arpitha&quot;,
+   &quot;9606445617&quot;, &quot;Ganesh&quot;,
+   &quot;9579945850&quot;,&quot;Prakash&quot;,
+&quot;&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Executive Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

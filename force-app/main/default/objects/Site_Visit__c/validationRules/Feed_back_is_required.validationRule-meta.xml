@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feed_back_is_required</fullName>
+    <active>true</active>
+    <description>AND(
+    ISPICKVAL(Status__c, &quot;Completed&quot;),$Profile.Name &lt;&gt; &apos;Pre Sales&apos;,
+    OR(
+        ISBLANK(Feedback__c),
+        ISBLANK(SV_Completed_Date_Time__c),  
+        ISPICKVAL(Site_Visit_rating__c , &quot;&quot;)
+
+
+    )
+)</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status__c, &quot;Completed&quot;),
+    $Profile.Name &lt;&gt; &quot;Pre Sales&quot;,
+    OR(
+        ISBLANK(Feedback__c),
+        ISBLANK(SV_Completed_Date_Time__c),
+        NOT(Customer_Visit_Happened__c),
+        ISBLANK(Site_Visit_Remarks__c),
+        ISPICKVAL(Site_Visit_rating__c, &quot;&quot;),
+        ISBLANK(SV_Sales_Feedback__c),
+        ISBLANK(Site_Visit_Drive_Team__c),
+        ISBLANK(Site_Visit_Entry_Time__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>Please Give Some Feedback, Site Visit Rating and SV Completed Date &amp; Time</errorMessage>
+</ValidationRule>

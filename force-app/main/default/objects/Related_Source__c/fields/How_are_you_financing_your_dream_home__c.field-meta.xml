@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>How_are_you_financing_your_dream_home__c</fullName>
+    <label>How are you financing your dream home</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Own Funds</fullName>
+                <default>false</default>
+                <label>Own Funds</label>
+            </value>
+            <value>
+                <fullName>Home Loans</fullName>
+                <default>false</default>
+                <label>Home Loans</label>
+            </value>
+            <value>
+                <fullName>Sale of existing property</fullName>
+                <default>false</default>
+                <label>Sale of existing property</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

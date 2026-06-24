@@ -1,0 +1,273 @@
+<apex:page standardController="Booking__c" extensions="CancellationLetterVFPController" showHeader="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf">
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        table,
+            th,
+            td {
+                border: 1px #C0C0C0;
+            }
+        .left-align {
+            text-align: left;
+        }
+        .right-align {
+            text-align: right;
+        }
+        .center-align {
+            text-align: center;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .indent {
+            padding-left: 20px;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .border-all {
+            border: 1px solid black !important;
+        }
+        .no-border {
+            border: none !important;
+        }
+    </style>
+
+    <div style="page-break-after:auto">
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tr><td>
+                <tr>
+                    <td style="font-size: 12px;text-align:left;border: none;">
+                        <img src="{!$Resource.Zuari}" width="110px" height="50" />
+                    </td>
+                    <td style="font-size: 12px;text-align:right;border: none;">
+                        <apex:image url="{!projectLogoUrl}" width="110px" height="50" rendered="{!NOT(ISBLANK(projectLogoUrl))}" />
+                    </td>
+                </tr>
+
+                <h2 style="text-align: center; text-decoration: underline; font-family: 'Times New Roman', serif; font-size: 18px; margin-bottom: 16px;">
+                    KEY HANDOVER LETTER
+                </h2>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: right; line-height: 1.6; margin: 8px 0;">
+                    Date: <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText>
+                </p>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: justify; line-height: 1.6; margin: 8px 0;">
+                    To,
+                </p>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: none; line-height: 1.6; margin: 8px 0;">
+                    {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} and {!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}
+                </p>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: justify; line-height: 1.6; margin: 8px 0;">
+                    <strong>Sub:</strong> Handover of the KEYS of {!unitLabel} No. {!Booking__c.Plot__r.Name} on {!Booking__c.Plot__r.Floor__c} Floor, in Tower {!Booking__c.Plot__r.Tower__c}, {!Booking__c.Plot__r.Phase_Detail__c}, in the project known as <strong>"{!projectName} – {!Booking__c.Plot__r.Project__r.Project_Address__c}"</strong>
+                </p>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: justify; line-height: 1.6; margin: 8px 0;">
+                    Dear Sir/Madam,
+                </p>
+
+                <p style="font-family: 'Times New Roman', serif; font-size: 12px; text-align: justify; line-height: 1.6; margin: 8px 0;">
+                    Please sign this Letter as a token of acceptance of the following:
+                </p>
+
+                <table style="width:100%; border-collapse:collapse; margin:17px auto; border:1px solid black;">
+                    <tr>
+                        <th style="border:1px solid black; padding:5px; background:#f2f2f2; text-align: center;" rowspan="2">Sl.No</th>
+                        <th style="border:1px solid black; padding:5px; background:#f2f2f2; text-align: center;" rowspan="2">Location</th>
+                        <th style="border:1px solid black; padding:5px; background:#f2f2f2; text-align:center;" colspan="2">Key Details</th>
+                    </tr>
+                    <tr>
+                        <th style="border:1px solid black; padding:5px; text-align:center;">Key No.</th>
+                        <th style="border:1px solid black; padding:5px; text-align:center;">No. of keys</th>
+                    </tr>
+                    <apex:variable var="rowNum" value="{!0}" />
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Main_Door__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Main Door</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Main_Door__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Main_Door_No_of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Kitchen_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Kitchen</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Kitchen_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Kitchen_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.GF_bedroom_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">GF bedroom</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.GF_bedroom_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.GF_bedroom_No_of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.GF_green_area_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">GF green area</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.GF_green_area_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.GF_green_area_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Staircase_store_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Staircase store</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Staircase_store_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Staircase_store_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.FF_Master_bedroom_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">FF Master bedroom</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.FF_Master_bedroom_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.FF_Master_bedroom_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.FF_children_bedroom_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">FF children bedroom</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.FF_children_bedroom_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.FF_children_bedroom_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Terrace_store_room_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Terrace store room</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Terrace_store_room_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Terrace_store_room_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Terrace_door_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Terrace door</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Terrace_door_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Terrace_door_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Bedroom_2__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Bedroom 2</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_2__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_2_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Bedroom_3__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Bedroom 3</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_3__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_3_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Bedroom_4__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Bedroom 4</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_4__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Bedroom_4_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+                     <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Master_bedroom__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Master Bedroom</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Master_bedroom__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Master_Bedroom_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Servant_room_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Servant room</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Servant_room_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Servant_room_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="none" rendered="{!NOT(ISBLANK(Booking__c.Shaft_room_Key_No__c))}">
+                    <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(rowNum)}"/></td>
+                        <td style="border:1px solid black; padding:5px;">Shaft room</td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Shaft_room_Key_No__c)}"/></td>
+                        <td style="border:1px solid black; padding:5px; text-align: center;"><apex:outputText value="{!floor(Booking__c.Shaft_room_No_Of_Keys__c)}"/></td>
+                    </tr>
+                    </apex:outputPanel>
+                </table>
+
+                <table>
+                    <tr><td>For Gangothri Infraedge Pvt Ltd</td></tr>
+                    <tr><td>CRM Representative<br/></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td></td></tr>
+                    <tr><td>I / we hereby acknowledge that we have inspected all the keys set out above and ascertained that the same are in working condition, before taking handover.<br/></td></tr>
+                    <tr><td>Name and Signature of the Unit owner<br/></td></tr>
+                    <tr><td>Name: ______________________<br/></td></tr>
+                    <tr><td>Signature: _____________________</td></tr>
+                </table>
+
+            </td></tr>
+        </table>
+    </div>
+</apex:page>

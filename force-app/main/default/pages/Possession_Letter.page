@@ -1,0 +1,137 @@
+<apex:page standardController="Booking__c" extensions="CancellationLetterVFPController"  showHeader="false" sidebar="false" standardStylesheets="false" renderAs="pdf">
+    <table width="100%"  cellspacing="0" border="0" style="border: none !important; border-collapse: collapse; border-spacing: 0;" >
+        <tr>
+            <td style="font-size: 12px;text-align:left;border: none;"> <img src="{!$Resource.Zuari}" width="150px" height="60" /></td>
+            
+            <td style="font-size: 12px;text-align:right;border: none;">
+                <apex:image url="{!projectLogoUrl}" width="150px" height="60" rendered="{!NOT(ISBLANK(projectLogoUrl))}" />
+            </td>
+            
+            
+        </tr>
+    </table>
+    
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 14pt; text-align:center; font-weight:bold; margin-top:40px;  padding-bottom: 6px; letter-spacing: 1.5px;">
+        POSSESSION LETTER
+    </p>
+    
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; margin-top: 30px; margin-right: 60px; text-align:right;">
+        Date: <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Possession_Date__c}"/></apex:outputText>
+    </p>
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; margin-bottom: 24px; text-align: justify;">
+        To,
+    </p>
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; text-align: none;">
+        {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} <apex:outputPanel rendered="{!firstCoApplicant != null}">and {!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}</apex:outputPanel>
+    </p>
+
+    <!-- Plot-type Sub line -->
+    <apex:outputPanel rendered="{!Booking__c.Project1__r.Project_Type__c == 'Plots'}">
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt;  margin-top: 30px; text-align: justify;">
+        <strong>Sub: </strong>&nbsp;&nbsp;&nbsp;&nbsp;Handover of physical possession of Plot No. {!Booking__c.Plot__r.Name} in {!Booking__c.Plot__r.Block__c} Block in the project known as
+        <strong>"{!projectName}"</strong> situated at {!Booking__c.Plot__r.Project__r.Project_Address__c}.
+    </p>
+    </apex:outputPanel>
+    <!-- Apartment/Villa-type Sub line -->
+    <apex:outputPanel rendered="{!Booking__c.Project1__r.Project_Type__c != 'Plots'}">
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt;  margin-top: 30px; text-align: justify;">
+        <strong>Sub: </strong>&nbsp;&nbsp;&nbsp;&nbsp;Handover of physical possession of Unit No. {!Booking__c.Plot__r.Name} on {!Booking__c.Plot__r.Floor__c} Floor, in Tower {!Booking__c.Plot__r.Tower__c}, in the project known as
+        <strong>"{!projectName}"</strong> situated at {!Booking__c.Plot__r.Project__r.Project_Address__c}.
+    </p>
+    </apex:outputPanel>
+    
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; margin-bottom: 16px; text-align: justify;">
+        Dear Sir/Madam,
+    </p>
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; margin-bottom: 16px; text-align: justify;">
+        You had entered into an agreement of sale agreement with respect to above mentioned subject {!unitLabel}. Upon payment of all outstanding amounts from you.
+        <strong>Zuari Infraworld India Ltd. </strong> has on this&nbsp; <apex:outputText value="{0,date,dd MMM yyyy}"><apex:param value="{!Booking__c.Possession_Date__c}"/></apex:outputText>
+        handed over the physical possession of the said {!unitLabel} to you and in this connection you hereby agree, acknowledge, confirm and undertake as under:-
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        1) You confirm having received possession of the {!unitLabel} from us. The dossier with all the documents specific to your {!unitLabel} with the checklist has been handed over to you. Please acknowledge the receipt.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        2) You have been explained about the nature and scope of the entire development of <strong>Zuari Infraworld India Ltd. </strong>, and you are satisfied with the same. All your queries with respect to the title to the property and the development have been clarified to your satisfaction.
+    </p>
+
+    <!-- Plot-specific clauses -->
+    <apex:outputPanel rendered="{!Booking__c.Project1__r.Project_Type__c == 'Plots'}">
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        3) You have visited the Project and inspected the Plot and confirm that the location, area, boundary and demarcation of the Plot is in accordance with the agreed specifications set out in the Agreement for Sale. Having satisfied yourselves location, area, boundary and demarcation of the Plot, you have taken possession.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        4) You confirm that the filing, leveling, etc. of the Plot, if any required, shall be done by you. All day to day repairs, upkeep, maintenance and any defects which may arise out at later date will be addressed by the Plot owner, and only structural defect, if any, will be addressed by <strong>Zuari Infraworld India Ltd. </strong> under Defect Liability period.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        5) You undertake Construction in the said Plot shall be carried out without causing any damages to the common services and subject to the stipulated guidelines and conditions. The decision of the Company/Owner Association as to the extent of damage caused, if any, and the amount required to rectify the same shall be final and binding.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        6) You further undertake that you shall not encroach upon any area outside the Plot including but not limited to any utilities, garden, open space, etc. outside the Plot, in any manner whatsoever.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        7) You shall pay non-interest bearing security deposit of Rs.{!Booking__c.Security_Deposit__c}/- for the Plot as security towards any damage caused during the course of the construction / interior works. Any damages &amp; losses to common area or any other Plot / apartment. You hereby authorize us to adjust the security deposit towards the same, without requirement of any further consent from you. In the event, any amount additional to the Security Deposit is required to be paid, you hereby agree and undertake to pay the same within 7 (seven) days of receipt of intimation from <strong>Zuari Infraworld India Ltd.</strong>.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        8) During the course of undertaking the Construction / interior work, you shall be solely responsible for compliance with all applicable laws, including in respect of the vendors, contractors, labours and workmen engaged for the said purpose. On completion of the interior works, you shall submit a copy of the occupation / completion certificate issued by the competent authority and the Property Management Team / CRM Team/ shall be permitted to inspect the Plot anytime hereafter.
+    </p>
+    </apex:outputPanel>
+
+    <!-- Apartment/Villa-specific clauses -->
+    <apex:outputPanel rendered="{!Booking__c.Project1__r.Project_Type__c != 'Plots'}">
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        3) You have visited the Project and inspected the Unit and confirm that the location, area, and specifications of the Unit is in accordance with the agreed specifications set out in the Agreement for Sale. Having satisfied yourselves with the location, area, and specifications of the Unit, you have taken possession.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        4) You confirm that all day to day repairs, upkeep, maintenance and any defects which may arise out at later date will be addressed by the Unit owner, and only structural defect, if any, will be addressed by <strong>Zuari Infraworld India Ltd. </strong> under Defect Liability period.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        5) You undertake that any interior work / renovation in the said Unit shall be carried out without causing any damages to the common services and subject to the stipulated guidelines and conditions. The decision of the Company/Owner Association as to the extent of damage caused, if any, and the amount required to rectify the same shall be final and binding.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        6) You further undertake that you shall not encroach upon any area outside the Unit including but not limited to any utilities, garden, open space, etc. outside the Unit, in any manner whatsoever.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        7) You shall pay non-interest bearing security deposit of Rs.{!Booking__c.Security_Deposit__c}/- for the Unit as security towards any damage caused during the course of the interior works. Any damages &amp; losses to common area or any other Unit / apartment. You hereby authorize us to adjust the security deposit towards the same, without requirement of any further consent from you. In the event, any amount additional to the Security Deposit is required to be paid, you hereby agree and undertake to pay the same within 7 (seven) days of receipt of intimation from <strong>Zuari Infraworld India Ltd.</strong>.
+    </p>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        8) During the course of undertaking the interior work, you shall be solely responsible for compliance with all applicable laws, including in respect of the vendors, contractors, labours and workmen engaged for the said purpose. On completion of the interior works, the Property Management Team / CRM Team shall be permitted to inspect the Unit anytime hereafter.
+    </p>
+    </apex:outputPanel>
+
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify;">
+        9) You understand and acknowledge that post inspection and based on the certification, the security deposit amount as adjusted by any cost on account of damage, if any, will be refunded without any interest within 7 working days.
+    </p>
+    
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; font-weight:bold; margin-top: 40px; margin-bottom: 40px; text-align: center;">
+        I/We have read the above and I/We accept and confirm the same.
+    </p>
+    <div>
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td style="border: none; padding: 6px;">Applicant :&nbsp;{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</td>
+                <td style="border: none; padding: 6px;text-align:center;">Co-Applicant:&nbsp;<apex:repeat value="{!coApplicants}" var="co">{!co.Salutation__c} {!co.Name},&nbsp;</apex:repeat></td>
+                
+            </tr>
+        </table>
+    </div>
+    
+    <p style="font-family:'Times New Roman', Times, serif; font-size: 12pt; text-align:left; text-align: justify;">
+        For&nbsp;<strong>Zuari Infraworld India Ltd.</strong>
+    </p>
+    <div>
+        Note: This is a system-generated Statement and doesn’t require a signature.
+    </div>
+</apex:page>

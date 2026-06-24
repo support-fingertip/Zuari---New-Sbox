@@ -1,0 +1,82 @@
+<apex:page standardController="Master_Payment_Schedule__c" 
+           extensions="MilestoneCompletionVFPController" 
+           contentType="application/pdf" 
+           renderAs="pdf" 
+           title="Milestone Completion Certificate">
+
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-size: 12px; text-align: left; border: none;">
+                <img src="{!$Resource.Zuari}" width="110px" height="50" />
+            </td>
+            <td style="font-size: 12px; text-align: right; border: none;">
+                <apex:outputText rendered="{!projectName == 'Zuari Garden City - Plots'}">
+                    <img src="{!$Resource.ZuariGardenCity}" width="110px" height="50" />
+                </apex:outputText>
+                <apex:outputText rendered="{!projectName == 'Zuari Gangothri Tribhuja'}">
+                    <img src="{!$Resource.GangotriLogo}" width="110px" height="50" />
+                </apex:outputText>
+            </td>
+        </tr>
+    </table>
+
+    <p style="text-align: center; font-size: 16px; font-weight: bold; font-family: 'Times New Roman', serif; margin: 20px 20px 10px 20px;">
+        MILESTONE COMPLETION CERTIFICATE
+    </p>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 10px 20px;">
+        <strong>Date:</strong> &nbsp;
+        <apex:outputText value="{0,date,dd/MM/yyyy}">
+            <apex:param value="{!TODAY()}" />
+        </apex:outputText> <br/>
+        <strong>Project Name:</strong>&nbsp; {!projectName} <br/>
+        <strong>Phase:</strong> &nbsp;{!Master_Payment_Schedule__c.Block__r.Phase_Deatils__c} <br/>
+        <strong>Block/Tower:</strong>&nbsp; {!Master_Payment_Schedule__c.Block__r.Name}
+    </p>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 20px 20px 10px 20px;">
+        This is to certify that the below-mentioned construction milestone has been completed at
+        site as per project schedule.
+    </p>
+
+    <p style="text-align: left; font-size: 14px; font-family: 'Times New Roman', serif; margin: 10px 20px 5px 20px;">
+        <strong>Milestone Details:</strong>
+    </p>
+
+    <ul style="font-size: 14px; line-height: 1.8; font-family: 'Times New Roman', serif; margin: 5px 20px 10px 40px;">
+        <li><strong>Milestone Name:</strong>&nbsp; {!masterScheduleName}</li>
+        <li><strong>Block/Tower:</strong>&nbsp; {!Master_Payment_Schedule__c.Block__r.Name}</li>
+        <li><strong>Completion Date:</strong>&nbsp;
+            <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!completedDate}" />
+            </apex:outputText>
+        </li>
+    </ul>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 10px 20px;">
+        The above milestone has been physically verified and found satisfactory as per
+        construction standards and quality norms.
+    </p>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 10px 20px;">
+        You may proceed with raising the corresponding demand as per the payment schedule
+        and agreement terms.
+    </p>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 15px 20px 5px 20px;">
+        From Gangothri Infredge Pvt Ltd
+    </p>
+
+    <p style="text-align: left; font-size: 14px; line-height: 1.8; font-family: 'Times New Roman', serif; margin: 10px 20px;">
+        <strong>Project Head</strong> <br/>
+        Name: &nbsp;{!projectHeadName} <br/>
+        Signature: __________ <br/>
+        Date: &nbsp;
+        <apex:outputText value="{0,date,dd/MM/yyyy}">
+            <apex:param value="{!TODAY()}" />
+        </apex:outputText>
+    </p>
+
+    <div style="border-bottom: 1.5px solid #ccc; padding: 10px;"></div>
+
+</apex:page>

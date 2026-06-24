@@ -1,0 +1,104 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="FileUploadController">
+    <aura:attribute name="recordId" type="string" access="global"/> 
+    <aura:attribute name="selectedDocumentName" type="string" access="global" default=""/> 
+    <aura:attribute name="contentDocIds" type="List" access="global"/>
+    <aura:attribute name="togglePreview" type="boolean" access="global" default="false"/>
+    <aura:attribute name="fileName" type="List" access="global"/>
+    <aura:attribute name="sectionName" type="String" access="global"/>
+    <aura:attribute name="uploadedFiles" type="List" access="global"/>
+    <aura:attribute name="picklistValues" type="String" access="global"/>
+    <aura:attribute name="picklistlabel" type="String" access="global"/>
+    <aura:attribute name="showPicklist" type="boolean" default="false" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:spinner aura:id="mySpinner" title="Uploading..." varient="brand" class="slds-hide"/>
+    <div class="demo-only">
+        <article class="slds-box slds-tile">
+            <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">{!v.sectionName}</h3>
+            <aura:if isTrue="{!v.showPicklist == true}">
+            <lightning:combobox 
+                                name="picklist"
+                                label="{!v.picklistlabel}"
+                                value="{!v.selectedDocumentName}" 
+                                options="{!v.picklistValues}"
+                                onchange="{!c.handleChange}" />
+            </aura:if>
+            
+            <div class="slds-grid slds-gutters slds-text-align_center">
+                <aura:if isTrue="{!v.sectionName != ''}">
+                    <div class="slds-col">
+                        <lightning:input type="file" 
+                                         aura:id="fileUpload"
+                                         label="File Upload" 
+                                         name="file" 
+                                         multiple="true" 
+                                         onchange="{!c.filesChangeHandler}"/>
+                        <aura:if isTrue="{!v.fileName.length > 0}">
+                            <aura:iteration items="{!v.fileName}" var="val">
+                                <div class="slds-text-color_success">
+                                    {!val}<br/>
+                                </div>
+                            </aura:iteration>
+                            <aura:set attribute="else">
+                                <div class="slds-text-color_error">
+                                    No Files Selected...
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                        <lightning:button name="Upload File" label="Upload File" variant="brand" onclick="{!c.uploadFiles}"/>
+                    </div>
+                </aura:if>
+            </div>
+            <br/>
+            <div>
+                <span>
+                    <lightning:input type="toggle" label="Preview" name="input1"  class="small-toggle" checked="{!v.togglePreview}"/>
+                </span>
+            </div>
+            <div class="slds-grid slds-gutters slds-scrollable_x">
+                <aura:if isTrue="{!AND(v.contentDocIds.length > 0,v.togglePreview)}">
+                    <aura:iteration items="{!v.contentDocIds}" var="val">
+                        <div class="slds-col">
+                            <lightning:fileCard fileId="{!val.fileId}"/>
+                        </div>
+                    </aura:iteration>
+                </aura:if>
+            </div>
+            <div class="slds-box slds-theme_default">
+                <aura:if isTrue="{!AND(v.contentDocIds.length > 0,!v.togglePreview)}">
+                    <table class="slds-no-row-hover slds-table slds-table_bordered slds-table_cell-buffer slds-table_edit slds-table_fixed-layout slds-table_resizable-cols">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th width="10%">PV</th>
+                                <th width="44%" style="padding-left:12px;">File Name</th>
+                                <th width="7%"></th>
+                                <th width="7%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.contentDocIds}" var="file">
+                                <tr>
+                                    <td>
+                                        <img src="{!file.previewUrl}" alt="{!file.title}" style="width:50px; height:50px;"/>
+                                    </td>
+                                    <td class="slds-truncate">{!file.title}</td>
+                                    <td>
+                                        <lightning:buttonIcon iconName="utility:download" alternativeText="Download" name="{!file.downloadUrl}"
+                                                              class="slds-button_icon slds-button_icon-inverse slds-text-color_success" 
+                                                              onclick="{!c.downloadFile}" 
+                                                              title="Download"/>
+                                    </td>
+                                    <td>
+                                        <lightning:buttonIcon iconName="utility:delete" alternativeText="Delete" name="{!file.fileId}"
+                                                              class="slds-button_icon slds-button_icon-inverse slds-text-color_error" 
+                                                              onclick="{!c.deleteFile}" 
+                                                              title="Delete"/>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </aura:if>
+            </div>
+        </article>
+    </div>
+</aura:component>

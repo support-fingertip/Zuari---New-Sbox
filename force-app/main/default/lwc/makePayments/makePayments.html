@@ -1,0 +1,98 @@
+<template>
+    <lightning-card title="Channel Partner Payments">
+
+        <!-- STEP 1: SEARCH -->
+        <div class="slds-p-around_medium">
+            <lightning-input
+                label="Search Invoice"
+                placeholder="Search by Invoice Number"
+                onchange={handleSearch}>
+            </lightning-input>
+        </div>
+
+        <!-- STEP 1: DATATABLE -->
+        <lightning-datatable
+            key-field="Id"
+            data={filteredInvoices}
+            columns={columns}
+            onrowselection={handleRowSelection}
+            selected-rows={selectedRowIds}>
+        </lightning-datatable>
+
+        <!-- SELECTED TOTAL -->
+        <template if:true={selectedInvoices.length}>
+            <div class="slds-p-around_medium slds-text-heading_small">
+                Total Selected Amount: ₹{totalInvoiceAmount}
+            </div>
+        </template>
+
+        <!-- STEP 2: PAYMENT DETAILS -->
+        <template if:true={selectedInvoices.length}>
+            <div class="slds-box slds-theme_shade slds-p-around_medium slds-m-top_medium">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                    Step 2: Enter Payment Details
+                </h3>
+
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input
+                            label="Payment Line Item Base Name"
+                            required
+                            value={baseName}
+                            onchange={handleNameChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input
+                            type="date"
+                            label="Payment Date"
+                            required
+                            value={paymentDate}
+                            onchange={handleDate}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input
+                            label="Transaction Number (UTR)"
+                            required
+                            value={utrNumber}
+                            onchange={handleUTR}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-combobox
+                            label="Payment Method"
+                            required
+                            value={paymentMethod}
+                            options={paymentMethodOptions}
+                            onchange={handlePaymentMethod}>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-combobox
+                            label="Status"
+                            required
+                            value={status}
+                            options={statusOptions}
+                            onchange={handleStatus}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="slds-m-top_large slds-text-align_center">
+                    <lightning-button
+                        label="Create Payment"
+                        variant="brand"
+                        onclick={savePayment}
+                        disabled={isInvalid}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+    </lightning-card>
+</template>

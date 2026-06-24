@@ -1,0 +1,30 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+    <aura:attribute name="myRecordID" type="String" description="Record to which the files should be attached" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card title="Project Mobile Documents Upload" iconName="custom:custom14" class="slds-p-around_small">
+        <div class="slds-p-vertical_xx-small">      
+              <c:GenricFileUploadComponent recordId="{!v.recordId}" picklistValues="New Launch,Project Images,Floor Plans,Project Brochure,Approval Document" />
+          </div>
+        
+        <!--
+        <div class="slds-p-vertical_xx-small">      
+           
+            <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="Project Images" />
+        </div>
+       <div class="slds-p-vertical_xx-small">      
+            <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="New Launch" />
+        </div>
+        
+        <div class="slds-p-vertical_xx-small">      
+            <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="Floor Plans" />
+        </div> 
+        <div class="slds-p-vertical_xx-small">      
+            <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="Project Brochure " />
+        </div> 
+        <div class="slds-p-vertical_xx-small">      
+            <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="Approval Document " />
+        </div> -->
+        
+    </lightning:card>
+</aura:component>

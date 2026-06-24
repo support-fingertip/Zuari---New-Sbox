@@ -1,0 +1,32 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="UserStatusController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="usr" type="User"/>
+    <aura:attribute name="isFalse" type="boolean" default="false"/>
+    <aura:attribute name="reasone" type="string" default=""/>
+    <aura:attribute name="label" type="string" default="Status-"/>
+    <aura:attribute name="isCti" type="boolean" default="false"/>
+    <div class="slds-box slds-theme_shade">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col">
+                <div class="slds-grid slds-gutters">
+                    
+                    <div class="slds-col">
+                        
+                        <div class="slds-align_absolute-center">
+                            <aura:if isTrue="{!v.isCti}">
+                                {!v.label}
+                                <lightning:input class="slds-p-right_medium"  type="toggle" name="{!v.usr.id}"  checked="{!v.usr.Availability__c}" value="{!v.usr.Availability__c}" onchange="{!c.selectChange}" messageToggleActive="Available"  messageToggleInactive="Offline"/>
+                                <lightning:icon size="xx-small" iconName="{!v.usr.Availability__c ? 'action:approval' : 'action:close'}"/>  
+                                <aura:set attribute="else">
+                                    {!v.label}
+                                    <lightning:input class="slds-p-right_medium"  type="toggle" name="{!v.usr.id}"  checked="{!v.usr.Availability__c}" value="{!v.usr.Availability__c}" onchange="{!c.selectChange}" messageToggleActive="Available"  messageToggleInactive="Offline"/>
+                                    <lightning:icon size="xx-small" iconName="{!v.usr.Availability__c ? 'action:approval' : 'action:close'}"/>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

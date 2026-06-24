@@ -1,0 +1,1285 @@
+<aura:component controller = "SiteVisitFormController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="leadRecord" type="Related_Source__c"  default="{}"/>
+    <aura:attribute name="leadRecordToSave" type="Related_Source__c"  default="{}"/>
+    <aura:attribute name="projects" type="List" />
+    <aura:attribute name="selectedProject" type="String" />
+    <aura:attribute name="phone" type="String" />
+    <aura:attribute name="datevalue" type="datetime" />
+    <aura:attribute name="leadName" type="String" />
+    <aura:attribute name="phonenumer" type="String" />
+    <aura:attribute name="otpStatus" type="String" default=''/>
+    <aura:attribute name="showDetails" type="Boolean" default="false"/>    
+    <aura:attribute name="isChannelPartner" type="boolean"/>
+    <aura:attribute name="sectionLabels" type="Map" default=""/>
+    <aura:attribute name="selectedCountry" type="string" />
+    <aura:attribute name="selectedCountryCode" type="string" />
+    <aura:attribute name="OTPnewLead" type="string" default="0000"/>
+    <aura:attribute name="OTPExisLead" type="string" />
+    <aura:attribute name="salesuser" type="string" />
+    <aura:attribute name="leadSource" type="string" />
+    <aura:attribute name="leadId" type="string" />
+    <aura:attribute name="tabId" type="String" default="1"/>
+    <aura:attribute name="visitType" type="string" />
+    <aura:attribute name="isDuplicateError" type="boolean" default="false" />
+    <aura:attribute name="formDataSnapshot" type="Related_Source__c"  default="{}"/>
+    <aura:attribute name="nativeCityOptions" type="List" default="[{'label':'Yes','value':'Yes'},{'label':'No','value':'No'}]"/>
+    <aura:attribute name="primaryPhone" type="String" />
+    <aura:attribute name="secondaryPhone" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title slds-align-middle">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon size="large" iconName="standard:groups"/>
+                        </div>
+                        <div class="slds-media__body slds-align-middle"><span style="font-size:18px;font-weight: bold;">GRE Form</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <lightning:tabset variant="scoped" class="slds-tabs_medium" aura:id="tabs" selectedTabId="{!v.tabId}">
+            <lightning:tab label="Verify Phone Number" id="1">
+                <div>
+                    <div class="slds-scope">
+                        <div class="slds-grid slds-wrap slds-text-align_left">
+                            <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                <lightning:select name="selectProject" aura:id="projectSelect" label="Select Project" value="{!v.selectedProject}">
+                                    <option value="">--None--</option>
+                                    
+                                    <aura:iteration items="{!v.projects}" var="project">
+                                        <option value="{!project.value}">{!project.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </div>
+                            <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                <lightning:input type="tel" name="phone" label="Enter OTP" value="{!v.phone}" />
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <aura:if isTrue="{!v.showDetails == true}">
+                        <lightning:card >
+                            <aura:set attribute="title">
+                                <div style="display: flex; align-items: center;">
+                                    <lightning:icon iconName="standard:lead_list" size="medium" alternativeText="Lead Icon" />
+                                    <b><span style="margin-left: 5px; font-size: 20px;">Related Source Details</span></b>
+                                </div>
+                            </aura:set>
+                            <hr style="margin-top: 5px; border-top: 1px solid #ccc;"/>
+                            <div style="text-align: left; padding-left: 20px;">
+                                
+                                <p style="font-size: 15px;"><b>OTP Status: </b>{!v.otpStatus}</p>
+                                <aura:if isTrue="{!v.otpStatus != 'No Lead Exists'}">
+                                    <table>
+                                        <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Related Source Name: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Name__c != null}">
+                                                    {!v.leadRecord.Name__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Primary Lead Source: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Lead_Source__c != null}">
+                                                    {!v.leadRecord.Lead_Source__c}
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                   <tr><td colspan="2" style="font-size: 18px;text-align:center">
+                                       <b>Demography Detail</b>
+                                       </td></tr>
+                                        <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Industry: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Industry != null}">
+                                                    {!v.leadRecord.Industry}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Not Open to Share: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Not_open_to_share__c != null}">
+                                                    {!v.leadRecord.Not_open_to_share__c}
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                    <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Sv Desgination of Customer: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Sv_Designation_of_Customer__c != null}">
+                                                    {!v.leadRecord.Sv_Designation_of_Customer__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Calling Region: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Calling_Region__c != null}">
+                                                    {!v.leadRecord.Calling_Region__c}
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                   
+                                         <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Sv Desgination : </b>
+                                                <aura:if isTrue="{!v.leadRecord.Sv_Designation__c != null}">
+                                                    {!v.leadRecord.Sv_Designation__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Residentail Status: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Residential_Status__c != null}">
+                                                    {!v.leadRecord.Residential_Status__c}
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                    <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Club Membership : </b>
+                                                <aura:if isTrue="{!v.leadRecord.Club_Memberships__c != null}">
+                                                    {!v.leadRecord.Club_Memberships__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Address: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Address__c != null}">
+                                                    {!v.leadRecord.Address__c}
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                  
+                                          <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>How long have you been looking for a home : </b>
+                                                <aura:if isTrue="{!v.leadRecord.How_long_have_you_been_looking_for_a_hom__c != null}">
+                                                    {!v.leadRecord.How_long_have_you_been_looking_for_a_hom__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>No. of members in the Family : </b>
+                                                    {!v.leadRecord.Number_of_members_in_the_family__c}
+                                                
+                                            </td>
+                                        </tr>
+                                    <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Any Relaties Frinds Abroad : </b>
+                                                <aura:if isTrue="{!v.leadRecord.Any_relatives_friends_Abroad__c != null}">
+                                                    {!v.leadRecord.Any_relatives_friends_Abroad__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>No. of Children : </b>
+                                                    {!v.leadRecord.No_of_Children__c}
+                                                
+                                            </td>
+                                        </tr>
+                                  
+                                         <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Vehicle Model : </b>
+                                                <aura:if isTrue="{!v.leadRecord.Vehicle_Model__c != null}">
+                                                    {!v.leadRecord.Vehicle_Model__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Age : </b>
+                                                    {!v.leadRecord.Age__c}
+                                                
+                                            </td>
+                                        </tr>
+                                  
+                                         <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Make of Vehicle : </b>
+                                                <aura:if isTrue="{!v.leadRecord.Make_of_Vehicle__c != null}">
+                                                    {!v.leadRecord.Make_of_Vehicle__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Kids : </b>
+                                                    {!v.leadRecord.Kids__c}
+                                                
+                                            </td>
+                                        </tr>
+                                    <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>How Long you are in the city in years : </b>
+                                                <aura:if isTrue="{!v.leadRecord.How_long_you_are_in_the_city_in_years__c != null}">
+                                                    {!v.leadRecord.How_long_you_are_in_the_city_in_years__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Age of Elder Child : </b>
+                                                    {!v.leadRecord.Age_of_Elder_Child__c}
+                                                
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Mother Tounge: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Mother_tongue__c != null}">
+                                                    {!v.leadRecord.Mother_tongue__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Are you a native of the city : </b>
+                                                    {!v.leadRecord.Are_you_a_Native_of_the_City__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  
+                                         <tr><td colspan="2" style="font-size: 18px;text-align:center">
+                                       <b>Client's Prefrence</b>
+                                       </td></tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Investment Range: </b>
+                                                <aura:if isTrue="{!v.leadRecord.Investment_Range__c != null}">
+                                                    {!v.leadRecord.Investment_Range__c}
+                                                </aura:if>
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Project Status: </b>
+                                                    {!v.leadRecord.Project_Status__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Purchase Timeline Range: </b>
+                                                    {!v.leadRecord.Purchase_Timeline__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Client Status: </b>
+                                                    {!v.leadRecord.Client_Status__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Possession Timeline </b>
+                                                    {!v.leadRecord.Possession_Timeline__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Source of Funding: </b>
+                                                    {!v.leadRecord.Source_of_Funding__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Preferred Project Location </b>
+                                                    {!v.leadRecord.Preferred_Project_location__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                <b>Channel Partner: </b>
+                                                    {!v.leadRecord.Channel_Partner__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Offer Scheme Interested </b>
+                                                    {!v.leadRecord.Offer_Scheme_interested__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                 <b>RM/CP Name: </b>
+                                                    {!v.leadRecord.RM_CP_Name__r.LastName}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Mode Of Enquriy </b>
+                                                    {!v.leadRecord.Mode_of_Enquiry__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                 <b>Channel Partner Email: </b>
+                                                    {!v.leadRecord.Channel_Partner_Email__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  <tr>
+                                            <td width = "50%" style="font-size: 15px;">
+                                                <b>Hoarding Details </b>
+                                                    {!v.leadRecord.Hoarding_Details__c}
+                                                
+                                            </td>
+                                             <td style="font-size: 15px;">
+                                                 <b>CP Manager Email: </b>
+                                                    {!v.leadRecord.CP_Manager_s_Email_Id__c}
+                                               
+                                            </td>
+                                        </tr>
+                                  
+                                  
+                                    </table>
+                                </aura:if>
+                            </div>
+                        </lightning:card>
+                    </aura:if>
+                    <br/>
+                    <button class="slds-button slds-button_brand" onclick="{!c.checkLead}">Validate OTP</button>
+                    <button class="slds-button slds-button_destructive" onclick="{!c.clearValues}">Clear</button>
+                </div>
+            </lightning:tab>
+            <aura:if isTrue="{!v.otpStatus == 'Lead Exist In Active Status' || v.otpStatus == 'Lead Exists And Not Active'}">
+                <lightning:tab label="Verify OTP" id="2">
+                    <lightning:card >
+                        <div class="slds-p-around_medium">
+                            <div class="slds-scope">
+                                <div class="slds-grid slds-wrap slds-text-align_left">
+                                    <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                        <lightning:input aura:id="field123" type="DateTime" name="phone" label="Date" value="{!v.datevalue}" required="true" messageWhenValueMissing="Please enter date"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-scope">
+                                <div class="slds-grid slds-wrap slds-text-align_left">
+                                    <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                        <lightning:select aura:id="field123" name="selectProjects" label="Select Projects" value="{!v.selectedProject}" required="true" messageWhenValueMissing="Please select project">
+                                            <option value="None">--None--</option>
+                                            <aura:iteration items="{!v.projects}" var="project">
+                                                <option value="{!project.value}">{!project.label}</option>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </div>
+                                    <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                        <lightning:input aura:id="field123" type="tel" name="phone" label="Entered OTP" value="{!v.phone}" required="true" disabled="true" messageWhenValueMissing="Please Enter OTP"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-scope">
+                                <div class="slds-grid slds-wrap slds-text-align_left">
+                                    <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                        <lightning:select aura:id="field123" label="Visit Type" required="true" value="{!v.visitType}" messageWhenValueMissing="Please select visit type">
+                                            <option value="Site Visit" >Site Visit</option>
+                                            <option value="Home Visit" >Home Visit</option>
+                                            <option value="Virtual Visit" >Virtual Visit</option>
+                                        </lightning:select>
+                                    </div>
+                                     <!--<div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                        <lightning:input aura:id="field123" type="text" name="otp" label="OTP" value="{!v.OTPExisLead}" required="true" messageWhenValueMissing="Please enter OTP"/>
+                                    </div>-->
+                                </div>
+                            </div>
+                           
+                            <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Related_Source__c">
+                                <div class="slds-scope">
+                                    <!-- Address Information Section -->
+                                    <div class="slds-section slds-m-bottom_medium">
+                                        <h3 class="slds-section__title">Address Information</h3>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="address" label="Address" value="{!v.leadRecordToSave.Address__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="state" label="State" value="{!v.leadRecordToSave.State__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:select name="residentialStatus" 
+                                                                  label="Residential Status"
+                                                                  value="{!v.leadRecordToSave.Residential_Status__c}"
+                                                                  required="false">
+                                                    <option value="">-- None --</option>
+                                                    <option value="Indian">Indian</option>
+                                                    <option value="NRI">NRI</option>
+                                                </lightning:select>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:select name="residenceTypology" 
+                                                                  label="Current Residence Typology"
+                                                                  value="{!v.leadRecordToSave.Current_Residence_Typology__c}"
+                                                                  required="false">
+                                                    <option value="">-- None --</option>
+                                                    <option value="1BHK">1BHK</option>
+                                                    <option value="2BHK">2BHK</option>
+                                                    <option value="3BHK">3BHK</option>
+                                                    <option value="4BHK">4BHK</option>
+                                                    <option value="5BHK">5BHK</option>
+                                                    <option value="6BHK">6BHK</option>
+                                                </lightning:select>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="nriProspect" label="NRI Prospect" value="{!v.leadRecordToSave.NRI_Prospect__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="city" label="City" value="{!v.leadRecordToSave.City__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="country" label="Country" value="{!v.leadRecordToSave.Country__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="currentResidence" label="Current Residence" value="{!v.leadRecordToSave.Current_Residence__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:combobox aura:id="nativeCity" label="Are you a Native of the City?" value="{!v.leadRecordToSave.Are_you_a_Native_of_the_City__c}" placeholder="--None--" options="{!v.nativeCityOptions}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="pincode" label="Pincode" value="{!v.leadRecordToSave.Pincode__c}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="slds-section slds-m-bottom_medium">
+                                        <h3 class="slds-section__title">Work Details</h3>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:select name="occupation" 
+                                                                  label="Occupation"
+                                                                  value="{!v.leadRecordToSave.Occupation__c}"
+                                                                  required="false">
+                                                    <option value="">-- None --</option>
+                                                    <option value="Self Employed">Self Employed</option>
+                                                    <option value="Business">Business</option>
+                                                    <option value="Professional/Salaried">Professional/Salaried</option>
+                                                    <option value="Retired">Retired</option>
+                                                </lightning:select>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="designation" label="Designation" value="{!v.leadRecordToSave.Designation__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="orgAddress" label="Organization Address" value="{!v.leadRecordToSave.Organisation_Address__c}"/>
+                                            </div>
+                                           <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="industry" 
+                     label="Industry"
+                     value="{!v.leadRecordToSave.Industry}"
+                     required="false">
+        <option value="">-- None --</option>
+        <option value="Agriculture">Agriculture</option>
+        <option value="Apparel">Apparel</option>
+        <option value="Banking">Banking</option>
+        <option value="Biotechnology">Biotechnology</option>
+        <option value="Chemicals">Chemicals</option>
+        <option value="Communications">Communications</option>
+        <option value="Construction">Construction</option>
+        <option value="Consulting">Consulting</option>
+        <option value="Education">Education</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Energy">Energy</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Environmental">Environmental</option>
+        <option value="Finance">Finance</option>
+        <option value="Government">Government</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Hospitality">Hospitality</option>
+        <option value="Insurance">Insurance</option>
+        <option value="Machinery">Machinery</option>
+        <option value="Manufacturing">Manufacturing</option>
+        <option value="Media">Media</option>
+        <option value="Not For Profit">Not For Profit</option>
+        <option value="Other">Other</option>
+        <option value="Recreation">Recreation</option>
+        <option value="Retail">Retail</option>
+        <option value="Shipping">Shipping</option>
+        <option value="Technology">Technology</option>
+        <option value="Telecommunications">Telecommunications</option>
+        <option value="Transportation">Transportation</option>
+        <option value="Utilities">Utilities</option>
+    </lightning:select>
+</div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="orgName" label="Organization Name" value="{!v.leadRecordToSave.Organization_Name__c}"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+                                                <lightning:input aura:id="orgPincode" label="Organization Pincode" value="{!v.leadRecordToSave.Organization_Pincode__c}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                  <!-- Customer History Information Section -->
+<div class="slds-section slds-m-bottom_medium">
+    <h3 class="slds-section__title">Customer History Information</h3>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="reasonForPurchase" 
+                     label="Reason For Purchase"
+                     value="{!v.leadRecord.Reason_For_Purchase__c}"
+                     required="false">
+        <option value="">-- None --</option>
+        <option value="Self Occupation">Self Occupation</option>
+        <option value="Investment">Investment</option>
+    </lightning:select>
+</div>
+        
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="projectDiscovery" 
+                     label="How did you know about our Project"
+                     value="{!v.leadRecord.How_did_you_get_to_know_about_our_Project__c}"
+                     required="false">
+        <option value="">-- None --</option>
+        <option value="Digital-Google">Digital-Google</option>
+        <option value="Social Media">Social Media</option>
+        <option value="Digital Website">Digital Website</option>
+        <option value="Digital-Property Portals">Digital-Property Portals</option>
+        <option value="SMS/Whatsapp">SMS/Whatsapp</option>
+        <option value="Emailer">Emailer</option>
+        <option value="Channel Partner Name">Channel Partner Name</option>
+        <option value="Existing customer">Existing customer</option>
+        <option value="Zuari Champion">Zuari Champion</option>
+    </lightning:select>
+</div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="homesOwned" label="No. Of Homes Owned" value="{!v.leadRecord.No_Of_Homes_Owned__c}"/>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Project Information Section -->
+<div class="slds-section slds-m-bottom_medium">
+    <h3 class="slds-section__title">Project Information</h3>
+    <div class="slds-grid slds-wrap">  
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="budget" 
+                     label="Budget"
+                     value="{!v.leadRecord.Budget__c}"
+                     required="false">
+        <option value="">-- Select Budget Range --</option>
+        <option value="50 lacs - 80 lacs">50 lacs - 80 lacs</option>
+        <option value="80 lacs - 1cr">80 lacs - 1cr</option>
+        <option value="1cr - 1.5cr">1cr - 1.5cr</option>
+        <option value="1.5cr - 2cr">1.5cr - 2cr</option>
+        <option value="2cr - 3cr">2cr - 3cr</option>
+        <option value="3cr - 4cr">3cr - 4cr</option>
+        <option value="4cr - 5cr">4cr - 5cr</option>
+        <option value="5cr - 6cr">5cr - 6cr</option>
+        <option value="6cr - 7cr">6cr - 7cr</option>
+        <option value="8cr - 10cr">8cr - 10cr</option>
+        <option value="10cr - 12cr">10cr - 12cr</option>
+    </lightning:select>
+</div>
+       
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="preferredPlotSize" label="Preferred Plot Size" value="{!v.leadRecord.Select_Your_Preferred_Plot_Size_With_Pri__c}"/>
+        </div>
+    </div>
+</div>
+
+<!-- Family Information Section -->
+<div class="slds-section slds-m-bottom_medium">
+    <h3 class="slds-section__title">Family Information</h3>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="familyMembers" 
+                     label="Number of family members"
+                     value="{!v.leadRecord.Number_of_members_in_the_family__c}"
+                     required="false">
+        <option value="">-- Select --</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </lightning:select>
+</div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="checkbox" aura:id="zuariVisit" label="Visited Zuari Project recently?" checked="{!v.leadRecord.Have_you_visited_any_Zuari_Project_recen__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="otherBuilders" label="Projects of other builders visited" value="{!v.leadRecord.Projects_of_other_builders_recently_visi__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="financing" 
+                     label="How are you financing your home"
+                     value="{!v.leadRecord.How_are_you_financing_your_dream_home__c}"
+                     required="false">
+        <option value="">-- Select --</option>
+        <option value="Own Funds">Own Funds</option>
+        <option value="Home Loans">Home Loans</option>
+        <option value="Sale of existing property">Sale of existing property</option>
+        <option value="Others">Others</option>
+    </lightning:select>
+</div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+    <lightning:select name="maritalStatus" 
+                     label="Marital Status"
+                     value="{!v.leadRecord.Martial_Status__c}"
+                     required="false">
+        <option value="">-- Select --</option>
+        <option value="Single">Single</option>
+        <option value="Married">Married</option>
+    </lightning:select>
+</div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="checkbox" aura:id="spouseWorking" label="Is your spouse working?" checked="{!v.leadRecord.Is_your_spouse_working__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="checkbox" aura:id="hasKids" label="Do You have Kids?" checked="{!v.leadRecord.Do_You_have_Kids__c}"/>
+        </div>
+    </div>
+</div>
+
+<!-- Demography Details Section -->
+<div class="slds-section slds-m-bottom_medium">
+    <h3 class="slds-section__title">Demography Details</h3>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="clubMemberships" label="Club Memberships" value="{!v.leadRecord.Club_Memberships__c}"/>
+        </div>
+       
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="vehicleModel" label="Vehicle Model" value="{!v.leadRecord.Vehicle_Model__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="vehicleMake" label="Make of Vehicle" value="{!v.leadRecord.Make_of_Vehicle__c}"/>
+        </div>
+       
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="motherTongue" label="Mother tongue" value="{!v.leadRecord.Mother_tongue__c}"/>
+        </div>
+        
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input aura:id="callingRegion" label="Calling Region" value="{!v.leadRecord.Calling_Region__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="numChildren" label="No. of Children" value="{!v.leadRecord.No_of_Children__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="age" label="Age" value="{!v.leadRecord.Age__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="kids" label="Kids" value="{!v.leadRecord.Kids__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="elderChildAge" label="Age of Elder Child" value="{!v.leadRecord.Age_of_Elder_Child__c}"/>
+        </div>
+        <div class="slds-size_1-of-2 slds-p-around_xxx-small">
+            <lightning:input type="number" aura:id="youngerChildAge" label="Age of Younger Child" value="{!v.leadRecord.Age_of_Younger_Child__c}"/>
+        </div>
+    </div>
+</div>
+                                    
+                                </div>
+                            </lightning:recordEditForm>
+                                   
+                        </div>
+                        <br/>
+                        <div style="display: flex; justify-content: center;">
+                            <lightning:button onclick = "{!c.svWithLead}" variant="brand" label="Save Details" />
+                        </div>
+                    </lightning:card>
+                </lightning:tab>
+            </aura:if>
+            <aura:if isTrue="{!v.otpStatus == 'No Lead Exists'}">
+                <lightning:tab label="Create New Lead" id="3">
+                    <lightning:card >
+                        <div class="slds-p-around_medium">
+                            <lightning:input type="text" name="otp" label="OTP" value="{!v.OTPnewLead}" disabled="true"/>
+                            <lightning:recordEditForm recordTypeId="" objectApiName="Related_Source__c" aura:id="myform" onsubmit="{!c.handleSubmit}" onsuccess="{!c.handleSuccess}" onerror="{!c.handleError}"> 
+                                <div >
+                                    <p><div class="slds-form">
+                                        <!--
+                                        <div class="slds-scope">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-1 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <div class="slds-form-element__control">
+                                                        <label><b>Name:</b></label><br/>
+                                                        <lightning:inputField variant='label-hidden' fieldName="Name" required="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        -->
+                                         
+                                <div class="slds-scope">
+                                    <div class="slds-grid slds-wrap slds-text-align_left">
+                                        <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                                            <div class="slds-form-element__control custom-bold-label">
+                                                <lightning:select aura:id="salutation" name="salutation" label="Salutation" required="true">
+                                                    <option value="">--None--</option>
+                                                    <option value="Mr.">Mr.</option>
+                                                    <option value="Mrs.">Mrs.</option>
+                                                    <option value="Ms.">Ms.</option>
+                                                    <option value="Dr.">Dr.</option>
+                                                </lightning:select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                                            <div class="slds-form-element__control custom-bold-label">
+                                                <!-- <lightning:inputField aura:id="leadName" variant='label-hidden' fieldName="Name" required="true"  pattern="[A-Za-z ]+"  messageWhenPatternMismatch="Please enter alphabets only."/>
+                                               --> <lightning:input class="custom-disabled" aura:id="leadFirstName"
+                                                                    name="leadFirstName"
+                                                                    label="First Name"
+                                                                    required="true"
+                                                                    pattern="[A-Za-z ]+"
+                                                                    messageWhenPatternMismatch="Please enter alphabets only."
+                                                                    />
+                                            </div>
+                                        </div>
+                                        <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                                            <div class="slds-form-element__control custom-bold-label">
+                                                <!-- <lightning:inputField aura:id="leadName" variant='label-hidden' fieldName="Name" required="true"  pattern="[A-Za-z ]+"  messageWhenPatternMismatch="Please enter alphabets only."/>
+                                               --> <lightning:input aura:id="leadName"
+                                                                    name="leadName"
+                                                                    label="Last Name"
+                                                                    required="true"
+                                                                    pattern="[A-Za-z ]+"
+                                                                    messageWhenPatternMismatch="Please enter alphabets only."
+                                                                    />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                        
+                                        <br/>
+                                        <br/>
+                                        <aura:if isTrue="{!v.selectedProject == 'Zuari Gangothri Tribhuja'}">
+                                        <!-- ============ TRIBHUJA: 29-field form ============ -->
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-1 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <aura:if isTrue="{!v.selectedProject == 'Zuari Gangothri Tribhuja'}">
+                                                        <!-- Tribhuja: Allocated Project is frozen to Zuari Gangothri Tribhuja and not editable -->
+                                                        <lightning:inputField fieldName="Allocated_Project__c" value="Zuari Gangothri Tribhuja" disabled="true"/>
+                                                        <aura:set attribute="else">
+                                                            <!-- All other projects: editable picklist as before -->
+                                                            <lightning:inputField fieldName="Allocated_Project__c"/>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <div class="slds-form-element__control">
+                                                        
+                                                        <lightning:inputField  fieldName="Country__c" aura:id="CountryLookupField" onchange="{!c.handleCountryChange}" required="true" />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <div class="slds-form-element__control">
+                                                        
+                                                        <lightning:inputField fieldName="Country_Code__c" value="{!v.selectedCountryCode}" disabled="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    
+                                                    <lightning:input type="tel" label="Primary Phone" name="primaryPhone" aura:id="mobileField" required="true" maxlength="10" pattern="[0-9]{10}" messageWhenValueMissing="Please enter mobile number" messageWhenPatternMismatch="Enter a valid 10 digit mobile number" value="{!v.primaryPhone}" onchange="{!c.handlePhoneChange}" />
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+
+                                                    <lightning:input type="tel" label="Secondary Phone" name="secondaryPhone" aura:id="mobileField" maxlength="10" pattern="[0-9]{10}" messageWhenPatternMismatch="Enter a valid 10 digit mobile number" value="{!v.secondaryPhone}" onchange="{!c.handleSecondaryPhoneChange}" />
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    
+                                                    <lightning:inputField  fieldName="Email__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    
+                                                    <lightning:inputField fieldName="Secondary_Email__c" />
+                                                </div>
+                                            </div>
+                                        </div>
+			
+										<div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Budget__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Unit_Preference__c"  required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+										<div class="slds-grid slds-wrap slds-text-align_left">
+                                        
+                                       <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                     <lightning:inputField  fieldName="Source_Type__c"  required="true"/>
+                                        </div>
+                                       <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                  
+                                                     <lightning:inputField  fieldName="Lead_Source__c"  required="true" value="{!v.leadSource}" onchange="{!c.isChannelPartner}"/>
+                                        </div>
+                                         <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                  
+                                                     <lightning:inputField  fieldName="Tertiary_Source__c" />
+                                        </div>
+                                   
+                                        
+                                    </div>
+								<div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+
+												<div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Reason_For_Purchase__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="How_are_you_financing_your_dream_home__c"  required="true"/>
+                                                </div>
+                                                <!--div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Search_Sourcing_Manager__c"  required="true"/>
+                                                </div-->
+                                            </div>
+                                        </div>
+										<div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                 
+                                                    <lightning:inputField  fieldName="Residential_Status__c"  required="true" />
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Home_Location__c"  required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    
+                                                    <lightning:inputField  fieldName="GenderIdentity__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    
+                                                    <lightning:inputField fieldName="Age__c"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        <!--div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Current_Residence__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Current_Residence_Typology__c"  required="true"/>
+                                                </div>
+                                            </div>
+                                        </div-->
+                                        
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+												
+                                                <!--div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Current_Company_Address__c"  required="true" />
+                                                </div-->
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="City__c"/>
+                                                </div>
+											    <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Pincode__c"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                                           
+                                        
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Organization_Name__c"  />
+                                                </div>
+												<div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Marital_Status__c" />
+                                                </div>
+                                                <!--div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Organization_Address__c"  required="true"/>
+                                                </div-->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Occupation__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Are_you_a_Native_of_the_City__c"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="How_did_you_get_to_know_about_our_Projec__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="How_long_have_you_been_looking_for_a_hom__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div-->
+                                        
+                                        <!--div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Reason_For_Purchase__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="How_soon_do_you_intend_to_buy_it__c"  required="true"/>
+                                                </div>
+                                            </div>
+                                        </div-->
+                                        
+                                        <!--div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Number_of_members_in_the_family__c"  required="true"/>
+                                                </div>
+                                                
+                                            </div>
+                                        </div-->
+                                        
+                                        <!--div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Have_you_visited_any_Zuari_Project_recen__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField  fieldName="Projects_of_other_builders_recently_visi__c"  required="true"/>
+                                                </div>
+                                            </div>
+                                        </div-->
+                                        
+                                        
+                                        
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+												<div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Search_Closing_Manager__c"  required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Is_this_your_First_Home__c" />
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <!-- ============ END TRIBHUJA branch ============ -->
+                                        <aura:set attribute="else">
+                                        <!-- ============ OTHER PROJECTS: full 41 fields, 38 mandatory ============ -->
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-1 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Allocated_Project__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Country__c" aura:id="CountryLookupField" onchange="{!c.handleCountryChange}" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Country_Code__c" value="{!v.selectedCountryCode}" disabled="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:input type="tel" label="Primary Phone" name="primaryPhone" aura:id="mobileField" required="true" maxlength="10" pattern="[0-9]{10}" messageWhenValueMissing="Please enter mobile number" messageWhenPatternMismatch="Enter a valid 10 digit mobile number" value="{!v.primaryPhone}" onchange="{!c.handlePhoneChange}"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:input type="tel" label="Secondary Phone" name="secondaryPhone" aura:id="mobileField" maxlength="10" pattern="[0-9]{10}" messageWhenPatternMismatch="Enter a valid 10 digit mobile number" value="{!v.secondaryPhone}" onchange="{!c.handleSecondaryPhoneChange}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Email__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Secondary_Email__c"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="GenderIdentity__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Age__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Residential_Status__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="No_Of_Homes_Owned__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Current_Residence__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Current_Residence_Typology__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Current_Company_Address__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="City__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Pincode__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Occupation__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Organization_Name__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Organization_Address__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Organization_Pincode__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Are_you_a_Native_of_the_City__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="How_did_you_get_to_know_about_our_Projec__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="How_long_have_you_been_looking_for_a_hom__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Reason_For_Purchase__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="How_soon_do_you_intend_to_buy_it__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Number_of_members_in_the_family__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Marital_Status__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Have_you_visited_any_Zuari_Project_recen__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Projects_of_other_builders_recently_visi__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="How_are_you_financing_your_dream_home__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Search_Sourcing_Manager__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Is_this_your_First_Home__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Current_Accommodation__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Source_Type__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Lead_Source__c" required="true" value="{!v.leadSource}" onchange="{!c.isChannelPartner}"/>
+                                                </div>
+                                                <div class="slds-size_1-of-3 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Tertiary_Source__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-scope custom-bold-label">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Budget__c" required="true"/>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <lightning:inputField fieldName="Unit_Preference__c" required="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ============ END OTHER PROJECTS branch ============ -->
+                                        </aura:set>
+                                        </aura:if>
+                                        </div>
+                                      <!--  <div class="slds-scope">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Proffession:</b></label><br/>
+                                                    <lightning:inputField variant='label-hidden' fieldName="Proffession__c" />
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Purpose:</b></label><br/>
+                                                    <lightning:inputField variant='label-hidden' fieldName="Purpose__c" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="slds-scope">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Location:</b></label><br/>
+                                                    <lightning:inputField variant='label-hidden' fieldName="Location__c" />
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Company Name:</b></label><br/>
+                                                    <lightning:inputField variant='label-hidden' fieldName="Company_Name__c" />
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                        
+                                        
+                                         <div class="slds-scope custom-bold-label">
+                                    
+                                    
+                                        
+                                        <aura:if isTrue="{!v.leadSource == 'Channel Partner'}">
+                                    <div class="slds-scope custom-bold-label">
+                                        <div class="slds-grid slds-wrap slds-text-align_left">
+                                            <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Channel_Partner__c"   required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!v.leadSource == 'Employe Referral'}">
+                                    <div class="slds-scope custom-bold-label">
+                                        <div class="slds-grid slds-wrap slds-text-align_left">
+                                            <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Company_Name__c"  required="true"/>
+                                            </div>
+                                            <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Designation__c"  required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!v.leadSource == 'Customer Referral'}">
+                                    <div class="slds-scope custom-bold-label">
+                                        <div class="slds-grid slds-wrap slds-text-align_left">
+                                            <div class="slds-size_1-of-3 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Customer_Name__c"  required="true"/>
+                                            </div>
+                                            <div class="slds-size_1-of-3 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Customer_Project_Name__c"  required="true"/>
+                                            </div>
+                                            
+                                            <div class="slds-size_1-of-3 slds-max-small-size_1-of-1">
+                                                <lightning:inputField fieldName="Customer_s_Unit_No__c"  required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </aura:if>
+                                
+                               
+                   <!--
+                                        <div class="slds-scope">
+                                            <div class="slds-grid slds-wrap slds-text-align_left">
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Lead Source:</b></label>
+                                                    <lightning:select aura:id="leadSource" name="leadSource"  value="{!v.leadSource}">
+                                                        <option text="Walk-in" value="Walk-in" />
+                                                    </lightning:select>
+                                                </div>
+                                                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1 slds-p-around_xxx-small">
+                                                    <label><b>Sub Source:<br/></b></label>
+                                                    <lightning:inputField variant='label-hidden' fieldName="Sub_Source__c"/>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                        <br/>
+                                      
+                                        
+                                        
+                                        </div>
+                                    </p><br/>
+                                    <div style="display: flex; justify-content: center;">
+                                        <lightning:button variant="brand" type="submit" label="Save Lead" />
+                                        <aura:if isTrue="{!v.isDuplicateError == true}">
+                                            <lightning:button variant="brand" label="Proceed Without OTP" onclick="{!c.duplicateLeadSaving}"/>
+                                        </aura:if>
+                                    </div>
+                                   
+                                </div>
+                            </lightning:recordEditForm> 
+                        </div>
+                    </lightning:card>
+                </lightning:tab>
+            </aura:if>
+        </lightning:tabset>
+    </div>
+</aura:component>

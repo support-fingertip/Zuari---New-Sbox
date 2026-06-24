@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_To_Manager</name>
+        <label>Send Email To Manager</label>
+        <locationX>786</locationX>
+        <locationY>560</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Manager.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Lead Status Not Updated</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailTemplate</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <decisions>
+        <name>Check_Status</name>
+        <label>Check Status</label>
+        <locationX>776</locationX>
+        <locationY>371</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_New_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_To_Manager</targetReference>
+            </connector>
+            <label>Check Status is Equal to New</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Lead Email Alert After 30 Min {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Email Alert After 30 Min</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>666</locationX>
+        <locationY>52</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Lead_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>Check_the_Status_After_30_Min</name>
+            <connector>
+                <targetReference>Check_Status</targetReference>
+            </connector>
+            <label>Check the Status After 30 Min</label>
+            <offsetNumber>1</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>CreatedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>EmailTemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.Owner:User.Manager.FirstName} {!$Record.Owner:User.Manager.LastName},
+This is an automated notification to inform you that the following lead has not had its status updated within 30 minutes of creation:
+
+Lead Name: {!$Record.FirstName} {!$Record.LastName}
+Lead ID: {!$Record.Lead_ID__c}
+Created At: {!$Record.CreatedDate}
+Current Status: {!$Record.Lead_Status__c}
+Assigned To: {!$Record.Owner:User.FirstName} {!$Record.Owner:User.LastName}
+
+Please review and ensure the status is updated promptly to avoid delays in follow-up</text>
+    </textTemplates>
+</Flow>

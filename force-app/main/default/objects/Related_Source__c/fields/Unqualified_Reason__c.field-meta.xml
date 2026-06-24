@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unqualified_Reason__c</fullName>
+    <label>Unqualified Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Not Within Budget Range</fullName>
+                <default>false</default>
+                <label>Not Within Budget Range</label>
+            </value>
+            <value>
+                <fullName>Location Mismatch</fullName>
+                <default>false</default>
+                <label>Location Mismatch</label>
+            </value>
+            <value>
+                <fullName>Possession time issue</fullName>
+                <default>false</default>
+                <label>Possession time issue</label>
+            </value>
+            <value>
+                <fullName>Size Mismatch</fullName>
+                <default>false</default>
+                <label>Size Mismatch</label>
+            </value>
+            <value>
+                <fullName>Not Enquired</fullName>
+                <default>false</default>
+                <label>Not Enquired</label>
+            </value>
+            <value>
+                <fullName>Already Allocated</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Already Allocated</label>
+            </value>
+            <value>
+                <fullName>Booked With Competitor</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Booked With Competitor</label>
+            </value>
+            <value>
+                <fullName>Booked with Channel Partner</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Booked with Channel Partner</label>
+            </value>
+            <value>
+                <fullName>Budget</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Budget</label>
+            </value>
+            <value>
+                <fullName>COVID19</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>COVID19</label>
+            </value>
+            <value>
+                <fullName>CP Clash</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>CP Clash</label>
+            </value>
+            <value>
+                <fullName>Casual Enquiry</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Casual Enquiry</label>
+            </value>
+            <value>
+                <fullName>Client has Blocked</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Client has Blocked</label>
+            </value>
+            <value>
+                <fullName>Delivery Timeline too long</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Delivery Timeline too long</label>
+            </value>
+            <value>
+                <fullName>Dimension</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Dimension</label>
+            </value>
+            <value>
+                <fullName>Dropped the Plan of Buying</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Dropped the Plan of Buying</label>
+            </value>
+            <value>
+                <fullName>Dropped/ Postponed</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Dropped/ Postponed</label>
+            </value>
+            <value>
+                <fullName>Duplicate Lead</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Duplicate Lead</label>
+            </value>
+            <value>
+                <fullName>Frequently disconnecting</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Frequently disconnecting</label>
+            </value>
+            <value>
+                <fullName>Handover Timeline</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Handover Timeline</label>
+            </value>
+            <value>
+                <fullName>Interested In New Project</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Interested In New Project</label>
+            </value>
+            <value>
+                <fullName>Interested in Plots/Villas/Commercial</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Interested in Plots/Villas/Commercial</label>
+            </value>
+            <value>
+                <fullName>Junk Leads</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Junk Leads</label>
+            </value>
+            <value>
+                <fullName>Lead older than 6 months</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Lead older than 6 months</label>
+            </value>
+            <value>
+                <fullName>Location</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Location</label>
+            </value>
+            <value>
+                <fullName>Looking For RTM</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Looking For RTM</label>
+            </value>
+            <value>
+                <fullName>Looking for Payment Plan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Looking for Payment Plan</label>
+            </value>
+            <value>
+                <fullName>Model Apartment</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Model Apartment</label>
+            </value>
+            <value>
+                <fullName>Needs More Discount or Looking for better deal</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Needs More Discount or Looking for better deal</label>
+            </value>
+            <value>
+                <fullName>No Discount</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>No Discount</label>
+            </value>
+            <value>
+                <fullName>No Eligible for Bank Loan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>No Eligible for Bank Loan</label>
+            </value>
+            <value>
+                <fullName>Non Contactable</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Non Contactable</label>
+            </value>
+            <value>
+                <fullName>Not A Valid Customer</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not A Valid Customer</label>
+            </value>
+            <value>
+                <fullName>Not In Availability</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not In Availability</label>
+            </value>
+            <value>
+                <fullName>Not In Cost</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not In Cost</label>
+            </value>
+            <value>
+                <fullName>Not In Location</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not In Location</label>
+            </value>
+            <value>
+                <fullName>Not In Size</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not In Size</label>
+            </value>
+            <value>
+                <fullName>Not Interested</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not Interested</label>
+            </value>
+            <value>
+                <fullName>Not happy with Zuari</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Not happy with Zuari</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Postponed the Plan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Postponed the Plan</label>
+            </value>
+            <value>
+                <fullName>Reading message but not responding</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Reading message but not responding</label>
+            </value>
+            <value>
+                <fullName>Rejecting Repeat Marketing Leads</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rejecting Repeat Marketing Leads</label>
+            </value>
+            <value>
+                <fullName>Test/ Mock Lead</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Test/ Mock Lead</label>
+            </value>
+            <value>
+                <fullName>Unable to connect</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Unable to connect</label>
+            </value>
+            <value>
+                <fullName>Vastu/Sunlight/Technical/Nala Issue</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Vastu/Sunlight/Technical/Nala Issue</label>
+            </value>
+            <value>
+                <fullName>Wrong Number/Invalid Number</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Wrong Number/Invalid Number</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,60 @@
+<aura:component controller="BookingWelcomeMail" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="LeadRecord" type="Object"/>
+    <aura:attribute name="projectName" type="string"/>
+     <aura:attribute name="isShowButton" type="boolean" default="true"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Name,OwnerId,Project__c,Funding_Type__c"
+                      recordUpdated="{!c.doInit}"
+                      targetFields="{!v.LeadRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+    <aura:html tag="style">
+        
+        .panel.slds-modal > .modal-container{
+        width: 75%;
+        max-width: 70rem;
+        }
+    </aura:html>
+    <section class="slds-modal slds-fade-in-open">
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">Generate Sale Deed</h2>
+        </header>
+        
+        <aura:if isTrue="{!v.projectName == 'Corner Stone'}">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <iframe src="{!'/apex/apex/DraftSALEDEEDCornerStone?Id=' + v.recordId }" width="100%" height="500px;" frameBorder="0"/> 
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.projectName == 'Tamarind'}">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <iframe src="{!'/apex/apex/SaleDeedEIPLTheTamarind?Id=' + v.recordId }" width="100%" height="500px;" frameBorder="0"/> 
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.projectName == 'Treasure Trove'}">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <iframe src="{!'/apex/apex/SaleDeedTresureTrove?Id=' + v.recordId }" width="100%" height="500px;" frameBorder="0"/> 
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isShowButton == false}">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <br/><br/><br/><br/>
+                <div style="font-size: 30px;text-align: center;"><i><b>Their is no Sale Deed configured within salesforce for the selected Project "{!v.projectName}".</b></i><br/><br/><br/>
+                    <i><b>Please contact your system admin to set up one.</b></i><br/><br/><br/><br/></div>
+            </div>
+        </aura:if>
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.close}">Cancel</button> 
+            <aura:if isTrue="{!v.isShowButton == true}">
+                <aura:if isTrue="{!v.LeadRecord.Funding_Type__c == 'Self'}">
+                    <button class="slds-button slds-button_brand" onclick="{!c.sendEmail}">Send Email to Customer</button>
+                </aura:if>
+                <aura:if isTrue="{!v.LeadRecord.Funding_Type__c == 'Loan'}">
+                    <button class="slds-button slds-button_brand" onclick="{!c.sendEmail}">Send Email to Customer</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.sendEmail2}">Send Email to Bank</button>
+                </aura:if>
+            </aura:if>
+        </footer>
+    </section>
+</aura:component>

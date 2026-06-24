@@ -1,0 +1,274 @@
+<aura:component controller="RelatedSourceBulkOwnerAuraCtrl"
+    implements="flexipage:availableForAllPageTypes,force:appHostable"
+    access="global">
+
+    <!-- Filter attributes -->
+    <aura:attribute name="dateRangeOption" type="String" default="all"/>
+    <aura:attribute name="fromDate" type="Date"/>
+    <aura:attribute name="toDate" type="Date"/>
+    <aura:attribute name="fromUserId" type="String" default=""/>
+    <aura:attribute name="allocatedProject" type="String" default=""/>
+    <aura:attribute name="sourceType" type="String" default=""/>
+    <aura:attribute name="sourceTypeOptions" type="List"/>
+
+    <!-- Data attributes -->
+    <aura:attribute name="records" type="Related_Source__c[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="selectedIds" type="Id[]"/>
+    <aura:attribute name="userOptions" type="List"/>
+    <aura:attribute name="allocatedProjectOptions" type="List"/>
+
+    <!-- Tab/Owner/STM2 update -->
+    <aura:attribute name="activeTab" type="String" default=""/>
+    <aura:attribute name="toUserId" type="Id"/>
+    <aura:attribute name="stm2Mode" type="String" default="empty"/>
+    <aura:attribute name="stm2ToUserId" type="Id"/>
+    <aura:attribute name="stm2FromUserId" type="Id"/>
+
+    <!-- Flow control -->
+    <aura:attribute name="showFilters" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:card title="Related Source Bulk Owner / STM2 Update">
+        <div class="slds-p-around_large">
+
+            <!-- STEP 1: Choose Update Type -->
+            <div class="slds-box slds-theme_shade slds-p-around_medium slds-m-bottom_medium">
+                <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                    <h3 class="slds-text-heading_small">Step 1: Select Update Type</h3>
+                    <aura:if isTrue="{!v.activeTab != ''}">
+                        <div class="slds-col_bump-left">
+                            <lightning:button
+                                label="Back"
+                                iconName="utility:back"
+                                variant="neutral"
+                                onclick="{!c.goBack}"/>
+                        </div>
+                    </aura:if>
+                </div>
+                <div class="slds-grid slds-gutters">
+
+                    <!-- Owner Card: hidden when STM2 selected -->
+                    <aura:if isTrue="{!v.activeTab != 'stm2'}">
+                        <div class="{!v.activeTab == 'owner' ? 'slds-col slds-size_1-of-1' : 'slds-col slds-size_1-of-2'}">
+                            <div class="{!v.activeTab == 'owner' ?
+                                'slds-box slds-theme_default slds-p-around_medium selection-card selected-card' :
+                                'slds-box slds-theme_default slds-p-around_medium selection-card'}"
+                                onclick="{!c.selectOwnerTab}">
+                                <lightning:icon iconName="utility:change_owner" size="medium" class="slds-m-bottom_small"/>
+                                <h3 class="slds-text-heading_small">Bulk Owner Update</h3>
+                                <p class="slds-text-body_small slds-text-color_weak">Reassign record ownership in bulk</p>
+                            </div>
+                        </div>
+                    </aura:if>
+
+                    <!-- STM2 Card: hidden when Owner selected -->
+                    <aura:if isTrue="{!v.activeTab != 'owner'}">
+                        <div class="{!v.activeTab == 'stm2' ? 'slds-col slds-size_1-of-1' : 'slds-col slds-size_1-of-2'}">
+                            <div class="{!v.activeTab == 'stm2' ?
+                                'slds-box slds-theme_default slds-p-around_medium selection-card selected-card' :
+                                'slds-box slds-theme_default slds-p-around_medium selection-card'}"
+                                onclick="{!c.selectSTM2Tab}">
+                                <lightning:icon iconName="utility:edit" size="medium" class="slds-m-bottom_small"/>
+                                <h3 class="slds-text-heading_small">Bulk STM2 Update</h3>
+                                <p class="slds-text-body_small slds-text-color_weak">Update STM2 field in bulk</p>
+                            </div>
+                        </div>
+                    </aura:if>
+
+                </div>
+            </div>
+
+            <!-- STEP 2: Filters -->
+            <aura:if isTrue="{!v.showFilters}">
+                <div class="slds-box slds-theme_shade slds-p-around_medium slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">Step 2: Filter Records</h3>
+                    <div class="slds-grid slds-gutters slds-wrap">
+
+                        <!-- Date Range Buttons: All or Range -->
+                        <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                            <lightning:radioGroup
+                                label="Date Range"
+                                options="[
+                                    { 'label': 'All',   'value': 'all'   },
+                                    { 'label': 'Range', 'value': 'range' }
+                                ]"
+                                value="{!v.dateRangeOption}"
+                                type="button"
+                                onchange="{!c.onDateRangeChange}"/>
+                        </div>
+
+                        <!-- From Date / To Date: shown only when Range is selected -->
+                        <aura:if isTrue="{!v.dateRangeOption == 'range'}">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning:input
+                                    type="date"
+                                    label="From Date"
+                                    value="{!v.fromDate}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning:input
+                                    type="date"
+                                    label="To Date"
+                                    value="{!v.toDate}"/>
+                            </div>
+                        </aura:if>
+
+                        <!-- From User -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_small">
+                            <lightning:combobox
+                                label="From User"
+                                value="{!v.fromUserId}"
+                                options="{!v.userOptions}"/>
+                        </div>
+
+                        <!-- Allocated Project -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_small">
+                            <lightning:combobox
+                                label="Allocated Project"
+                                value="{!v.allocatedProject}"
+                                options="{!v.allocatedProjectOptions}"/>
+                        </div>
+
+                        <!-- Source Type -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_small">
+                            <lightning:combobox
+                                label="Source Type"
+                                value="{!v.sourceType}"
+                                options="{!v.sourceTypeOptions}"/>
+                        </div>
+
+                    </div>
+                    <div class="slds-m-top_medium">
+                        <lightning:button
+                            label="Search Records"
+                            variant="brand"
+                            iconName="utility:search"
+                            onclick="{!c.searchRecords}"
+                            class="slds-m-right_small"/>
+                        <lightning:button
+                            label="Clear Filters"
+                            variant="neutral"
+                            iconName="utility:clear"
+                            onclick="{!c.clearFilters}"/>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Results + Action Panel -->
+                <aura:if isTrue="{!v.records.length > 0}">
+                    <div class="slds-box slds-theme_shade slds-p-around_medium slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">
+                            Step 3: Select Records &amp; Apply Update
+                        </h3>
+
+                        <!-- Owner Update Action Panel -->
+                        <aura:if isTrue="{!v.activeTab == 'owner'}">
+                            <div class="slds-box slds-theme_default slds-p-around_medium slds-m-bottom_medium">
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">Owner Update</h4>
+                                <div class="slds-grid slds-gutters slds-grid_vertical-align-end">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                        <lightning:combobox
+                                            label="New Owner"
+                                            value="{!v.toUserId}"
+                                            options="{!v.userOptions}"
+                                            placeholder="Select New Owner"
+                                            required="true"/>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                        <lightning:button
+                                            label="Update Owner"
+                                            variant="brand"
+                                            iconName="utility:change_owner"
+                                            onclick="{!c.updateOwner}"
+                                            disabled="{!or(empty(v.toUserId), empty(v.selectedIds))}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+
+                        <!-- STM2 Update Action Panel -->
+                        <aura:if isTrue="{!v.activeTab == 'stm2'}">
+                            <div class="slds-box slds-theme_default slds-p-around_medium slds-m-bottom_medium">
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">STM2 Update</h4>
+                                <lightning:radioGroup
+                                    label="STM2 Update Mode"
+                                    options="[
+                                        { 'label': 'Update Empty STM2', 'value': 'empty'    },
+                                        { 'label': 'Reassign STM2',     'value': 'reassign' }
+                                    ]"
+                                    value="{!v.stm2Mode}"
+                                    type="radio"/>
+                                <div class="slds-grid slds-gutters slds-grid_vertical-align-end slds-m-top_small">
+                                    <aura:if isTrue="{!v.stm2Mode == 'empty'}">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                            <lightning:combobox
+                                                label="Set STM2 To"
+                                                value="{!v.stm2ToUserId}"
+                                                options="{!v.userOptions}"
+                                                placeholder="Select STM2 User"
+                                                required="true"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <lightning:button
+                                                label="Update Empty STM2"
+                                                variant="brand"
+                                                iconName="utility:edit"
+                                                onclick="{!c.updateEmptySTM2}"
+                                                disabled="{!or(empty(v.stm2ToUserId), empty(v.selectedIds))}"/>
+                                        </div>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.stm2Mode == 'reassign'}">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <lightning:combobox
+                                                label="STM2 From"
+                                                value="{!v.stm2FromUserId}"
+                                                options="{!v.userOptions}"
+                                                placeholder="Select Old STM2"
+                                                required="true"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <lightning:combobox
+                                                label="STM2 To"
+                                                value="{!v.stm2ToUserId}"
+                                                options="{!v.userOptions}"
+                                                placeholder="Select New STM2"
+                                                required="true"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <lightning:button
+                                                label="Reassign STM2"
+                                                variant="brand"
+                                                iconName="utility:change_owner"
+                                                onclick="{!c.reassignSTM2}"
+                                                disabled="{!or(empty(v.stm2ToUserId), empty(v.stm2FromUserId), empty(v.selectedIds))}"/>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </aura:if>
+
+                        <!-- Datatable -->
+                        <div class="slds-m-top_small">
+                            <p class="slds-text-body_small slds-m-bottom_small">
+                                Showing {!v.records.length} record(s)
+                                <aura:if isTrue="{!v.selectedIds.length > 0}">
+                                    &nbsp;&bull;&nbsp;
+                                    <b class="slds-text-color_success">{!v.selectedIds.length} selected</b>
+                                </aura:if>
+                            </p>
+                            <lightning:datatable
+                                keyField="Id"
+                                data="{!v.records}"
+                                columns="{!v.columns}"
+                                onrowselection="{!c.handleRowSelection}"
+                                hideCheckboxColumn="false"/>
+                        </div>
+
+                    </div>
+                </aura:if>
+            </aura:if>
+
+        </div>
+    </lightning:card>
+</aura:component>

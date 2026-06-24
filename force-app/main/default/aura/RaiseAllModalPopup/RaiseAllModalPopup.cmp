@@ -1,0 +1,123 @@
+<aura:component controller="DemandRaisedSave" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global">
+    <aura:attribute name="selectedRecords" type="List"/>
+    <aura:attribute name="selectedFileIds" type="List"/>
+    <aura:attribute name="showPopup" type="Boolean" default="false"/>
+    <aura:attribute name="selectedBookingIds" type="List" default="[]"/>
+    
+    <aura:attribute name="emailContentMap" type="Map" />
+    <aura:attribute name="contentDocumentIdsMap" type="Map" />
+    
+    <div class="demo-only demo-only_viewport" style="height:640px">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="id-of-modalheader-h1" class="slds-modal slds-fade-in-open slds-modal_large slds-list-builder">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close" onclick="{!c.Close}">
+                    <lightning:icon iconName="utility:close" alternativeText="close" size="x-small"
+                                    title="close" />
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="id-of-modalheader-h1" class="slds-text-heading_medium">Raise Bulk demand</h1>
+                </div>
+                <div class="slds-modal__content slds-grid slds-grow" id="modal-content-id-1">
+                    <div class="slds-grid slds-grid_vertical">
+                        <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-shrink-none slds-theme_shade">
+                            <div class="slds-text-title slds-m-top_x-small" aria-live="polite">{!v.selectedRecords.length || 0} Item(s) Selected</div>
+                        </div>
+                        <div class="slds-scrollable slds-grow">
+                            <div class="slds-scrollable_none">
+                                <table aria-multiselectable="true" class="slds-table slds-no-row-hover slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example product list">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="" scope="col" style="width:3.75rem"></th>
+                                             <th aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-p-left_small">
+                                                    <span class="slds-truncate" title="Product Code">Booking Id</span>
+                                                </div>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Product Code column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-10" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-p-left_small">
+                                                    <span class="slds-truncate" title="Product Code">Customer Name</span>
+                                                </div>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Product Code column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-10" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                             <th aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-p-left_small">
+                                                    <span class="slds-truncate" title="Product Code">Customer Email</span>
+                                                </div>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Product Code column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-10" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+
+                                             <th aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-p-around_xx-small">
+                                                    <span class="slds-truncate" title="Product Code">Project</span>
+                                                </div>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Product Code column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-10" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                           <!-- Iterate over selectedRecords to display each record -->
+                                        <aura:iteration items="{!v.selectedRecords}" var="record" indexVar="index">
+                                            <tr aria-selected="false" class="slds-hint-parent">
+                                                <td class="slds-text-align_right" role="gridcell" tabindex="0">
+                                                    <lightning:input type="checkbox" aura:id="bookingCheckbox" value="{!record.booking}" checked="true"/>
+                                                </td>
+                                                <th scope="row">
+                                                    <div class="slds-truncate" title="{!record.booking.Name}">
+                                                        {!record.booking.Name}
+                                                    </div>
+                                                </th>
+                                                <td role="gridcell">
+                                                    <div class="slds-truncate" title="{!record.booking.Applicant_Name__c}">
+                                                        {!record.booking.Applicant_Name__c}
+                                                    </div>
+                                                </td>
+                                                <td role="gridcell">
+                                                    <div class="slds-truncate" title="{!record.booking.Email__c}">
+                                                        {!record.booking.Email__c}
+                                                    </div>
+                                                </td>
+                                                <td role="gridcell">
+                                                    <div class="slds-truncate" title="{!record.booking.Project__c}">
+                                                        {!record.booking.Project1__r.Name}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick="{!c.Close}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.submit}">Submit for Approval</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </div>
+</aura:component>

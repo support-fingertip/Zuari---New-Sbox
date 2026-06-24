@@ -1,0 +1,36 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false"
+           applyHtmlTag="true" applyBodyTag="false" docType="html-5.0">
+    <html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Project Status</title>
+        <apex:includeLightning />
+        <style>
+            body { font-family: 'Salesforce Sans', Arial, sans-serif; background-color: #f3f2f2; margin: 0; padding: 0; }
+            #ppsr-host { max-width: 960px; margin: 0 auto; padding: 16px; }
+        </style>
+    </head>
+    <body>
+        <div id="ppsr-host"></div>
+        <script>
+            (function () {
+                var pid = '{!JSENCODE($CurrentPage.parameters.pid)}';
+                $Lightning.use("c:projectPublicStatusApp", function () {
+                    $Lightning.createComponent(
+                        "c:projectPublicStatus",
+                        { projectId: pid },
+                        "ppsr-host",
+                        function (cmp, status, errorMessage) {
+                            if (status === "ERROR") {
+                                document.getElementById("ppsr-host").innerText =
+                                    "Unable to load project status: " + errorMessage;
+                            }
+                        }
+                    );
+                });
+            })();
+        </script>
+    </body>
+    </html>
+</apex:page>

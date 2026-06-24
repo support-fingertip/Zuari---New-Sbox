@@ -1,0 +1,125 @@
+<apex:page standardController="Booking__c" extensions="ConsolidatedReceiptController" renderAs="pdf" applyHtmlTag="false" showHeader="false" cache="true" readOnly="true">
+        <head>
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    padding: 5px;
+                }
+    .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+                .details-container {
+                    display: flex;
+                    justify-content: space-between;
+                }
+    
+                .customer-details, .booking-details {
+                    flex: 1;
+                }
+            </style>
+        </head>
+        <body>
+           <table width="100%"  cellspacing="0" border="0" style="border: none !important; border-collapse: collapse; border-spacing: 0;" >
+                    <tr>
+                         <td style="font-size: 12px;text-align:left;border: none;"> <img src="{!$Resource.Zuari}" width="150px" height="60" /></td>
+                        
+                         <td style="font-size: 12px;text-align:right;border: none;">
+                             
+                              <!--Update on 09-02-2026 by Praveen-->
+                   
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City - Plots'}"><img src="{!$Resource.ZuariGardenCity}" width="150px" height="60" /></apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Gangothri Tribhuja'}"><img src="{!$Resource.GangotriLogo}" width="150px" height="60" /></apex:outputText>
+                
+                         <!---    <img src="{!$Resource.ZuariPlotlogo}" width="150px" height="60" />
+                        -->
+                        </td>
+                        
+                         
+                       </tr>
+                  </table>
+      <div style="text-align:center;" class="header">
+          ZUARI INFRAWORLD INDIA LIMITED<br/>
+          Adventz Centre, 1st Floor, No. 28, Union Street, Off Infantry Road<br/>
+          Bangalore, Karnataka, India 560001<br/>
+          <strong>GST No:</strong> 29AAACZ2305D1ZM<br/>
+      </div>
+            <div style="height:15px; padding:10px 0; text-align:center;">
+      <strong>Receipt</strong>
+    </div>
+            <p>
+                <span style="float:right;display: inline-block;">
+                    <strong>Date: <apex:outputText value="{0,date,dd/MM/yyyy}">
+                        <apex:param value="{!TODAY()}" />
+                    </apex:outputText></strong>
+                </span>
+            </p>
+            <div class="details-container">
+                <div class="customer-details">
+                    <h3>
+                        Customer Details : 
+                    </h3>
+                    <div>
+                            <div>Applicant's Name :&nbsp;&nbsp;&nbsp;&nbsp;{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} </div>
+                        <div>Applicant's Address :&nbsp;{!PermanentFullAddress}</div>
+                        <div>
+                         <apex:outputPanel rendered="{!NOT(ISBLANK(firstCoApplicant.Name))}">Co Applicant's Name :{!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}</apex:outputPanel>
+
+                        </div>
+                        
+                    </div>
+                </div><br/>
+                <div class="booking-details">
+                    <table width="100%" style="table-layout: fixed; border-collapse: separate; border-spacing: 0; margin-top: 0; border: 1px solid black;" border="1">
+                        <tr>
+                            <th colspan="2" style="text-align:center;">Booking Details:</th>
+                        </tr>
+                        <tr>
+                            <td>Project</td>
+                            <td>{!Booking__c.Project__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Unit No</td>
+                            <td>{!Booking__c.Unit_No__c}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <p>We have received the below mentioned payments via following modes:</p>
+    
+            <!-- Display grouped transactions -->
+            <table width="100%" style="table-layout: fixed; border-collapse: separate; border-spacing: 0; margin-top: 0; border: 1px solid black;" border="1">
+                <tr>
+                      <th>Receipt No</th>
+                    <th>Instrument Date</th>
+                    <th>Payment Schedule Name</th>
+                    <th>Amount</th>
+                    <th>Mode of Payment</th>
+                    <th>Instrument No</th>
+                   
+                </tr>
+                <apex:repeat value="{!repList}" var="wrapper">
+                    <tr>
+                        
+                          <td>{!wrapper.receiptNo}</td>
+                        <td><apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!wrapper.receiptDate}" />
+                        </apex:outputText></td>
+                        <td>{!wrapper.payNameName}</td>
+                        <td>{!wrapper.receiptAmount}</td>
+                        <td>{!wrapper.modeOfPayment}</td>
+                        <td>{!wrapper.instruMentNo}</td>
+                      
+                    </tr>
+                </apex:repeat>
+            </table>
+    
+            <p>Total paid: <b>Rs. {!totalAmount}/-</b></p>
+    <p>In words <b>{!receiptAmountInWords}/-</b></p>
+    
+            <p>Zuari CRM Team.</p>
+            <p>Note: This is a system-generated Statement and doesn’t require a signature.</p>
+        </body>
+    </apex:page>

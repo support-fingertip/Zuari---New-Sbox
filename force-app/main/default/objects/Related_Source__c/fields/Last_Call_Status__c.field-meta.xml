@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_Call_Status__c</fullName>
+    <label>Last Call Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Non contactable</fullName>
+                <default>false</default>
+                <label>Non contactable</label>
+            </value>
+            <value>
+                <fullName>Cost Sheet Shared</fullName>
+                <default>false</default>
+                <label>Cost Sheet Shared</label>
+            </value>
+            <value>
+                <fullName>Shared Project Details</fullName>
+                <default>false</default>
+                <label>Shared Project Details</label>
+            </value>
+            <value>
+                <fullName>Customer Meeting Proposed</fullName>
+                <default>false</default>
+                <label>Customer Meeting Proposed</label>
+            </value>
+            <value>
+                <fullName>Customer Meeting Confirmed</fullName>
+                <default>false</default>
+                <label>Customer Meeting Confirmed</label>
+            </value>
+            <value>
+                <fullName>Customer meeting done</fullName>
+                <default>false</default>
+                <label>Customer meeting done</label>
+            </value>
+            <value>
+                <fullName>SV Proposed</fullName>
+                <default>false</default>
+                <label>SV Proposed</label>
+            </value>
+            <value>
+                <fullName>SV Confirmed</fullName>
+                <default>false</default>
+                <label>SV Confirmed</label>
+            </value>
+            <value>
+                <fullName>SV Done</fullName>
+                <default>false</default>
+                <label>SV Done</label>
+            </value>
+            <value>
+                <fullName>Event Visit Proposed</fullName>
+                <default>false</default>
+                <label>Event Visit Proposed</label>
+            </value>
+            <value>
+                <fullName>Event Visit Confirmed</fullName>
+                <default>false</default>
+                <label>Event Visit Confirmed</label>
+            </value>
+            <value>
+                <fullName>Event Visit done</fullName>
+                <default>false</default>
+                <label>Event Visit done</label>
+            </value>
+            <value>
+                <fullName>EOI Collected</fullName>
+                <default>false</default>
+                <label>EOI Collected</label>
+            </value>
+            <value>
+                <fullName>In process</fullName>
+                <default>false</default>
+                <label>In process</label>
+            </value>
+            <value>
+                <fullName>Lost</fullName>
+                <default>false</default>
+                <label>Lost</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,87 @@
+<aura:component controller="FileDocumentController"
+                implements="flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+
+    <!-- Attributes -->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="docTypes" type="List"/>
+    <aura:attribute name="selectedDoc" type="String" default=""/>
+    <aura:attribute name="uploadedDocs" type="Object[]"/>
+    <aura:attribute name="previewMode" type="Boolean" default="false"/>
+    <aura:attribute name="columns" type="List"/>
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:FileUploadCompleteEvent" action="{!c.refresh}"/>
+
+    <lightning:card title="Booking Documents" class="slds-p-around_medium">
+
+        <!-- Dropdown -->
+        <div class="slds-m-bottom_medium">
+            <lightning:select label="Select a document type"
+                              value="{!v.selectedDoc}"
+                              onchange="{!c.onDocChange}">
+                <option value="">All</option>
+                <aura:iteration items="{!v.docTypes}" var="d">
+                    <option value="{!d}">{!d}</option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+
+        <!-- Upload Box -->
+        <aura:if isTrue="{!v.selectedDoc != ''}">
+            <div class="slds-p-around_medium slds-box">
+                <div class="slds-text-heading_small slds-m-bottom_small">File Upload</div>
+  <c:FileUploader parentId="{!v.recordId}" picklistValues="Applicant Aadhar Card Back,Applicant Passport,Co Applicant Passport Size Photo,Sale Agreement,Cheque Date,DD,Sale Deed,Possession Letter,Cancellation Agreement" />
+        <!--
+               
+                <c:FileUploader parentId="{!v.recordId}" docType="{!v.selectedDoc}"  picklistValues="Applicant Aadhar Card Back,Applicant Passport,Booking Form Signature,Co Applicant Passport Size Photo,Sale Agreement,Cheque Date,DD,Sale Deed,Possession Letter,Cancellation Agreement" />
+           -->
+            </div>
+        </aura:if>
+
+        <!-- Preview Toggle -->
+        <div class="slds-m-vertical_medium">
+            <lightning:input type="toggle" label="Preview" checked="{!v.previewMode}" onchange="{!c.refresh}"/>
+        </div>
+
+        <!-- Preview Mode -->
+        <aura:if isTrue="{!v.previewMode}">
+            
+            <div class="preview-container">
+                <aura:iteration items="{!v.uploadedDocs}" var="doc">
+
+                    <div class="preview-card"
+                         onclick="{!c.openPreview}"
+                         data-id="{!doc.documentId}">
+                        
+                        <!-- Preview Image / PDF -->
+                        <aura:if isTrue="{!doc.isImage}">
+                            <img src="{!doc.previewUrl}" class="preview-image"/>
+                        <aura:set attribute="else">
+                            <div class="pdf-container">
+                                <img src="/img/icon/t4v35/doctype/pdf_120.png" class="pdf-icon"/>
+                            </div>
+                        </aura:set>
+                        </aura:if>
+
+                        <!-- File label -->
+                        <div class="file-label">{!doc.fileName}</div>
+
+                    </div>
+
+                </aura:iteration>
+            </div>
+
+        <aura:set attribute="else">
+
+            <!-- Datatable Mode -->
+            <lightning:datatable keyField="id"
+                                 data="{!v.uploadedDocs}"
+                                 columns="{!v.columns}"/>
+        </aura:set>
+        </aura:if>
+
+    </lightning:card>
+
+</aura:component>

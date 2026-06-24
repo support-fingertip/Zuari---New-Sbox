@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="files" type="List" />
+</aura:event>

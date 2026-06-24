@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Event to handle Raise Demand">
+    <aura:attribute name="showNextCmp" type="boolean"/>
+</aura:event>

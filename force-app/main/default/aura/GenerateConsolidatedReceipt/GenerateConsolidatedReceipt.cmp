@@ -1,0 +1,35 @@
+<aura:component controller="SendReceiptToCustomerClass" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="LeadRecord" type="Object"/>
+    <aura:attribute name="projectName" type="string"/>
+    <aura:attribute name="vfPageName" type="String" default="Customer_Statement"/>
+
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Name,Approval_status__c,Project1__r.Name"
+                      targetFields="{!v.LeadRecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.doInit}"
+                      />
+    <aura:html tag="style">
+        .panel.slds-modal > .modal-container{
+        width: 75%;
+        max-width: 70rem;
+        }
+    </aura:html>
+    <section class="slds-modal slds-fade-in-open">
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">Generate Statement of Accounts</h2>
+        </header>
+
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <iframe src="{!'/apex/' + v.vfPageName + '?Id=' + v.recordId}" width="100%" height="500px;" frameBorder="0"/>
+        </div>
+
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.close}">Cancel</button>
+            <!--<aura:if isTrue="{!v.LeadRecord.Approval_status__c == 'Approved'}">-->
+                <button class="slds-button slds-button_brand" onclick="{!c.sendEmail}">Send Email</button>
+        </footer>
+    </section>
+</aura:component>

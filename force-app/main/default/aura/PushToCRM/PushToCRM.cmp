@@ -1,0 +1,12 @@
+<aura:component controller="PushToCrmController"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+                access="global">
+    <aura:attribute name="bookingRec" type="Booking__c"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.bookingRec}"
+                      fields="Id,Name,Booking_Form_Signature_Uploaded__c,Approval_yes_or_No__c"
+                      recordUpdated="{!c.doInit}"
+                      targetError="{!v.recordLoadError}" />
+</aura:component>

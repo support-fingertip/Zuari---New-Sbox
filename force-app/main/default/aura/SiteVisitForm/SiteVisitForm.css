@@ -1,0 +1,14 @@
+.THIS.slds-input[disabled] {
+    color: black;
+}
+.THIS .custom-disabled input[disabled] {
+    color: #000; /* or any darker shade you prefer */
+    font-weight: 600;
+    opacity: 1; /* prevent SLDS from making it too faint */
+}
+.THIS .custom-disabled-input label.slds-form-element__label {
+    font-weight: 600;      /* Bolder label */
+}
+.THIS .custom-bold-label .slds-form-element__label {
+    font-weight: bold !important;
+}

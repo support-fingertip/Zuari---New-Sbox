@@ -1,0 +1,108 @@
+<template>
+    <div class="ppsr-topbar">
+        <img src={logoUrl} alt="Zuari" class="ppsr-logo"/>
+        <span class="ppsr-title">Project Status</span>
+    </div>
+    <div class="slds-card slds-p-around_medium ppsr-card">
+        <header class="slds-card__header">
+            <h1 class="slds-text-heading_medium">Project: {projectName}</h1>
+        </header>
+
+        <template lwc:if={loading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:if={hasError}>
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                {errorMessage}
+            </div>
+        </template>
+
+        <!-- Stage 1: Blocks -->
+        <template lwc:if={showBlocks}>
+            <h2 class="slds-text-heading_small slds-m-top_medium">Select a Block</h2>
+            <template lwc:if={hasBlocks}>
+                <ul class="slds-has-dividers_bottom-space">
+                    <template for:each={blocks} for:item="b">
+                        <li key={b.Id}
+                            class="slds-item slds-p-around_small ppsr-clickable"
+                            data-id={b.Id}
+                            data-name={b.Name}
+                            onclick={handleBlockClick}>
+                            <lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+                            <span class="slds-p-left_small">{b.Name}</span>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <template lwc:if={loading}></template>
+                <template lwc:else>
+                    <p class="slds-text-body_regular slds-p-vertical_small">No blocks found for this project.</p>
+                </template>
+            </template>
+        </template>
+
+        <!-- Stage 2: Payment Plans -->
+        <template lwc:if={showPlans}>
+            <lightning-button label="Back to Blocks" icon-name="utility:back" onclick={handleBackToBlocks}
+                              class="slds-m-bottom_small"></lightning-button>
+            <h2 class="slds-text-heading_small">Block: {selectedBlockName} — Select a Payment Plan</h2>
+            <template lwc:if={hasPlans}>
+                <ul class="slds-has-dividers_bottom-space">
+                    <template for:each={paymentPlans} for:item="p">
+                        <li key={p.Id}
+                            class="slds-item slds-p-around_small ppsr-clickable"
+                            data-id={p.Id}
+                            data-name={p.Name}
+                            onclick={handlePlanClick}>
+                            <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                            <span class="slds-p-left_small">{p.Name}</span>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <p class="slds-text-body_regular slds-p-vertical_small">No active payment plans for this block.</p>
+            </template>
+        </template>
+
+        <!-- Stage 3: Master Payment Schedule table -->
+        <template lwc:if={showMps}>
+            <lightning-button label="Back to Payment Plans" icon-name="utility:back" onclick={handleBackToPlans}
+                              class="slds-m-bottom_small"></lightning-button>
+            <h2 class="slds-text-heading_small">Payment Plan: {selectedPlanName} — Master Payment Schedule</h2>
+            <template lwc:if={hasMps}>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer ppsr-table">
+                    <thead class="ppsr-thead">
+                        <tr class="slds-line-height_reset">
+                            <th scope="col"><div class="slds-truncate">Name</div></th>
+                            <th scope="col"><div class="slds-truncate">Status</div></th>
+                            <th scope="col"><div class="slds-truncate">Percentage</div></th>
+                            <th scope="col"><div class="slds-truncate">Image</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={mpsList} for:item="r">
+                            <tr key={r.id}>
+                                <td>{r.name}</td>
+                                <td>{r.status}</td>
+                                <td>{r.percent}%</td>
+                                <td>
+                                    <template lwc:if={r.imageUrl}>
+                                        <img src={r.imageUrl} alt="Milestone" class="ppsr-img"/>
+                                    </template>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template lwc:else>
+                <p class="slds-text-body_regular slds-p-vertical_small">No master payment schedule records for this plan.</p>
+            </template>
+        </template>
+    </div>
+</template>

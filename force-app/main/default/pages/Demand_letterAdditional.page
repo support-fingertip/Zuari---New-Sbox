@@ -1,0 +1,79 @@
+<apex:page standardController="Additional_Charges__c" 
+            extensions="DemandLetterVFP" 
+            renderAs="pdf" 
+            applyHtmlTag="false" 
+            showHeader="false" 
+            standardStylesheets="false">
+    <head>
+        <style>
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            .details-container {
+                display: flex;
+                justify-content: space-between;
+            }
+            .customer-details,
+            .booking-details {
+                flex: 1;
+            }
+            .footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+            .footer img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="float:right;"></div><br/><br/><br/>
+
+        <div style="margin-left:50px;margin-right:50px;font-size:14px;text-align:justify;">
+            <table width="100%" cellspacing="0" border="0" style="border: none !important; border-collapse: collapse; border-spacing: 0;">
+                <tr>
+                    <td style="font-size: 12px;text-align:left;border: none;">
+                        <img src="{!$Resource.Zuari}" width="150px" height="60" />
+                    </td>
+                    <td style="font-size: 12px;text-align:right;border: none;">
+                        <!--Update on 09-02-2026 by Praveen-->
+                    <apex:outputText rendered="{!Additional_Charges__c.Booking__r.Project1__r.Name == 'Zuari Garden City - Plots'}"><img src="{!$Resource.ZuariGardenCity}" width="150px" height="60" /></apex:outputText>
+                    <apex:outputText rendered="{!Additional_Charges__c.Booking__r.Project1__r.Name == 'Zuari Gangothri Tribhuja'}"><img src="{!$Resource.GangotriLogo}" width="150px" height="60" /></apex:outputText>
+                <!--
+                        <img src="{!$Resource.ZuariPlotlogo}" width="150px" height="60" />-->
+                    </td>
+                </tr>
+            </table>
+            <p>Date: <apex:outputText value="{0,date,dd/MM/yyyy}">
+                <apex:param value="{!TODAY()}" />
+            </apex:outputText></p>
+            <p>To,</p>
+            <p>{!Additional_Charges__c.Booking__r.S__c} {!Additional_Charges__c.Booking__r.First_Applicant_Name__c},</p>
+            <p>{!PermanentFullAddress} .</p>
+            <p>Dear Sir,</p>
+            <p style="text-align:center">
+                <b> For {!Additional_Charges__c.Booking__r.Project__c} PROJECT 
+                <br/>
+                Release of Installment for {!Additional_Charges__c.Type__c} </b>
+            </p>
+            <P>In this connection, we request you to release the Instalment of agreed amount i.e.)</P>
+            <P> 1. <B>Rs.<apex:outputText value="{0,number}"><apex:param value="{!Additional_Charges__c.Total_Amount_Without_GST__c}" /></apex:outputText>/-.</B> Additional Charge Payment.</P>
+            <P> 2. <B>Rs.<apex:outputText value="{0,number}"><apex:param value="{!Additional_Charges__c.Total_Additional_Charge__c - Additional_Charges__c.Total_Amount_Without_GST__c}" /></apex:outputText>/-.</B> GST Payment.</P>
+            <P> We are happy to advise that the {!Additional_Charges__c.Name} was already completed. We request you to arrange the payment by means of Draft in the name of <!--{!Additional_Charges__c.Booking__r.Account_Name__c} !-->as per our agreement. </P>
+            <p>Kindly do the needful.</p>
+            <p>With regards,</p>
+            <p>Yours faithfully,</p>
+            <p>For Zuari Infraworld,</p>
+            <p>Authorised Signatory</p>
+            <br/><br/><br/>
+            <p>* This is a system generated document and does not require signatures.</p>
+        </div>
+    </body>
+</apex:page>

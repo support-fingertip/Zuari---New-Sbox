@@ -1,0 +1,190 @@
+/* ====================================================
+   UNIT PRICE CHANGE — Overrides Standard Quick Action Container
+   ==================================================== */
+
+.THIS {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Flexbox guarantees the header/footer stay fixed while the body scrolls */
+.THIS .upc-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh; /* Prevents the modal from being taller than the screen */
+    width: 100%;
+}
+
+/* ====== HEADER ====== */
+.THIS .upc-modal-header {
+    background: linear-gradient(135deg, #032D60 0%, #0070d2 100%);
+    padding: 16px 24px;
+    position: relative;
+    flex-shrink: 0; /* Prevents header from shrinking when space is tight */
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.THIS .upc-header-row {
+    display: flex;
+    align-items: center;
+}
+
+.THIS .upc-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.THIS .upc-subheading {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 2px;
+}
+
+/* Position close button perfectly at top right inside the header */
+.THIS .upc-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+/* ====== BODY ====== */
+.THIS .upc-modal-body {
+    background: #f4f6f9;
+    padding: 24px;
+    overflow-y: auto; /* Adds a scrollbar specifically to the body if content gets long */
+    flex-grow: 1;     /* Fills out the remaining available height */
+    position: relative;
+    min-height: 350px;
+}
+
+/* ====== STEP BADGES ====== */
+.THIS .upc-step-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.THIS .upc-step-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #0070d2;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.THIS .upc-step-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1B2A4A;
+}
+
+.THIS .upc-count-badge {
+    margin-left: 12px;
+    background: #0070d2;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+/* ====== FILTER CARD ====== */
+.THIS .upc-filter-card {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* ====== SELECTION INFO BAR ====== */
+.THIS .upc-selection-info {
+    display: flex;
+    align-items: center;
+    background: #EBF5FF;
+    border: 1px solid #B8D6F5;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #032D60;
+}
+
+/* ====== DATA TABLE ====== */
+.THIS .upc-table-wrapper {
+    min-height: 150px;
+    max-height: 300px; /* Limits table height so we can scroll independently inside it */
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* ====== PRICE CARD ====== */
+.THIS .upc-price-card {
+    background: #ffffff;
+    border-left: 4px solid #0070d2;
+    border-radius: 8px;
+    border-color: #0070d2 #e5e7eb #e5e7eb #0070d2;
+    padding: 16px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.THIS .upc-price-input .slds-form-element__label {
+    font-weight: 700;
+}
+
+.THIS .upc-info-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #032D60;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 20px; /* Aligns with input visually */
+}
+
+.THIS .upc-info-pill strong {
+    color: #ffc107;
+    font-size: 15px;
+}
+
+/* ====== FOOTER ====== */
+.THIS .upc-modal-footer {
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 16px 24px;
+    text-align: right;
+    flex-shrink: 0; /* Prevents footer from collapsing */
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.THIS .upc-update-btn {
+    min-width: 180px;
+}
+
+/* ====== SPINNER ====== */
+.THIS .upc-spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.75);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

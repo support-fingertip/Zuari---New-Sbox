@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Amount1__c</fullName>
+    <formula>/* Payment_percent__c * Quote__r.Total_Consideration_with_taxes_and_other__c
+Payment_percent__c *  Quote__r.Agreement_Value_Before_GST__c*/
+
+IF(
+Is_Clubhouse_Charges__c, Quote__r.Clubhouse_Charges__c,
+IF(Is_Infrastructure_Charges__c, Quote__r.Total_Infrastructure_Charges__c,
+IF(Is_Maintenance_Charges__c, Quote__r.Total_Maintenance_Amount__c,
+IF(
+Booking__r.RecordType.DeveloperName != &quot;Plots&quot;,
+Payment_percent__c * Quote__r.GRAND_TOTAL__c,
+Booking__r.Agreement_Value__c * Payment_percent__c
+)
+)
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Amount1</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

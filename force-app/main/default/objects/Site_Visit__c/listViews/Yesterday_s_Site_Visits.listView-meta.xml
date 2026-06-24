@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Yesterday_s_Site_Visits</fullName>
+    <columns>NAME</columns>
+    <columns>Enquiry_Name__c</columns>
+    <columns>Customer_Name__c</columns>
+    <columns>Project_Name__c</columns>
+    <columns>Related_Source__c</columns>
+    <columns>Source1__c</columns>
+    <columns>Status__c</columns>
+    <columns>Date__c</columns>
+    <columns>SV_Completed_Date_Time__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Date__c</field>
+        <operation>equals</operation>
+        <value>YESTERDAY</value>
+    </filters>
+    <label>Yesterday&apos;s Site Visits</label>
+</ListView>

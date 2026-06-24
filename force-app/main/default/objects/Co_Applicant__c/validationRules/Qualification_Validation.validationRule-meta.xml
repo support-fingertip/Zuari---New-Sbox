@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Qualification_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Qualification__c, &apos;Other&apos;),
+    ISBLANK(Other_Qualification__c)
+)</errorConditionFormula>
+    <errorDisplayField>Other_Qualification__c</errorDisplayField>
+    <errorMessage>Please enter Other Qualification</errorMessage>
+</ValidationRule>

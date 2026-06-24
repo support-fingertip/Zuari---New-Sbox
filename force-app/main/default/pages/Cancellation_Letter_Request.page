@@ -1,0 +1,89 @@
+<apex:page standardController="Booking__c" extensions="CancellationLetterVFPController" showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0" renderAs="pdf">
+    
+    
+    <div class="container" style="max-width:800px; margin:40px auto; padding:10px 20px; border:1.5px solid #000; font-family:'Times New Roman', serif; background:#fff; font-size:13px;">
+        <table width="100%"  cellspacing="0" border="0" style="border: none !important; border-collapse: collapse; border-spacing: 0;" >
+        <tr>
+            <td style="font-size: 12px;text-align:left;border: none;"> <img src="{!$Resource.Zuari}" width="150px" height="60" /></td>
+            
+            <td style="font-size: 12px;text-align:right;border: none;">
+                <apex:image url="{!projectLogoUrl}" width="150px" height="60" rendered="{!NOT(ISBLANK(projectLogoUrl))}" />
+            </td>
+            
+            
+        </tr>
+    </table>
+        <br/>
+        <div class="section1" style="font-size:13px; line-height:0.7; letter-spacing:0.2px; text-align:justify; margin-bottom:25px;">
+            Date: <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Today()}"/></apex:outputText>
+        </div>
+        
+        <div class="section1" style="font-size:13px; line-height:0.7; letter-spacing:0.2px; margin-bottom:25px;">
+            <table style="width:100%; border-collapse: collapse; border: none;">
+                <tr>
+                    <td style="width:70%; padding: 8px;"><b>From</b></td>
+                </tr>
+                <tr>
+                    <td style="width:70%; padding: 8px;">Applicant's Name :&nbsp;&nbsp;&nbsp;{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} </td>
+                    
+                </tr>
+                <tr>
+                    <td style="width:70%; padding: 8px;">Co Applicant's Name : <apex:repeat value="{!coApplicants}" var="ca">{!ca.Salutation__c} {!ca.Name} <br/><br/>
+                        </apex:repeat> </td>
+                </tr>
+                <tr>
+                    <td style="width:70%; padding: 8px;">Address : &nbsp;{!PermanentFullAddress} </td>
+                </tr>
+                
+            </table>
+            
+        </div>
+        <div class="section" style="font-size:13px; line-height:1.2; letter-spacing:0.2px; margin-bottom:25px;">
+            <strong>To :</strong><br/>
+            {!Booking__c.Project1__r.Name} <br/>
+            {!Booking__c.Project1__r.Project_Address__c}<br/>
+            <br/>
+            Dear Sir/Madum, <br/><br/>
+            Ref: Booking at <strong>{!projectName}</strong>
+        </div>
+        <p style="font-size:13px; line-height:1.2; letter-spacing:0.2px;  margin-bottom:25px;">
+            Sub: Request for cancellation of booking of {!unitLabel} No. {!Booking__c.Plot__r.Name} at <strong>{!projectName}.</strong> <br/><br/>
+            Further to my/our booking of a unit at the above project, due to personal reasons I/We are unable to continue with the booking of the subject unit. I/We therefore request you to kindly cancel my/our booking. I/We do understand agree and undertake that the cancellation will be governed by the terms and conditions of the application for allotment/agreement for sale, and give my/our unconditional consent for the same. 
+        </p>
+        <div class="section" style="font-size:13px; line-height:1.2; letter-spacing:0.2px; text-align:justify; margin-bottom:25px;">
+            <ol style="margin:0 0 0 20px; padding:0;">
+                <li>The Original receipt/s of my/our booking of {!Booking__c.Plot__r.Name} at {!projectName} is returned herewith if any. </li>
+                <li>I/We have surrendered the original agreements documents along with receipts for the above Property if any.  </li>
+                <li>I/We declare that I/We have not borrowed any loan from anyone based on the /for the above Flat/Unit if any. </li>
+                <li>I/We have intimated our bankers of my/our willingness to withdraw from the project and a NOC from them is enclosed if any. </li>
+                <li>I/We have surrendered the original bank documents received for the above property if any. </li>
+                <li>I/We have surrendered all the documents received for the above property if any.</li>
+            </ol></div>
+        I/We confirm that will have no right, title, interest, lien in the above booking once the cancellation is confirmed. 
+        <br/><br/>  
+        <div class="section" style="font-size:13px; line-height:0.9; letter-spacing:0.2px;  margin-bottom:20px;">
+            Reason For Cancellation:(To Be filled By Purchaser:)<br/>
+            ____________________________________________________________________________________________________<br/>
+            ____________________________________________________________________________________________________<br/>
+            ____________________________________________________________________________________________________<br/> </div>
+        <div class="section" style="font-size:13px; line-height:1; letter-spacing:0.2px;  margin-bottom:15px;">
+            Thanking You,<br/> <br/>
+            Yours Faithfully, <br/>
+            <br/>
+            <div class="section1" style="font-size:13px; line-height:0.7; letter-spacing:0.2px; margin-bottom:25px;">
+                <table style="width:100%; border-collapse: collapse; border: none;">
+                    <tr>
+                        <td style="padding: 8px; text-align:left;">
+                            Signature: Applicant: ________________________ <br/><br/>
+                            Co Applicant: _______________________ <br/><br/>
+                            Cancellation Received By: ________________________ <br/><br/>
+                            Cancellation Handled By: ____________________<br/><br/>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>        
+        </div>
+    </div>
+    
+</apex:page>

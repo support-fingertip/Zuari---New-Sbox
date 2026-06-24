@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sv_Designation_of_Customer__c</fullName>
+    <label>Sv_Designation of Customer</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Board Level</fullName>
+                <default>false</default>
+                <label>Board Level</label>
+            </value>
+            <value>
+                <fullName>C-Level</fullName>
+                <default>false</default>
+                <label>C-Level</label>
+            </value>
+            <value>
+                <fullName>VP/SVP/EVP</fullName>
+                <default>false</default>
+                <label>VP/SVP/EVP</label>
+            </value>
+            <value>
+                <fullName>Senior Director</fullName>
+                <default>false</default>
+                <label>Senior Director</label>
+            </value>
+            <value>
+                <fullName>Director</fullName>
+                <default>false</default>
+                <label>Director</label>
+            </value>
+            <value>
+                <fullName>General Manager</fullName>
+                <default>false</default>
+                <label>General Manager</label>
+            </value>
+            <value>
+                <fullName>Manager</fullName>
+                <default>false</default>
+                <label>Manager</label>
+            </value>
+            <value>
+                <fullName>Junior Executive/Associate</fullName>
+                <default>false</default>
+                <label>Junior Executive/Associate</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

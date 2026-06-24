@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>RS_Inbound_Email_Alert</name>
+        <label>RS Inbound Email Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Related_Source__c.RS_Inbound_Call_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Related_Source__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Related_Source__c.RS_Inbound_Call_Alert</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <description>This flow will run when an inbound call is inserted with conditions where Lead not equal to null and call type equals Inbound Call, this flow will send email to lead owner to notify the incoming call.</description>
+    <environments>Default</environments>
+    <interviewLabel>Inbound Call - Email Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Inbound Call - Email Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>RS_Inbound_Email_Alert</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Lead__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Call_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Inbound Call</stringValue>
+            </value>
+        </filters>
+        <object>Call_Detail__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

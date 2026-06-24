@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Amenties__c</fullName>
+    <label>Amenties</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Private Garden</fullName>
+                <default>false</default>
+                <label>Private Garden</label>
+            </value>
+            <value>
+                <fullName>Club House</fullName>
+                <default>false</default>
+                <label>Club House</label>
+            </value>
+            <value>
+                <fullName>Tennis Court</fullName>
+                <default>false</default>
+                <label>Tennis Court</label>
+            </value>
+            <value>
+                <fullName>Jogging Track</fullName>
+                <default>false</default>
+                <label>Jogging Track</label>
+            </value>
+            <value>
+                <fullName>Temperature Controlled Swimming Pool</fullName>
+                <default>false</default>
+                <label>Temperature Controlled Swimming Pool</label>
+            </value>
+            <value>
+                <fullName>Pet Park</fullName>
+                <default>false</default>
+                <label>Pet Park</label>
+            </value>
+            <value>
+                <fullName>Mini Cricket Turf</fullName>
+                <default>false</default>
+                <label>Mini Cricket Turf</label>
+            </value>
+            <value>
+                <fullName>Football Turf</fullName>
+                <default>false</default>
+                <label>Football Turf</label>
+            </value>
+            <value>
+                <fullName>Basketball Court</fullName>
+                <default>false</default>
+                <label>Basketball Court</label>
+            </value>
+            <value>
+                <fullName>Kids Play Area</fullName>
+                <default>false</default>
+                <label>Kids Play Area</label>
+            </value>
+            <value>
+                <fullName>Adventure and Obstacle Course</fullName>
+                <default>false</default>
+                <label>Adventure and Obstacle Course</label>
+            </value>
+            <value>
+                <fullName>Rock Climbing</fullName>
+                <default>false</default>
+                <label>Rock Climbing</label>
+            </value>
+            <value>
+                <fullName>Archery Range</fullName>
+                <default>false</default>
+                <label>Archery Range</label>
+            </value>
+            <value>
+                <fullName>Miyawaki Forest</fullName>
+                <default>false</default>
+                <label>Miyawaki Forest</label>
+            </value>
+            <value>
+                <fullName>Yoga Deck</fullName>
+                <default>false</default>
+                <label>Yoga Deck</label>
+            </value>
+            <value>
+                <fullName>Senior Citizen Sitout</fullName>
+                <default>false</default>
+                <label>Senior Citizen Sitout</label>
+            </value>
+            <value>
+                <fullName>Amphitheatre</fullName>
+                <default>false</default>
+                <label>Amphitheatre</label>
+            </value>
+            <value>
+                <fullName>Gymnasium</fullName>
+                <default>false</default>
+                <label>Gymnasium</label>
+            </value>
+            <value>
+                <fullName>Yoga Room</fullName>
+                <default>false</default>
+                <label>Yoga Room</label>
+            </value>
+            <value>
+                <fullName>Badminton Court</fullName>
+                <default>false</default>
+                <label>Badminton Court</label>
+            </value>
+            <value>
+                <fullName>Banquet Hall</fullName>
+                <default>false</default>
+                <label>Banquet Hall</label>
+            </value>
+            <value>
+                <fullName>Theatre</fullName>
+                <default>false</default>
+                <label>Theatre</label>
+            </value>
+            <value>
+                <fullName>Dance Room</fullName>
+                <default>false</default>
+                <label>Dance Room</label>
+            </value>
+            <value>
+                <fullName>Crèche</fullName>
+                <default>false</default>
+                <label>Crèche</label>
+            </value>
+            <value>
+                <fullName>Party Lounge</fullName>
+                <default>false</default>
+                <label>Party Lounge</label>
+            </value>
+            <value>
+                <fullName>Cycle Track</fullName>
+                <default>false</default>
+                <label>Cycle Track</label>
+            </value>
+            <value>
+                <fullName>Volley Ball Court</fullName>
+                <default>false</default>
+                <label>Volley Ball Court</label>
+            </value>
+            <value>
+                <fullName>Swimming Pool</fullName>
+                <default>false</default>
+                <label>Swimming Pool</label>
+            </value>
+            <value>
+                <fullName>Outdoor Gym</fullName>
+                <default>false</default>
+                <label>Outdoor Gym</label>
+            </value>
+            <value>
+                <fullName>High-Speed Elevators</fullName>
+                <default>false</default>
+                <label>High-Speed Elevators</label>
+            </value>
+            <value>
+                <fullName>Sky Bridge</fullName>
+                <default>false</default>
+                <label>Sky Bridge</label>
+            </value>
+            <value>
+                <fullName>Rooftop Sitting Area</fullName>
+                <default>false</default>
+                <label>Rooftop Sitting Area</label>
+            </value>
+            <value>
+                <fullName>Giant Chess</fullName>
+                <default>false</default>
+                <label>Giant Chess</label>
+            </value>
+            <value>
+                <fullName>Temple</fullName>
+                <default>false</default>
+                <label>Temple</label>
+            </value>
+            <value>
+                <fullName>Leisure pool / Lap Poc</fullName>
+                <default>false</default>
+                <label>Leisure pool / Lap Poc</label>
+            </value>
+            <value>
+                <fullName>Fitness pool</fullName>
+                <default>false</default>
+                <label>Fitness pool</label>
+            </value>
+            <value>
+                <fullName>Wading pool</fullName>
+                <default>false</default>
+                <label>Wading pool</label>
+            </value>
+            <value>
+                <fullName>Kids pool</fullName>
+                <default>false</default>
+                <label>Kids pool</label>
+            </value>
+            <value>
+                <fullName>Wet lounge</fullName>
+                <default>false</default>
+                <label>Wet lounge</label>
+            </value>
+            <value>
+                <fullName>Infinity edge</fullName>
+                <default>false</default>
+                <label>Infinity edge</label>
+            </value>
+            <value>
+                <fullName>Dry lounge</fullName>
+                <default>false</default>
+                <label>Dry lounge</label>
+            </value>
+            <value>
+                <fullName>Labyrinth walk</fullName>
+                <default>false</default>
+                <label>Labyrinth walk</label>
+            </value>
+            <value>
+                <fullName>Dry deck fountain</fullName>
+                <default>false</default>
+                <label>Dry deck fountain</label>
+            </value>
+            <value>
+                <fullName>Pool amenities</fullName>
+                <default>false</default>
+                <label>Pool amenities</label>
+            </value>
+            <value>
+                <fullName>Herbal garden</fullName>
+                <default>false</default>
+                <label>Herbal garden</label>
+            </value>
+            <value>
+                <fullName>Alfresco picnic zone</fullName>
+                <default>false</default>
+                <label>Alfresco picnic zone</label>
+            </value>
+            <value>
+                <fullName>Tree court</fullName>
+                <default>false</default>
+                <label>Tree court</label>
+            </value>
+            <value>
+                <fullName>Mounds</fullName>
+                <default>false</default>
+                <label>Mounds</label>
+            </value>
+            <value>
+                <fullName>Putting green</fullName>
+                <default>false</default>
+                <label>Putting green</label>
+            </value>
+            <value>
+                <fullName>Sensory garden</fullName>
+                <default>false</default>
+                <label>Sensory garden</label>
+            </value>
+            <value>
+                <fullName>Community garden</fullName>
+                <default>false</default>
+                <label>Community garden</label>
+            </value>
+            <value>
+                <fullName>Sele walk – super bloom</fullName>
+                <default>false</default>
+                <label>Sele walk – super bloom</label>
+            </value>
+            <value>
+                <fullName>Tree house</fullName>
+                <default>false</default>
+                <label>Tree house</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>3</visibleLines>
+</CustomField>

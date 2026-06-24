@@ -1,0 +1,772 @@
+<apex:page controller="EOIFormSiteController" showHeader="false" sidebar="false"
+           standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false"
+           docType="html-5.0" cache="false" title="Expression of Interest - Codename X">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <apex:slds />
+    <style>
+        html, body { margin:0; padding:0; background:#f3f3f3; width:100%; overflow-x:hidden;
+            -webkit-text-size-adjust:100%; font-family:Arial, sans-serif; color:#16325c; }
+        * { box-sizing:border-box; }
+        .eoi-wrapper { max-width:920px; margin:0 auto; padding:1rem; }
+        .eoi-header { text-align:center; padding:1.5rem 1rem; margin-bottom:1rem; border-bottom:3px solid #1f4e9c; }
+        .eoi-title { font-size:1.75rem; font-weight:700; color:#1f4e9c; margin:0; }
+        .eoi-subtitle { font-size:1rem; color:#54698d; margin-top:.25rem; }
+        .eoi-card { background:#fff; border:1px solid #dddbda; border-radius:.5rem; padding:1.5rem;
+            margin-bottom:1.25rem; box-shadow:0 2px 4px rgba(0,0,0,.04); }
+        .eoi-section-title { font-size:1.25rem; font-weight:700; color:#1f4e9c; margin:0 0 1rem;
+            padding-bottom:.5rem; border-bottom:1px solid #e5e5e5; }
+        .eoi-subsection { margin-top:1.25rem; padding-top:1rem; border-top:1px dashed #e0e0e0; }
+        .eoi-subsection-title { font-size:1rem; font-weight:600; color:#2e5aac; margin:0 0 .75rem; }
+        .eoi-field { margin-bottom:.75rem; }
+        .eoi-field label { display:block; font-size:.8rem; font-weight:600; margin-bottom:.25rem; color:#3e3e3c; }
+        .eoi-field .req { color:#c23934; }
+        .eoi-input, .eoi-select, .eoi-textarea { width:100%; padding:.5rem .65rem; font-size:.95rem;
+            border:1px solid #c9c7c5; border-radius:.25rem; background:#fff; }
+        .eoi-textarea { min-height:70px; resize:vertical; }
+        .eoi-input:focus, .eoi-select:focus, .eoi-textarea:focus { outline:none; border-color:#1f4e9c; box-shadow:0 0 0 1px #1f4e9c; }
+        .eoi-check { display:flex; align-items:center; gap:.5rem; margin:.4rem 0; font-size:.9rem; }
+        .eoi-muted { color:#706e6b; font-size:.85rem; margin-bottom:.75rem; }
+        .eoi-note { font-size:.78rem; color:#706e6b; font-style:italic; }
+        .eoi-legal { background:#f7f9fb; border-left:3px solid #1f4e9c; padding:.75rem 1rem;
+            border-radius:.25rem; font-size:.85rem; line-height:1.5; color:#3e3e3c; margin-bottom:.75rem; }
+        .eoi-bold { font-weight:700; margin-top:.75rem; }
+        .eoi-legal ol, .eoi-legal ul { margin:.25rem 0 .5rem 1.25rem; padding:0; }
+        .eoi-legal li { margin-bottom:.35rem; }
+        .eoi-principal { background:#fff; border:1px solid #c9c7c5; border-radius:.25rem;
+            padding:.6rem .85rem; margin:.4rem 0; font-size:.9rem; line-height:1.7; }
+        .eoi-principal-label { display:inline-block; min-width:120px; color:#54698d; }
+        .eoi-file-input { display:block; width:100%; font-size:.85rem; padding:.4rem 0; }
+        .eoi-thumb { width:56px; height:56px; object-fit:cover; border:1px solid #dddbda;
+            border-radius:.25rem; background:#fff; vertical-align:middle; margin-left:.5rem; }
+        .eoi-table-scroll { width:100%; overflow-x:auto; }
+        .eoi-ref-table { width:100%; min-width:640px; border-collapse:collapse; font-size:.82rem; }
+        .eoi-ref-table th, .eoi-ref-table td { border:1px solid #dddbda; padding:.5rem .6rem; text-align:left; vertical-align:top; }
+        .eoi-ref-table th { background:#1f4e9c; color:#fff; font-weight:600; white-space:nowrap; }
+        .eoi-ref-table tbody tr:nth-child(even) { background:#f7f9fb; }
+        .eoi-table { width:100%; border-collapse:collapse; font-size:.9rem; margin-top:.25rem; }
+        .eoi-table td { border:1px solid #dddbda; padding:.5rem .75rem; }
+        .eoi-table td:last-child { text-align:right; font-weight:600; white-space:nowrap; }
+        .eoi-note-card { background:#fffaf0; border-color:#e0c98c; }
+        .eoi-note-card p { margin:.25rem 0; font-size:.85rem; color:#5c4a1a; }
+        .eoi-btn { background:#1f4e9c; color:#fff; border:none; border-radius:.25rem;
+            padding:.75rem 1.75rem; font-size:1rem; font-weight:600; cursor:pointer; }
+        .eoi-btn:disabled { opacity:.6; cursor:default; }
+        .eoi-actions { text-align:center; margin:1.5rem 0 3rem; }
+        .eoi-error { background:#fdf2f2; border:1px solid #c23934; color:#c23934; padding:.75rem 1rem;
+            border-radius:.25rem; margin-bottom:1rem; font-size:.9rem; }
+        .eoi-success { text-align:center; border-color:#2e844a; }
+        .eoi-success .eoi-section-title { color:#2e844a; border:none; }
+        .row { display:flex; flex-wrap:wrap; margin:0 -.5rem; }
+        .col { padding:0 .5rem; flex:1 1 100%; }
+        .col-2 { padding:0 .5rem; flex:1 1 50%; max-width:50%; }
+        .col-3 { padding:0 .5rem; flex:1 1 33.333%; max-width:33.333%; }
+        .hidden { display:none; }
+        @media (max-width:768px) {
+            .eoi-wrapper { padding:.5rem; }
+            .eoi-card { padding:1rem; }
+            .eoi-title { font-size:1.4rem; }
+            .eoi-section-title { font-size:1.1rem; }
+            .col-2, .col-3 { flex:1 1 100%; max-width:100%; }
+            .eoi-principal-label { min-width:84px; }
+            .eoi-btn { width:100%; }
+        }
+        /* ---- Visual polish ---- */
+        body { background:linear-gradient(180deg,#eaf0f8 0%, #f3f3f3 260px, #f3f3f3 100%); }
+        .eoi-header { background:linear-gradient(135deg,#1f4e9c 0%, #2e6fd6 100%); border:none;
+            border-radius:14px; padding:1.9rem 1rem; box-shadow:0 10px 28px rgba(31,78,156,.25); }
+        .eoi-title { color:#fff; letter-spacing:.3px; }
+        .eoi-subtitle { color:#dbe6f8; }
+        .eoi-card { border:1px solid #e7eaf0; border-radius:14px; box-shadow:0 4px 16px rgba(22,50,92,.06);
+            transition:box-shadow .2s ease; }
+        .eoi-card:hover { box-shadow:0 8px 26px rgba(22,50,92,.10); }
+        .eoi-section-title { position:relative; padding-left:.8rem; border-bottom:1px solid #eef0f4; }
+        .eoi-section-title::before { content:""; position:absolute; left:0; top:.15rem; bottom:.6rem; width:4px;
+            border-radius:3px; background:linear-gradient(180deg,#1f4e9c,#2e6fd6); }
+        .eoi-subsection { border-top:1px dashed #dfe3ea; }
+        .eoi-subsection-title { color:#1f4e9c; }
+        .eoi-input, .eoi-select, .eoi-textarea { border:1px solid #d7dbe3; border-radius:8px; padding:.6rem .7rem;
+            transition:border-color .15s ease, box-shadow .15s ease; }
+        .eoi-input:focus, .eoi-select:focus, .eoi-textarea:focus { border-color:#2e6fd6;
+            box-shadow:0 0 0 3px rgba(46,111,214,.15); }
+        .eoi-input.invalid, .eoi-select.invalid { border-color:#c23934; box-shadow:0 0 0 3px rgba(194,57,52,.12); }
+        .eoi-fielderr { color:#c23934; font-size:.72rem; margin-top:.25rem; line-height:1.3; }
+        .eoi-btn { background:linear-gradient(135deg,#1f4e9c,#2e6fd6); border-radius:10px; padding:.85rem 2.2rem;
+            box-shadow:0 6px 18px rgba(31,78,156,.3); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+        .eoi-btn:hover:not(:disabled) { transform:translateY(-1px); filter:brightness(1.06);
+            box-shadow:0 10px 24px rgba(31,78,156,.36); }
+        .eoi-success { border:1px solid #b6e2c4; box-shadow:0 4px 16px rgba(46,132,74,.10); }
+    </style>
+</head>
+<body>
+<div class="eoi-wrapper">
+    <div class="eoi-header">
+        <h1 class="eoi-title">Expression of Interest</h1>
+        <p class="eoi-subtitle">Codename X &mdash; Nelamangala &ndash; Chikkaballapura Road, Bangalore</p>
+    </div>
+
+    <div id="eoiError" class="eoi-error hidden"></div>
+
+    <div id="eoiThankYou" class="eoi-card eoi-success hidden">
+        <h2 class="eoi-section-title">Thank you!</h2>
+        <p>Your Expression of Interest has been submitted successfully.</p>
+        <p>Reference ID: <strong id="tyRef"></strong></p>
+        <p class="eoi-muted">Documents attached: <span id="tyFiles"></span></p>
+        <p class="eoi-muted">Our team will get in touch with you shortly.</p>
+    </div>
+
+    <div id="eoiForm">
+        <!-- PROJECT (auto-populated, read-only) -->
+        <div class="eoi-card">
+            <div class="eoi-field"><label>Project Name</label>
+                <input class="eoi-input" type="text" data-field="Project_Name__c" value="Codename X" readonly="readonly" style="background:#f3f3f3; font-weight:600;"/></div>
+        </div>
+
+        <!-- APPLICANT -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Applicant Details</h2>
+            <div class="row">
+                <div class="col-3 eoi-field">
+                    <label>Salutation <span class="req">*</span></label>
+                    <select class="eoi-select" data-field="Salutation__c" data-required="1">
+                        <apex:repeat value="{!salutationOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat>
+                    </select>
+                </div>
+                <div class="col-2 eoi-field"><label>Full Name <span class="req">*</span></label>
+                    <input class="eoi-input" type="text" data-field="Name__c" data-required="1" maxlength="120"/></div>
+                <div class="col-3 eoi-field"><label>S/O, D/O</label>
+                    <input class="eoi-input" type="text" data-field="S_o_D_o__c"/></div>
+                <div class="col-3 eoi-field"><label>Date of Birth <span class="req">*</span></label>
+                    <input class="eoi-input" type="date" data-field="Date_of_Birth__c" data-required="1"/></div>
+                <div class="col-3 eoi-field"><label>Country of Residence <span class="req">*</span></label>
+                    <input class="eoi-input" type="text" data-field="Country_of_Residence__c" data-required="1"/></div>
+                <div class="col-3 eoi-field"><label>Passport No. (PIO / NRI)</label>
+                    <input class="eoi-input" type="text" data-field="Passport_Number_PIO__c"/></div>
+                <div class="col-2 eoi-field"><label>Aadhaar No. <span class="req">*</span></label>
+                    <input class="eoi-input" type="text" data-field="Aadhaar_Number__c" data-required="1" data-validate="aadhaar" inputmode="numeric" maxlength="12"/>
+                    <div class="eoi-fielderr hidden">Enter a valid 12-digit Aadhaar number.</div></div>
+                <div class="col-2 eoi-field"><label>PAN No. <span class="req">*</span></label>
+                    <input class="eoi-input" type="text" data-field="PAN_Number__c" data-required="1" data-validate="pan" maxlength="10" style="text-transform:uppercase;"/>
+                    <div class="eoi-fielderr hidden">Format: ABCDE1234F (5 letters, 4 digits, 1 letter).</div></div>
+                <div class="col-2 eoi-field"><label>Primary Contact No. <span class="req">*</span></label>
+                    <input class="eoi-input" type="tel" data-field="Primary_Contact_No__c" data-required="1" data-validate="phone" inputmode="numeric" maxlength="10" id="primaryPhone"/>
+                    <div class="eoi-fielderr hidden">Enter a valid 10-digit mobile number starting with 6-9.</div></div>
+                <div class="col-2 eoi-field"><label>Alternate Contact No.</label>
+                    <input class="eoi-input" type="tel" data-field="Alternate_Contact_No__c" data-validate="phone" inputmode="numeric" maxlength="10"/>
+                    <div class="eoi-fielderr hidden">Enter a valid 10-digit mobile number starting with 6-9.</div></div>
+                <div class="col eoi-field"><label>Email <span class="req">*</span></label>
+                    <input class="eoi-input" type="email" data-field="Email__c" data-required="1" id="emailField"/></div>
+            </div>
+
+            <!-- Permanent Address (structured; combined into the address field on submit) -->
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">Permanent Address</h3>
+                <div class="row">
+                    <div class="col-2 eoi-field"><label>House No. / Building <span class="req">*</span></label>
+                        <input class="eoi-input" type="text" id="houseNo" data-required="1" maxlength="120"/></div>
+                    <div class="col-2 eoi-field"><label>Street / Area / Locality <span class="req">*</span></label>
+                        <input class="eoi-input" type="text" id="permLine" data-required="1" maxlength="255"/></div>
+                    <div class="col-2 eoi-field"><label>District <span class="req">*</span></label>
+                        <input class="eoi-input" type="text" id="permDistrict" data-required="1" maxlength="80"/></div>
+                    <div class="col-2 eoi-field"><label>State <span class="req">*</span></label>
+                        <select class="eoi-select" id="permState" data-required="1"><option value="">-- Select --</option></select></div>
+                    <div class="col-2 eoi-field"><label>Pincode <span class="req">*</span></label>
+                        <input class="eoi-input" type="text" data-field="Permanent_Pincode__c" id="permPin" data-required="1" data-validate="pin" inputmode="numeric" maxlength="6"/>
+                        <div class="eoi-fielderr hidden">Enter a valid 6-digit pincode.</div></div>
+                </div>
+            </div>
+
+            <!-- Communication Address (optional; combined on submit) -->
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">Communication Address <span style="font-weight:400;font-size:.78rem;color:#706e6b;">(if different from permanent)</span></h3>
+                <div class="row">
+                    <div class="col-2 eoi-field"><label>Street / Area / Locality</label>
+                        <input class="eoi-input" type="text" id="commLine" maxlength="255"/></div>
+                    <div class="col-2 eoi-field"><label>District</label>
+                        <input class="eoi-input" type="text" id="commDistrict" maxlength="80"/></div>
+                    <div class="col-2 eoi-field"><label>State</label>
+                        <select class="eoi-select" id="commState"><option value="">-- Select --</option></select></div>
+                    <div class="col-2 eoi-field"><label>Pincode</label>
+                        <input class="eoi-input" type="text" data-field="Communication_Pincode__c" id="commPin" data-validate="pin" inputmode="numeric" maxlength="6"/>
+                        <div class="eoi-fielderr hidden">Enter a valid 6-digit pincode.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFESSIONAL -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Professional Details</h2>
+            <div class="row">
+                <div class="col-2 eoi-field"><label>Profession <span class="req">*</span></label>
+                    <select class="eoi-select" data-field="Profession__c" data-required="1"><option value="">-- Select --</option>
+                        <apex:repeat value="{!professionOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat>
+                        <option value="Homemaker">Homemaker</option>
+                        <option value="Retired">Retired</option>
+                        <option value="Others">Others</option></select></div>
+                <div class="col-2 eoi-field"><label>Company / Firm Name</label>
+                    <input class="eoi-input" type="text" data-field="Company_Firm_Name__c"/></div>
+                <div class="col-2 eoi-field"><label>Designation</label>
+                    <input class="eoi-input" type="text" data-field="Designation__c"/></div>
+                <div class="col-2 eoi-field"><label>Office Pincode</label>
+                    <input class="eoi-input" type="text" data-field="Pincode__c" maxlength="6"/></div>
+                <div class="col eoi-field"><label>Office Address</label>
+                    <textarea class="eoi-textarea" data-field="Office_Address__c"></textarea></div>
+                <div class="col-2 eoi-field"><label>Qualification</label>
+                    <select class="eoi-select" data-field="Qualification__c" id="qualSelect"><option value="">-- Select --</option>
+                        <apex:repeat value="{!qualificationOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field hidden" id="otherQualWrap"><label>Other Qualification</label>
+                    <input class="eoi-input" type="text" data-field="Other_Qualification__c"/></div>
+            </div>
+        </div>
+
+        <!-- OTHER -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Other Details</h2>
+            <div class="row">
+                <div class="col-2 eoi-field"><label>Annual Household Income</label>
+                    <select class="eoi-select" data-field="Annual_Household_Income__c"><option value="">-- Select --</option>
+                        <apex:repeat value="{!incomeOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field"><label>Purpose of Purchase</label>
+                    <select class="eoi-select" data-field="Purpose_of_Purchase__c" id="purposeSelect"><option value="">-- Select --</option>
+                        <apex:repeat value="{!purposeOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col eoi-field hidden" id="otherPurposeWrap"><label>Other Purpose</label>
+                    <input class="eoi-input" type="text" data-field="Other_Purpose__c"/></div>
+                <div class="col-2 eoi-field"><label>How did you get to know about us? <span class="req">*</span></label>
+                    <select class="eoi-select" data-field="How_did_you_get_to_know_about_us__c" id="howKnowSelect" data-required="1"><option value="">-- Select --</option>
+                        <apex:repeat value="{!howKnowOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field hidden" id="otherSourceWrap"><label>Please specify source</label>
+                    <input class="eoi-input" type="text" data-field="Others_Source__c"/></div>
+            </div>
+
+            <!-- Source Type -> Secondary Source -> Tertiary Source (mapped to the Lead) -->
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">Source Details</h3>
+                <div class="row">
+                    <div class="col-2 eoi-field"><label>Source Type</label>
+                        <select class="eoi-select" id="sourceType"><option value="">-- Select --</option></select></div>
+                    <div class="col-2 eoi-field"><label>Secondary Source</label>
+                        <select class="eoi-select" id="secondarySource"><option value="">-- Select --</option></select></div>
+                    <div class="col-2 eoi-field"><label>Tertiary Source (Name)</label>
+                        <input class="eoi-input" type="text" id="tertiarySource" placeholder="Channel Partner / Referral / Dealer name"/></div>
+                </div>
+            </div>
+
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">If Referred by Friend / Relative / Owner</h3>
+                <div class="row">
+                    <div class="col-2 eoi-field"><label>Name</label><input class="eoi-input" type="text" data-field="Friend_Relative_Self_Referrer_Name__c"/></div>
+                    <div class="col-2 eoi-field"><label>Project Name</label><input class="eoi-input" type="text" data-field="Referrer_Project_Name__c"/></div>
+                    <div class="col-2 eoi-field"><label>Contact No.</label><input class="eoi-input" type="tel" data-field="Referrer_Contact_No__c" maxlength="10"/></div>
+                    <div class="col-2 eoi-field"><label>Email ID</label><input class="eoi-input" type="email" data-field="Referrer_Email__c"/></div>
+                </div>
+            </div>
+
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">If Referred by Channel Partner</h3>
+                <div class="row">
+                    <div class="col-2 eoi-field" style="position:relative;"><label>Approved CP Name (search)</label>
+                        <input class="eoi-input" type="text" id="cpSearch" autocomplete="off" placeholder="Type to search approved partners"/>
+                        <div id="cpResults" class="hidden" style="position:absolute;z-index:50;left:0;right:0;top:100%;background:#fff;border:1px solid #d0d5dd;border-top:none;border-radius:0 0 6px 6px;max-height:220px;overflow-y:auto;box-shadow:0 6px 18px rgba(0,0,0,0.12);"></div>
+                        <input type="hidden" data-field="Channel_Partner__c" id="cpId"/></div>
+                    <div class="col-2 eoi-field"><label>Name</label><input class="eoi-input" type="text" data-field="Channel_Partner_Name__c" id="cpName"/></div>
+                    <div class="col-2 eoi-field"><label>Project Name</label><input class="eoi-input" type="text" data-field="Channel_Partner_Project_Name__c" value="Codename X"/></div>
+                    <div class="col-2 eoi-field"><label>Contact No.</label><input class="eoi-input" type="tel" data-field="CP_Contact_No__c" maxlength="10"/></div>
+                    <div class="col-2 eoi-field"><label>Email ID</label><input class="eoi-input" type="email" data-field="Channel_Partner_Email__c"/></div>
+                    <div class="col eoi-field"><label>Sign and Seal (upload image)</label>
+                        <input type="file" class="eoi-file-input" accept="image/*" data-category="Channel Partner Sign and Seal"/></div>
+                </div>
+            </div>
+
+            <div class="eoi-subsection">
+                <h3 class="eoi-subsection-title">If Corporate Activity</h3>
+                <div class="eoi-field"><label>Company Name</label><input class="eoi-input" type="text" data-field="Corporate_Activity_Company_Name__c"/></div>
+            </div>
+        </div>
+
+        <!-- UNIT PREFERENCES -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Unit Preferences</h2>
+            <p class="eoi-muted">EOI price range: BSP &#8377;5,500 to &#8377;6,000 per sq. ft.</p>
+            <div class="row">
+                <div class="col-2 eoi-field"><label>Preferred PLC</label>
+                    <select class="eoi-select" data-field="Preferred_PLC__c"><option value="">-- Select --</option><apex:repeat value="{!plcOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field"><label>Preferred Area</label>
+                    <select class="eoi-select" data-field="Preferred_Area__c"><option value="">-- Select --</option><apex:repeat value="{!areaOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field"><label>Preferred Facing</label>
+                    <select class="eoi-select" data-field="Preferred_Facing__c"><option value="">-- Select --</option><apex:repeat value="{!facingOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2 eoi-field"><label>Road Facing</label>
+                    <select class="eoi-select" data-field="Road_Facing__c"><option value="">-- Select --</option><apex:repeat value="{!roadOptions}" var="o"><option value="{!o.value}">{!o.label}</option></apex:repeat></select></div>
+                <div class="col-2"><label class="eoi-check"><input type="checkbox" data-field="Corner__c"/> Corner Plot</label></div>
+                <div class="col-2"><label class="eoi-check"><input type="checkbox" data-field="Amenity_Garden_View__c"/> Amenity and Garden View</label></div>
+            </div>
+
+            <h3 class="eoi-subsection-title" style="margin-top:1rem;">Preferred Unit No.</h3>
+            <div class="row">
+                <div class="col-3 eoi-field"><label>Preference 1</label><input class="eoi-input" type="text" data-field="Preference_1__c"/></div>
+                <div class="col-3 eoi-field"><label>Preference 2</label><input class="eoi-input" type="text" data-field="Preference_2__c"/></div>
+                <div class="col-3 eoi-field"><label>Preference 3</label><input class="eoi-input" type="text" data-field="Preference_3__c"/></div>
+            </div>
+
+            <h3 class="eoi-subsection-title" style="margin-top:1rem;">Preferred PLC &mdash; Definition</h3>
+            <div class="eoi-table-scroll">
+                <table class="eoi-ref-table">
+                    <thead><tr>
+                        <th>Classic</th><th>Premium<br/>(&#8377;200 / Sq. Ft.)</th><th>Super Premium<br/>(&#8377;300 / Sq. Ft.)</th>
+                        <th>Ultra Premium<br/>(&#8377;400 / Sq. Ft.)</th><th>Exclusive<br/>(&#8377;600 / Sq. Ft.)</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr><td>West</td><td>12M Road</td><td>15M Road</td><td>East + Corner + View</td><td>East + Corner + 15M Road + View</td></tr>
+                        <tr><td></td><td>East</td><td>East + Corner</td><td>North-East + 15M Road</td><td>West + Corner + 15M+ View</td></tr>
+                        <tr><td></td><td>West + Corner</td><td>East + View</td><td>North-West + 15M Road</td><td></td></tr>
+                        <tr><td></td><td>West + View</td><td>East + 12M Road</td><td>South-East + 15M Road</td><td></td></tr>
+                        <tr><td></td><td>West + 12M Road</td><td>West + Corner + View</td><td>West + Corner + 12M+ View</td><td></td></tr>
+                        <tr><td></td><td></td><td>South-West + 15M Road</td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="eoi-note">*Definition of Preferred PLC</p>
+
+            <h3 class="eoi-subsection-title" style="margin-top:1rem;">Additional Charges</h3>
+            <table class="eoi-table"><tbody>
+                <tr><td>Clubhouse Membership Fees</td><td>&#8377;3,00,000/-</td></tr>
+                <tr><td>Infrastructure Fees</td><td>&#8377;250 / Sq. Ft.</td></tr>
+                <tr><td>Legal and Documentation Fees</td><td>&#8377;50,000/-</td></tr>
+                <tr><td>Corpus Fund</td><td>&#8377;108 / Sq. Ft.</td></tr>
+            </tbody></table>
+        </div>
+
+        <!-- DOCUMENTS -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Documents</h2>
+            <p class="eoi-muted">Max 3 MB per file. Accepted: images / PDF.</p>
+            <div class="row">
+                <div class="col-3 eoi-field"><label>Passport Size Photo</label>
+                    <input type="file" class="eoi-file-input" accept="image/*" data-category="Passport Photo"/></div>
+                <div class="col-3 eoi-field"><label>Copy of EOI Cheque</label>
+                    <input type="file" class="eoi-file-input" accept="image/*,application/pdf" data-category="EOI Cheque"/></div>
+                <div class="col-3 eoi-field"><label>Address Proof</label>
+                    <input type="file" class="eoi-file-input" accept="image/*,application/pdf" data-category="Address Proof"/></div>
+            </div>
+            <div id="filePreview"></div>
+        </div>
+
+        <!-- CHEQUE NOTE -->
+        <div class="eoi-card eoi-note-card">
+            <p>*EOI Cheque of &#8377;5,00,000/- (Five Lakhs) to be made favouring <strong>SSK INFINITY VENTURES LLP</strong>, A/c no: 005305014510.</p>
+            <p>**The EOI cheque provided by customer will not be encashed without intimation.</p>
+            <p>***Copy of Cheque to be attached with EOI Form.</p>
+        </div>
+
+        <!-- DECLARATION -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">Declaration</h2>
+            <div class="eoi-legal">
+                <p>I/We, the Applicant(s), declare our understanding / satisfaction on the following:</p>
+                <ol>
+                    <li>The allotment of the plot will be at the sole discretion of the developer and may be done post regulatory approvals and the official launch of the said project.</li>
+                    <li>In case an allotment is not made to me in the said project or the project is not launched due to any reason whatsoever, the advance payment made by me shall be refunded without any interest/deductions and I shall have no claims whatsoever on the developer, except to the extent of refund of the advance payment made by me.</li>
+                    <li>I understand the plans, designs, specifications and Amenities shown to me at this level are tentative and may change during the launch.</li>
+                    <li>If this EOI is accepted as per the developer&rsquo;s process and an allotment of plot is made to me on allotment day, I will submit the complete Application Form within Two (2) days from the date of formal mail communication regarding the acceptance of my EOI and Allotment.</li>
+                    <li>I understand that if the Application Form is delayed without the developer&rsquo;s prior written approval, the allotment will be considered invalid, and the developer reserves the right to allot the plot to other parties.</li>
+                    <li>I understand that the booking will be confirmed only after I sign the Application Form and the developer approves it. Consequently, the terms and conditions outlined in the Application Form will govern the booking moving forward.</li>
+                    <li>At any stage, prior to submitting the application form for booking of plot, I can avail full refund of my advance payment.</li>
+                    <li>Post launch, once I have submitted the duly signed application form and made the booking in the project, I shall be bound by the terms and conditions as stated in the application form.</li>
+                </ol>
+                <p>I request you to consider this expression of interest favourably and allot a plot to the undersigned in your upcoming Codename X project in Nelamangala &ndash; Chikkaballapura Road, Bangalore as and when the project is launched.</p>
+            </div>
+            <label class="eoi-check"><input type="checkbox" data-field="Declaration_Accepted__c" id="declCheck"/> I have read and accept the Declaration above</label>
+        </div>
+
+        <!-- DPDP -->
+        <div class="eoi-card">
+            <h2 class="eoi-section-title">DPDP Act, 2023 &mdash; Consent</h2>
+            <div class="eoi-legal">
+                <p class="eoi-bold">CONSENT FOR COLLECTION, USE AND SHARING OF PERSONAL DATA BY THE PROMOTER</p>
+                <p><em>(Pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023)</em></p>
+                <p>This Consent Form is executed pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023, by the EOI Applicant in favour of Promoter.</p>
+                <p class="eoi-bold">1. Details of the Data Fiduciary</p>
+                <p>Name of Promoter: SSK Infinity Ventures LLP<br/>Registered Address: 750, 33rd A Cross, 9th Main, Jayanagar 4th Block, Jayanagar III Block, Jayanagar Police Station, Bangalore South, Bangalore - 560011, Karnataka, India<br/>Email (Grievance / Data Protection): pampannabe@gmail.com</p>
+                <p class="eoi-bold">2. Details of Data Processor</p>
+                <p>Name of the Data Processor: Salesforce.Com India Private Limited<br/>Registered Address: Third Floor, Torrey Pines, Embassy Golf Links Business Park, Varthur Hobli, Challaghatta Village, Bengaluru Urban, Karnataka, 560071</p>
+                <p class="eoi-bold">3. Details of the Data Principal (EOI Applicant)</p>
+                <div class="eoi-principal">
+                    <div><span class="eoi-principal-label">Name:</span> <strong id="dpName">&mdash;</strong></div>
+                    <div><span class="eoi-principal-label">Mobile Number:</span> <strong id="dpMobile">&mdash;</strong></div>
+                    <div><span class="eoi-principal-label">Email ID:</span> <strong id="dpEmail">&mdash;</strong></div>
+                    <div><span class="eoi-principal-label">Address:</span> <strong id="dpAddress">&mdash;</strong></div>
+                </div>
+                <p class="eoi-note">(Auto-filled from the details you entered above.)</p>
+                <p class="eoi-bold">4. Consent and Purpose</p>
+                <p>I, the undersigned EOI Applicant (&ldquo;Data Principal&rdquo;), hereby provide my free, specific, informed, unconditional, and unambiguous consent to the Promoter and its authorized representatives, to collect, use, store, access, share, and otherwise process my personal data strictly for lawful and legitimate purposes connected with the sales process, including but not limited to:</p>
+                <ul>
+                    <li>Lead generation, customer onboarding, and site visits;</li>
+                    <li>Follow-ups, communication, and facilitation of booking;</li>
+                    <li>Sharing of project information, pricing, availability, and offers;</li>
+                    <li>Verification, documentation, internal record-keeping, and audit;</li>
+                    <li>Raising of invoices, issuance of receipts and refund, if any; and</li>
+                    <li>Compliance with applicable laws, regulations, and contractual obligations.</li>
+                </ul>
+                <p class="eoi-bold">5. Nature of Personal Data</p>
+                <p>The personal data collected and processed may include, without limitation:</p>
+                <ul>
+                    <li>Name, contact details, and address as mentioned in personal/professional detail in EOI Form;</li>
+                    <li>Identity or verification details (where required);</li>
+                    <li>Information relating to preferences, budget, and transaction interest; and</li>
+                    <li>Any other personal information voluntarily shared during the engagement.</li>
+                </ul>
+                <p class="eoi-bold">6. Consent for Sharing with Promoter</p>
+                <p>I expressly acknowledge and consent that:</p>
+                <ul>
+                    <li>My personal data may be shared by the Promoter with the statutory and government authorities as may be required under law from time to time; and</li>
+                    <li>My personal data may be shared with banks and financial institutions for the purposes of loan and verification of my KYC.</li>
+                </ul>
+                <p class="eoi-bold">7. Data Security and Retention</p>
+                <p>I understand and acknowledge that:</p>
+                <ul>
+                    <li>Reasonable technical and organizational security safeguards shall be implemented by the Promoter to protect my personal data against unauthorized access, misuse, loss, alteration, or disclosure;</li>
+                    <li>My personal data shall be retained only for such period as necessary to fulfill the stated purpose or as required under applicable law, and shall thereafter be erased.</li>
+                </ul>
+                <p class="eoi-bold">8. Rights of the Data Principal</p>
+                <p>I am aware of and acknowledge my rights under the DPDP Act, including the right to:</p>
+                <ul>
+                    <li>Seek information regarding processing of my personal data;</li>
+                    <li>Request correction or erasure of my personal data;</li>
+                    <li>Withdraw my consent at any time;</li>
+                    <li>Seek grievance redressal; and</li>
+                    <li>Nominate a person to exercise my rights in the event of death or incapacity.</li>
+                </ul>
+                <p>Requests may be addressed to the Promoter at: Mr. Pampanna BE (pampannabe@gmail.com)</p>
+                <p class="eoi-bold">9. Withdrawal of Consent</p>
+                <p>I understand that I may withdraw this consent at any time by providing written notice to the Promoter. I acknowledge that such withdrawal may affect the Promoter&rsquo;s ability to continue engagement or complete the intended transaction.</p>
+                <p class="eoi-bold">10. Declaration</p>
+                <p>By signing this Annexure, I confirm that:</p>
+                <ul>
+                    <li>I have read and understood the terms of this Annexure;</li>
+                    <li>This consent is given voluntarily and without coercion; and</li>
+                    <li>The information provided by me is true and accurate.</li>
+                </ul>
+                <p class="eoi-bold">11. Signature of Data Principal</p>
+                <div class="eoi-principal">
+                    <div><span class="eoi-principal-label">Name:</span> <strong id="dpName2">&mdash;</strong></div>
+                    <div><span class="eoi-principal-label">Date:</span> <strong id="dpDate"></strong></div>
+                </div>
+            </div>
+            <label class="eoi-check"><input type="checkbox" data-field="DPDP_Consent_Given__c" id="dpdpCheck"/> I provide my consent under the DPDP Act, 2023</label>
+            <div class="col-3 eoi-field" style="margin-top:.5rem;"><label>Place</label><input class="eoi-input" type="text" data-field="Consent_Place__c"/></div>
+        </div>
+
+        <div class="eoi-actions">
+            <button type="button" class="eoi-btn" id="submitBtn" onclick="EOI.submit()">Submit Expression of Interest</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var files = {};
+    function $(id){ return document.getElementById(id); }
+    function show(el){ el.classList.remove('hidden'); }
+    function hide(el){ el.classList.add('hidden'); }
+    function showError(msg){ var e=$('eoiError'); e.textContent=msg; show(e); window.scrollTo({top:0,behavior:'smooth'}); }
+    function clearError(){ hide($('eoiError')); }
+
+    function bindOther(selectId, wrapId){
+        var sel=$(selectId); if(!sel) return;
+        sel.addEventListener('change', function(){
+            var v=(sel.value||'').toLowerCase();
+            if(v.indexOf('other')>=0){ show($(wrapId)); } else { hide($(wrapId)); }
+        });
+    }
+    bindOther('qualSelect','otherQualWrap');
+    bindOther('purposeSelect','otherPurposeWrap');
+    bindOther('howKnowSelect','otherSourceWrap');
+
+    function refreshDpdp(){
+        var sal=document.querySelector('[data-field="Salutation__c"]').value || '';
+        var nm=document.querySelector('[data-field="Name__c"]').value || '';
+        var full=(sal?sal+' ':'')+nm;
+        $('dpName').textContent = nm ? full : '\u2014';
+        $('dpName2').textContent = nm ? full : '\u2014';
+        $('dpMobile').textContent = $('primaryPhone').value || '\u2014';
+        $('dpEmail').textContent = $('emailField').value || '\u2014';
+        $('dpAddress').textContent = buildPermAddr() || '\u2014';
+    }
+    ['Salutation__c','Name__c'].forEach(function(f){
+        var el=document.querySelector('[data-field="'+f+'"]');
+        if(el){ el.addEventListener('change', refreshDpdp); el.addEventListener('keyup', refreshDpdp); }
+    });
+    ['primaryPhone','emailField','houseNo','permLine','permDistrict','permState','permPin'].forEach(function(id){
+        var el=$(id); if(el){ el.addEventListener('keyup', refreshDpdp); el.addEventListener('change', refreshDpdp); }
+    });
+    $('dpDate').textContent = new Date().toLocaleDateString('en-GB');
+
+    // #1 Auto-populate +91 country code as a visual prefix on phone fields
+    var tels = document.querySelectorAll('input[type=tel]');
+    for (var t=0; t<tels.length; t++){
+        (function(inp){
+            var wrap=document.createElement('div');
+            wrap.style.display='flex'; wrap.style.alignItems='stretch';
+            var cc=document.createElement('span');
+            cc.textContent='+91';
+            cc.style.cssText='display:flex;align-items:center;padding:0 .6rem;border:1px solid #c9c7c5;border-right:none;border-radius:.25rem 0 0 .25rem;background:#f3f3f3;color:#3e3e3c;font-size:.95rem;';
+            inp.parentNode.insertBefore(wrap, inp);
+            wrap.appendChild(cc); wrap.appendChild(inp);
+            inp.style.borderRadius='0 .25rem .25rem 0';
+            inp.style.borderLeft='none';
+        })(tels[t]);
+    }
+
+    // ---- Indian States / UTs for the address dropdowns ----
+    var INDIAN_STATES = ['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Andaman and Nicobar Islands','Chandigarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry'];
+    ['permState','commState'].forEach(function(id){
+        var sel=$(id); if(!sel) return;
+        INDIAN_STATES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+    });
+
+    // ---- Build a standard address string from the structured fields ----
+    function buildAddr(houseNo, line, district, state, pin){
+        var parts=[];
+        if(houseNo && houseNo.trim()) parts.push(houseNo.trim());
+        if(line && line.trim()) parts.push(line.trim());
+        if(district && district.trim()) parts.push(district.trim());
+        if(state && state.trim()) parts.push(state.trim());
+        var s=parts.join(', ');
+        if(pin && pin.trim()) s += (s ? ' - ' : '') + pin.trim();
+        return s;
+    }
+    function buildPermAddr(){
+        return buildAddr($('houseNo').value, $('permLine').value, $('permDistrict').value, $('permState').value, $('permPin').value);
+    }
+
+    // ---- Inline pattern validation (PAN / Aadhaar / phone / pin) ----
+    var PATTERNS = {
+        pan:     { re:/^[A-Z]{5}[0-9]{4}[A-Z]$/, norm:function(v){ return v.toUpperCase().replace(/[^A-Z0-9]/g,''); } },
+        aadhaar: { re:/^[0-9]{12}$/,             norm:function(v){ return v.replace(/\D/g,''); } },
+        phone:   { re:/^[6-9][0-9]{9}$/,         norm:function(v){ return v.replace(/\D/g,''); } },
+        pin:     { re:/^[0-9]{6}$/,              norm:function(v){ return v.replace(/\D/g,''); } }
+    };
+    function checkField(inp){
+        var kind=inp.getAttribute('data-validate'); if(!kind) return true;
+        var p=PATTERNS[kind]; if(!p) return true;
+        if(p.norm){ var nv=p.norm(inp.value); if(nv!==inp.value) inp.value=nv; }
+        var hint=inp.parentNode.querySelector('.eoi-fielderr');
+        if(inp.value===''){ inp.classList.remove('invalid'); if(hint) hint.classList.add('hidden'); return true; }
+        var okk=p.re.test(inp.value);
+        if(okk){ inp.classList.remove('invalid'); if(hint) hint.classList.add('hidden'); }
+        else { inp.classList.add('invalid'); if(hint) hint.classList.remove('hidden'); }
+        return okk;
+    }
+    var vfields=document.querySelectorAll('[data-validate]');
+    for(var vi=0; vi<vfields.length; vi++){
+        (function(inp){
+            inp.addEventListener('input', function(){ checkField(inp); });
+            inp.addEventListener('blur',  function(){ checkField(inp); });
+        })(vfields[vi]);
+    }
+    function validatePatterns(){
+        var all=true, firstBad=null;
+        var fs=document.querySelectorAll('[data-validate]');
+        for(var i=0;i<fs.length;i++){
+            if(fs[i].value!=='' && !checkField(fs[i])){ all=false; if(!firstBad) firstBad=fs[i]; }
+        }
+        return { ok:all, firstBad:firstBad };
+    }
+
+    // #13 Channel Partner search -> reliable click-to-select dropdown (replaces flaky <datalist>)
+    var cpSearch=$('cpSearch');
+    var cpResults=$('cpResults');
+    if(cpSearch && cpResults){
+        var cpTimer=null;
+
+        function cpRender(list){
+            cpResults.innerHTML='';
+            if(!list || !list.length){
+                var none=document.createElement('div');
+                none.textContent='No approved partners found';
+                none.style.cssText='padding:10px 12px;color:#667085;font-size:13px;';
+                cpResults.appendChild(none);
+                cpResults.className=''; // show
+                return;
+            }
+            for(var i=0;i<list.length;i++){
+                (function(item){
+                    var row=document.createElement('div');
+                    row.textContent=item.label;
+                    row.style.cssText='padding:10px 12px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;';
+                    row.onmouseover=function(){ row.style.background='#eef4ff'; };
+                    row.onmouseout=function(){ row.style.background='#fff'; };
+                    row.onmousedown=function(e){ // mousedown fires before blur, so the pick registers
+                        e.preventDefault();
+                        $('cpId').value=item.value;
+                        cpSearch.value=item.label;
+                        if($('cpName')) $('cpName').value=item.label;
+                        cpResults.className='hidden';
+                    };
+                    cpResults.appendChild(row);
+                })(list[i]);
+            }
+            cpResults.className=''; // show
+        }
+
+        function cpSearchNow(){
+            var term=cpSearch.value || '';
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.EOIFormSiteController.searchChannelPartners}',
+                term,
+                function(result, event){
+                    if(!event.status){ return; }
+                    var list; try{ list=JSON.parse(result); }catch(e){ list=[]; }
+                    cpRender(list);
+                }, {escape:false}
+            );
+        }
+
+        cpSearch.addEventListener('focus', cpSearchNow); // show full list on click, no typing needed
+        cpSearch.addEventListener('input', function(){
+            $('cpId').value=''; // typing invalidates a prior pick
+            if(cpTimer) clearTimeout(cpTimer);
+            cpTimer=setTimeout(cpSearchNow, 200);
+        });
+        document.addEventListener('click', function(e){ // close when clicking elsewhere
+            if(e.target!==cpSearch && !cpResults.contains(e.target)){ cpResults.className='hidden'; }
+        });
+    }
+
+    // Source Type -> Secondary Source dependency (Channel Partner / Dealer fixed; Walkin / Referral from Lead)
+    var srcMap={};
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.EOIFormSiteController.getSourceDependencyJson}',
+        function(result, event){
+            if(!event.status || !result) return;
+            var data; try{ data=JSON.parse(result); }catch(e){ return; }
+            srcMap=data.map||{};
+            var st=$('sourceType');
+            (data.sourceTypes||[]).forEach(function(s){
+                var o=document.createElement('option'); o.value=s.value; o.textContent=s.label; st.appendChild(o);
+            });
+        }, {escape:false}
+    );
+    var stSel=$('sourceType');
+    if(stSel){
+        stSel.addEventListener('change', function(){
+            var sec=$('secondarySource'); sec.innerHTML='<option value="">-- Select --</option>';
+            var vals=srcMap[stSel.value]||[];
+            vals.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; sec.appendChild(o); });
+        });
+    }
+
+    var MAX = 3*1024*1024;
+    var fileInputs = document.querySelectorAll('input[type=file]');
+    for (var fi=0; fi<fileInputs.length; fi++) {
+        (function(inp){
+            inp.addEventListener('change', function(){
+                var cat=inp.getAttribute('data-category');
+                var f=inp.files && inp.files[0];
+                if(!f) return;
+                if(f.size>MAX){ showError(f.name+' is larger than 3 MB. Please upload a smaller file.'); inp.value=''; return; }
+                var isImg=(f.type||'').indexOf('image/')===0;
+                var reader=new FileReader();
+                reader.onerror=function(){ showError('Could not read '+f.name); };
+                reader.onload=function(){
+                    var dataUrl=String(reader.result||'');
+                    var c=dataUrl.indexOf(',');
+                    var b64=c>=0?dataUrl.substring(c+1):'';
+                    if(!b64){ showError(f.name+' read as empty.'); return; }
+                    files[cat]={fileName:f.name, title:cat, base64:b64};
+                    clearError();
+                    renderPreview(cat, f.name, isImg?dataUrl:null);
+                };
+                reader.readAsDataURL(f);
+            });
+        })(fileInputs[fi]);
+    }
+    function renderPreview(cat, name, imgUrl){
+        var box=$('filePreview');
+        var id='pv_'+cat.replace(/[^a-z0-9]/gi,'');
+        var row=$(id);
+        if(!row){ row=document.createElement('div'); row.id=id; row.style.margin='.4rem 0'; row.style.color='#2e844a'; row.style.fontSize='.85rem'; box.appendChild(row); }
+        row.innerHTML='';
+        var span=document.createElement('span'); span.textContent=cat+': '+name; row.appendChild(span);
+        if(imgUrl){ var img=document.createElement('img'); img.src=imgUrl; img.className='eoi-thumb'; row.appendChild(img); }
+    }
+
+    function gather(){
+        var rec={};
+        var els=document.querySelectorAll('[data-field]');
+        for (var i=0;i<els.length;i++){
+            var el=els[i]; var key=el.getAttribute('data-field');
+            if(el.type==='checkbox'){ rec[key]=el.checked; continue; }
+            if(el.closest('.hidden')) continue;
+            var v=el.value;
+            if(v!==null && v!==undefined && v!=='') rec[key]=v;
+        }
+        return rec;
+    }
+
+    function validate(){
+        clearError();
+        var ok=true, firstBad=null;
+        var req=document.querySelectorAll('[data-required="1"]');
+        for(var i=0;i<req.length;i++){
+            if(!req[i].value){ ok=false; req[i].style.borderColor='#c23934'; if(!firstBad) firstBad=req[i]; }
+            else { req[i].style.borderColor='#c9c7c5'; }
+        }
+        if(!ok){ showError('Please complete the highlighted required fields.'); if(firstBad) firstBad.focus(); return false; }
+        var pv=validatePatterns();
+        if(!pv.ok){ showError('Please correct the highlighted fields - check the format shown below each one.'); if(pv.firstBad) pv.firstBad.focus(); return false; }
+        if(!$('declCheck').checked){ showError('Please accept the Declaration before submitting.'); return false; }
+        if(!$('dpdpCheck').checked){ showError('Please provide DPDP consent before submitting.'); return false; }
+        return true;
+    }
+
+    function gatherLead(){
+        return {
+            sourceType: ($('sourceType')||{}).value || '',
+            secondary:  ($('secondarySource')||{}).value || '',
+            tertiary:   ($('tertiarySource')||{}).value || ''
+        };
+    }
+
+    function submit(){
+        if(!validate()) return;
+        var btn=$('submitBtn'); btn.disabled=true; btn.textContent='Submitting...';
+        var rec=gather();
+        // Combine the structured address fields into the standard address text
+        rec.Permanent_Address__c = buildPermAddr();
+        var commAddr = buildAddr('', $('commLine').value, $('commDistrict').value, $('commState').value, $('commPin').value);
+        if(commAddr) rec.Communication_Address__c = commAddr;
+        var fileArr=Object.keys(files).map(function(k){ return files[k]; });
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.EOIFormSiteController.submitEOIRemote}',
+            JSON.stringify(rec),
+            JSON.stringify(fileArr),
+            JSON.stringify(gatherLead()),
+            function(result, event){
+                if(event.status && result){
+                    var r; try { r = JSON.parse(result); } catch(e){ r = {recordId: result, attached: 0}; }
+                    done(r.recordId, r.attached);
+                } else {
+                    btn.disabled=false; btn.textContent='Submit Expression of Interest';
+                    showError((event && event.message) ? event.message : 'Submission failed. Please try again.');
+                }
+            },
+            {escape:false, timeout:120000}
+        );
+    }
+
+    function done(recordId, attached){
+        $('tyRef').textContent=recordId;
+        $('tyFiles').textContent=attached;
+        hide($('eoiForm'));
+        show($('eoiThankYou'));
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    window.EOI={ submit: submit };
+})();
+</script>
+</body>
+</html>
+</apex:page>

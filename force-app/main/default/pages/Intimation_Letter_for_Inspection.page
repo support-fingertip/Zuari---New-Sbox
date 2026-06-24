@@ -1,0 +1,85 @@
+<apex:page standardController="Booking__c" contentType="application/pdf" renderAs="pdf" title="Unit Ready for Inspection">
+
+    <!-- Header with Logos -->
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-size: 12px; text-align: left; border: none;">
+                <img src="{!$Resource.Zuari}" width="110px" height="50" />
+            </td>
+            <td style="font-size: 12px; text-align: right; border: none;">
+                <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City - Plots'}">
+                    <img src="{!$Resource.ZuariGardenCity}" width="110px" height="50" />
+                </apex:outputText>
+                <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Gangothri Tribhuja'}">
+                    <img src="{!$Resource.GangotriLogo}" width="110px" height="50" />
+                </apex:outputText>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Greeting -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 20px;">
+        <strong>Warm Greetings from Zuari Gangothri Tribhuja.</strong>
+    </p>
+
+    <!-- Flat Info -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        It gives us immense pleasure to inform you that your Flat No. {!Booking__c.Plot__r.Name},
+       <apex:outputPanel rendered="{!NOT(ISBLANK(Booking__c.Plot__r.Phase_Detail__c))}">{!Booking__c.Plot__r.Phase_Detail__c},   </apex:outputPanel>
+       <apex:outputPanel rendered="{!NOT(ISBLANK(Booking__c.Plot__r.Block_Lookup__c))}"> Block {!Booking__c.Plot__r.Block_Lookup__r.Name} </apex:outputPanel> at Zuari Gangothri Tribhuja
+        is in the final stages of completion and will soon be ready for inspection.
+    </p>
+
+    <!-- Joint Inspection Invite -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        As we approach this important milestone, we cordially invite you to schedule a
+        <strong>joint inspection</strong> of your home along with our Customer Relationship
+        Management (CRM) Team. This visit will allow you to review the completed works and
+        ensure that every aspect meets your expectations. We kindly request you to plan your
+        inspection within <strong>15 days</strong> from the date of this communication and
+        confirm your preferred schedule at least <strong>4 working days in advance</strong>
+        for smooth coordination.
+    </p>
+
+    <!-- Authorized Representative -->
+    <p style="text-align: justify; font-size: 15px; line-height:1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        If you are unable to visit personally, you may nominate an authorized representative
+        to attend the inspection on your behalf. Kindly share the representative's details
+        with us in advance via email.
+    </p>
+
+    <!-- Final Installment -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        In accordance with the milestones outlined in your Agreement for Sale, the
+        <strong>final installment is due prior to handover of possession</strong>. A formal
+        demand note will be issued shortly. We request you to arrange the necessary funds to
+        facilitate a seamless possession experience.
+    </p>
+
+    <!-- Risk Disclaimer -->
+    <p style="text-align: justify; font-size: 15px; line-height:1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        Please note that in the event the inspection is not completed within the stipulated
+        timeline, the flat will remain at your sole risk and responsibility, and the Company
+        shall not be liable for any consequences arising from delay in inspection or
+        possession.
+    </p>
+
+    <!-- Welcome Message -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        We are delighted to welcome you to the Zuari family and extend our heartfelt wishes
+        for peace, happiness, and prosperity in your new home. We look forward to your valued
+        association in the years to come.
+    </p>
+
+    <!-- Warm Regards -->
+    <p style="text-align: justify; font-size: 15px; line-height: 1.5; font-family: 'Times New Roman', serif; margin: 20px;">
+        <strong>Warm Regards,</strong>
+    </p>
+
+    <!-- Signatory -->
+    <p style="text-align: left; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 20px;">
+        <strong>For Gangothri Infra Edge Pvt. Ltd.</strong><br/>
+        Authorized Signatory
+    </p>
+
+</apex:page>

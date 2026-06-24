@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Site_Visit_Scheduled__c</fullName>
+    <formula>OR(
+				ISPICKVAL(Status__c, &apos;Scheduled&apos;),
+ISPICKVAL(Status__c, &apos;Rescheduled&apos;)
+				)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Site Visit Scheduled</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

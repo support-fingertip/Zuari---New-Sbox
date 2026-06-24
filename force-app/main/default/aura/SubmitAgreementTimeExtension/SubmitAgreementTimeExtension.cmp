@@ -1,0 +1,17 @@
+<aura:component controller="BookingController" implements="force:hasRecordId,force:lightningQuickAction">
+    <!-- Attribute to hold the record Id -->
+    <aura:attribute name="recordId" type="String"/>
+    
+    <!-- Automatically trigger the approval process when the quick action is invoked -->
+    <aura:handler name="init" value="{!this}" action="{!c.handleApprovalSubmit}" />
+    
+    <!-- Error message display -->
+    <aura:if isTrue="{!not(empty(v.error))}">
+        <div class="slds-text-color_error">{!v.error}</div>
+    </aura:if>
+
+    <!-- Success message display -->
+    <aura:if isTrue="{!not(empty(v.successMessage))}">
+        <div class="slds-text-color_success">{!v.successMessage}</div>
+    </aura:if>
+</aura:component>

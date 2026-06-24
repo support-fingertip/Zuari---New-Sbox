@@ -1,0 +1,417 @@
+<template>
+    <div class="eoi-root">
+        <div class="eoi-wrapper">
+            <div class="eoi-header">
+                <h1 class="eoi-title">Expression of Interest</h1>
+                <p class="eoi-subtitle">Codename X &mdash; Nelamangala &ndash; Chikkaballapura Road, Bangalore</p>
+            </div>
+
+            <template lwc:if={showError}>
+                <div class="eoi-error">{errorMessage}</div>
+            </template>
+
+            <!-- THANK YOU -->
+            <template lwc:if={submitted}>
+                <div class="eoi-card eoi-success">
+                    <h2 class="eoi-section-title">Thank you!</h2>
+                    <p>Your Expression of Interest has been submitted successfully.</p>
+                    <p>Reference ID: <strong>{refId}</strong></p>
+                    <p class="eoi-muted">Documents attached: <span>{attachedCount}</span></p>
+                    <p class="eoi-muted" style="color:#c23934;">DEBUG — files received by server: {filesReceived}</p>
+                    <p class="eoi-muted" style="color:#c23934;">DEBUG — attach error: {attachErrorText}</p>
+                    <p class="eoi-muted">Our team will get in touch with you shortly.</p>
+                </div>
+            </template>
+
+            <!-- FORM -->
+            <template lwc:if={showForm}>
+                <!-- PROJECT -->
+                <div class="eoi-card">
+                    <div class="eoi-field"><label>Project Name</label>
+                        <input class="eoi-input" type="text" data-field="Project_Name__c" value="Codename X"
+                               readonly style="background:#f3f3f3; font-weight:600;"/></div>
+                </div>
+
+                <!-- APPLICANT -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Applicant Details</h2>
+                    <div class="row">
+                        <div class="col-3 eoi-field">
+                            <label>Salutation <span class="req">*</span></label>
+                            <select class="eoi-select" data-field="Salutation__c" data-required="1" onchange={refreshDpdp}>
+                                <template for:each={meta.salutation} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template>
+                            </select>
+                        </div>
+                        <div class="col-2 eoi-field"><label>Full Name <span class="req">*</span></label>
+                            <input class="eoi-input" type="text" data-field="Name__c" data-required="1" maxlength="120" oninput={refreshDpdp}/></div>
+                        <div class="col-3 eoi-field"><label>S/O, D/O</label>
+                            <input class="eoi-input" type="text" data-field="S_o_D_o__c"/></div>
+                        <div class="col-3 eoi-field"><label>Date of Birth <span class="req">*</span></label>
+                            <input class="eoi-input" type="date" data-field="Date_of_Birth__c" data-required="1"/></div>
+                        <div class="col-3 eoi-field"><label>Country of Residence <span class="req">*</span></label>
+                            <input class="eoi-input" type="text" data-field="Country_of_Residence__c" data-required="1"/></div>
+                        <div class="col-3 eoi-field"><label>Passport No. (PIO / NRI)</label>
+                            <input class="eoi-input" type="text" data-field="Passport_Number_PIO__c"/></div>
+                        <div class="col-2 eoi-field"><label>Aadhaar No. <span class="req">*</span></label>
+                            <input class="eoi-input" type="text" data-field="Aadhaar_Number__c" data-required="1" data-validate="aadhaar" inputmode="numeric" maxlength="12" oninput={handleValidate} onblur={handleValidate}/>
+                            <div class="eoi-fielderr hidden">Enter a valid 12-digit Aadhaar number.</div></div>
+                        <div class="col-2 eoi-field"><label>PAN No. <span class="req">*</span></label>
+                            <input class="eoi-input" type="text" data-field="PAN_Number__c" data-required="1" data-validate="pan" maxlength="10" style="text-transform:uppercase;" oninput={handleValidate} onblur={handleValidate}/>
+                            <div class="eoi-fielderr hidden">Format: ABCDE1234F (5 letters, 4 digits, 1 letter).</div></div>
+                        <div class="col-2 eoi-field"><label>Primary Contact No. <span class="req">*</span></label>
+                            <div class="eoi-tel">
+                                <span class="eoi-cc">+91</span>
+                                <input class="eoi-input eoi-tel-input" type="tel" data-field="Primary_Contact_No__c" data-id="primaryPhone" data-required="1" data-validate="phone" inputmode="numeric" maxlength="10" oninput={handlePhoneInput} onblur={handleValidate}/>
+                            </div>
+                            <div class="eoi-fielderr hidden">Enter a valid 10-digit mobile number starting with 6-9.</div></div>
+                        <div class="col-2 eoi-field"><label>Alternate Contact No.</label>
+                            <div class="eoi-tel">
+                                <span class="eoi-cc">+91</span>
+                                <input class="eoi-input eoi-tel-input" type="tel" data-field="Alternate_Contact_No__c" data-validate="phone" inputmode="numeric" maxlength="10" oninput={handleValidate} onblur={handleValidate}/>
+                            </div>
+                            <div class="eoi-fielderr hidden">Enter a valid 10-digit mobile number starting with 6-9.</div></div>
+                        <div class="col eoi-field"><label>Email <span class="req">*</span></label>
+                            <input class="eoi-input" type="email" data-field="Email__c" data-id="emailField" data-required="1" oninput={refreshDpdp}/></div>
+                    </div>
+
+                    <!-- Permanent Address -->
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">Permanent Address</h3>
+                        <div class="row">
+                            <div class="col-2 eoi-field"><label>House No. / Building <span class="req">*</span></label>
+                                <input class="eoi-input" type="text" data-id="houseNo" data-required="1" maxlength="120" oninput={refreshDpdp}/></div>
+                            <div class="col-2 eoi-field"><label>Street / Area / Locality <span class="req">*</span></label>
+                                <input class="eoi-input" type="text" data-id="permLine" data-required="1" maxlength="255" oninput={refreshDpdp}/></div>
+                            <div class="col-2 eoi-field"><label>District <span class="req">*</span></label>
+                                <input class="eoi-input" type="text" data-id="permDistrict" data-required="1" maxlength="80" oninput={refreshDpdp}/></div>
+                            <div class="col-2 eoi-field"><label>State <span class="req">*</span></label>
+                                <select class="eoi-select" data-id="permState" data-required="1" onchange={refreshDpdp}>
+                                    <option value="">-- Select --</option>
+                                    <template for:each={states} for:item="s"><option key={s} value={s}>{s}</option></template>
+                                </select></div>
+                            <div class="col-2 eoi-field"><label>Pincode <span class="req">*</span></label>
+                                <input class="eoi-input" type="text" data-field="Permanent_Pincode__c" data-id="permPin" data-required="1" data-validate="pin" inputmode="numeric" maxlength="6" oninput={handleValidate} onblur={handleValidate}/>
+                                <div class="eoi-fielderr hidden">Enter a valid 6-digit pincode.</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Communication Address -->
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">Communication Address <span style="font-weight:400;font-size:.78rem;color:#706e6b;">(if different from permanent)</span></h3>
+                        <div class="row">
+                            <div class="col-2 eoi-field"><label>Street / Area / Locality</label>
+                                <input class="eoi-input" type="text" data-id="commLine" maxlength="255"/></div>
+                            <div class="col-2 eoi-field"><label>District</label>
+                                <input class="eoi-input" type="text" data-id="commDistrict" maxlength="80"/></div>
+                            <div class="col-2 eoi-field"><label>State</label>
+                                <select class="eoi-select" data-id="commState">
+                                    <option value="">-- Select --</option>
+                                    <template for:each={states} for:item="s"><option key={s} value={s}>{s}</option></template>
+                                </select></div>
+                            <div class="col-2 eoi-field"><label>Pincode</label>
+                                <input class="eoi-input" type="text" data-field="Communication_Pincode__c" data-id="commPin" data-validate="pin" inputmode="numeric" maxlength="6" oninput={handleValidate} onblur={handleValidate}/>
+                                <div class="eoi-fielderr hidden">Enter a valid 6-digit pincode.</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFESSIONAL -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Professional Details</h2>
+                    <div class="row">
+                        <div class="col-2 eoi-field"><label>Profession <span class="req">*</span></label>
+                            <select class="eoi-select" data-field="Profession__c" data-required="1"><option value="">-- Select --</option>
+                                <template for:each={meta.profession} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template>
+                                <option value="Homemaker">Homemaker</option>
+                                <option value="Retired">Retired</option>
+                                <option value="Others">Others</option></select></div>
+                        <div class="col-2 eoi-field"><label>Company / Firm Name</label>
+                            <input class="eoi-input" type="text" data-field="Company_Firm_Name__c"/></div>
+                        <div class="col-2 eoi-field"><label>Designation</label>
+                            <input class="eoi-input" type="text" data-field="Designation__c"/></div>
+                        <div class="col-2 eoi-field"><label>Office Pincode</label>
+                            <input class="eoi-input" type="text" data-field="Pincode__c" maxlength="6"/></div>
+                        <div class="col eoi-field"><label>Office Address</label>
+                            <textarea class="eoi-textarea" data-field="Office_Address__c"></textarea></div>
+                        <div class="col-2 eoi-field"><label>Qualification</label>
+                            <select class="eoi-select" data-field="Qualification__c" data-other="qual" onchange={handleOtherToggle}><option value="">-- Select --</option>
+                                <template for:each={meta.qualification} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <template lwc:if={showOtherQual}>
+                            <div class="col-2 eoi-field"><label>Other Qualification</label>
+                                <input class="eoi-input" type="text" data-field="Other_Qualification__c"/></div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- OTHER -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Other Details</h2>
+                    <div class="row">
+                        <div class="col-2 eoi-field"><label>Annual Household Income</label>
+                            <select class="eoi-select" data-field="Annual_Household_Income__c"><option value="">-- Select --</option>
+                                <template for:each={meta.annualIncome} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <div class="col-2 eoi-field"><label>Purpose of Purchase</label>
+                            <select class="eoi-select" data-field="Purpose_of_Purchase__c" data-other="purpose" onchange={handleOtherToggle}><option value="">-- Select --</option>
+                                <template for:each={meta.purpose} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <template lwc:if={showOtherPurpose}>
+                            <div class="col eoi-field"><label>Other Purpose</label>
+                                <input class="eoi-input" type="text" data-field="Other_Purpose__c"/></div>
+                        </template>
+                        <div class="col-2 eoi-field"><label>How did you get to know about us? <span class="req">*</span></label>
+                            <select class="eoi-select" data-field="How_did_you_get_to_know_about_us__c" data-required="1" data-other="source" onchange={handleOtherToggle}><option value="">-- Select --</option>
+                                <template for:each={meta.howKnow} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <template lwc:if={showOtherSource}>
+                            <div class="col-2 eoi-field"><label>Please specify source</label>
+                                <input class="eoi-input" type="text" data-field="Others_Source__c"/></div>
+                        </template>
+                    </div>
+
+                    <!-- Source Type -> Secondary -> Tertiary -->
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">Source Details</h3>
+                        <div class="row">
+                            <div class="col-2 eoi-field"><label>Source Type</label>
+                                <select class="eoi-select" data-id="sourceType" onchange={handleSourceTypeChange}><option value="">-- Select --</option>
+                                    <template for:each={meta.sourceTypes} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                            <div class="col-2 eoi-field"><label>Secondary Source</label>
+                                <select class="eoi-select" data-id="secondarySource"><option value="">-- Select --</option>
+                                    <template for:each={secondarySourceOptions} for:item="v"><option key={v} value={v}>{v}</option></template></select></div>
+                            <div class="col-2 eoi-field"><label>Tertiary Source (Name)</label>
+                                <input class="eoi-input" type="text" data-id="tertiarySource" placeholder="Channel Partner / Referral / Dealer name"/></div>
+                        </div>
+                    </div>
+
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">If Referred by Friend / Relative / Owner</h3>
+                        <div class="row">
+                            <div class="col-2 eoi-field"><label>Name</label><input class="eoi-input" type="text" data-field="Friend_Relative_Self_Referrer_Name__c"/></div>
+                            <div class="col-2 eoi-field"><label>Project Name</label><input class="eoi-input" type="text" data-field="Referrer_Project_Name__c"/></div>
+                            <div class="col-2 eoi-field"><label>Contact No.</label>
+                                <div class="eoi-tel"><span class="eoi-cc">+91</span>
+                                    <input class="eoi-input eoi-tel-input" type="tel" data-field="Referrer_Contact_No__c" maxlength="10"/></div></div>
+                            <div class="col-2 eoi-field"><label>Email ID</label><input class="eoi-input" type="email" data-field="Referrer_Email__c"/></div>
+                        </div>
+                    </div>
+
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">If Referred by Channel Partner</h3>
+                        <div class="row">
+                            <div class="col-2 eoi-field" style="position:relative;"><label>Approved CP Name (search)</label>
+                                <input class="eoi-input" type="text" data-id="cpSearch" autocomplete="off" placeholder="Type to search approved partners"
+                                       onfocus={handleCpFocus} oninput={handleCpInput}/>
+                                <template lwc:if={showCpResults}>
+                                    <div class="eoi-cp-results">
+                                        <template lwc:if={cpHasResults}>
+                                            <template for:each={cpResults} for:item="cp">
+                                                <div key={cp.value} class="eoi-cp-row" data-value={cp.value} data-label={cp.label} onmousedown={handleCpSelect}>{cp.label}</div>
+                                            </template>
+                                        </template>
+                                        <template lwc:if={cpNoResults}>
+                                            <div class="eoi-cp-none">No approved partners found</div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <input type="hidden" data-field="Channel_Partner__c" data-id="cpId"/></div>
+                            <div class="col-2 eoi-field"><label>Name</label><input class="eoi-input" type="text" data-field="Channel_Partner_Name__c" data-id="cpName"/></div>
+                            <div class="col-2 eoi-field"><label>Project Name</label><input class="eoi-input" type="text" data-field="Channel_Partner_Project_Name__c" value="Codename X"/></div>
+                            <div class="col-2 eoi-field"><label>Contact No.</label>
+                                <div class="eoi-tel"><span class="eoi-cc">+91</span>
+                                    <input class="eoi-input eoi-tel-input" type="tel" data-field="CP_Contact_No__c" maxlength="10"/></div></div>
+                            <div class="col-2 eoi-field"><label>Email ID</label><input class="eoi-input" type="email" data-field="Channel_Partner_Email__c"/></div>
+                            <div class="col eoi-field"><label>Sign and Seal (upload image)</label>
+                                <input type="file" class="eoi-file-input" accept="image/*" data-category="Channel Partner Sign and Seal" onchange={handleFileChange}/></div>
+                        </div>
+                    </div>
+
+                    <div class="eoi-subsection">
+                        <h3 class="eoi-subsection-title">If Corporate Activity</h3>
+                        <div class="eoi-field"><label>Company Name</label><input class="eoi-input" type="text" data-field="Corporate_Activity_Company_Name__c"/></div>
+                    </div>
+                </div>
+
+                <!-- UNIT PREFERENCES -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Unit Preferences</h2>
+                    <p class="eoi-muted">EOI price range: BSP &#8377;5,500 to &#8377;6,000 per sq. ft.</p>
+                    <div class="row">
+                        <div class="col-2 eoi-field"><label>Preferred PLC</label>
+                            <select class="eoi-select" data-field="Preferred_PLC__c"><option value="">-- Select --</option><template for:each={meta.preferredPLC} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <div class="col-2 eoi-field"><label>Preferred Area</label>
+                            <select class="eoi-select" data-field="Preferred_Area__c"><option value="">-- Select --</option><template for:each={meta.preferredArea} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <div class="col-2 eoi-field"><label>Preferred Facing</label>
+                            <select class="eoi-select" data-field="Preferred_Facing__c"><option value="">-- Select --</option><template for:each={meta.preferredFacing} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <div class="col-2 eoi-field"><label>Road Facing</label>
+                            <select class="eoi-select" data-field="Road_Facing__c"><option value="">-- Select --</option><template for:each={meta.roadFacing} for:item="o"><option key={o.value} value={o.value}>{o.label}</option></template></select></div>
+                        <div class="col-2"><label class="eoi-check"><input type="checkbox" data-field="Corner__c"/> Corner Plot</label></div>
+                        <div class="col-2"><label class="eoi-check"><input type="checkbox" data-field="Amenity_Garden_View__c"/> Amenity and Garden View</label></div>
+                    </div>
+
+                    <h3 class="eoi-subsection-title" style="margin-top:1rem;">Preferred Unit No.</h3>
+                    <div class="row">
+                        <div class="col-3 eoi-field"><label>Preference 1</label><input class="eoi-input" type="text" data-field="Preference_1__c"/></div>
+                        <div class="col-3 eoi-field"><label>Preference 2</label><input class="eoi-input" type="text" data-field="Preference_2__c"/></div>
+                        <div class="col-3 eoi-field"><label>Preference 3</label><input class="eoi-input" type="text" data-field="Preference_3__c"/></div>
+                    </div>
+
+                    <h3 class="eoi-subsection-title" style="margin-top:1rem;">Preferred PLC &mdash; Definition</h3>
+                    <div class="eoi-table-scroll">
+                        <table class="eoi-ref-table">
+                            <thead><tr>
+                                <th>Classic</th><th>Premium<br/>(&#8377;200 / Sq. Ft.)</th><th>Super Premium<br/>(&#8377;300 / Sq. Ft.)</th>
+                                <th>Ultra Premium<br/>(&#8377;400 / Sq. Ft.)</th><th>Exclusive<br/>(&#8377;600 / Sq. Ft.)</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td>West</td><td>12M Road</td><td>15M Road</td><td>East + Corner + View</td><td>East + Corner + 15M Road + View</td></tr>
+                                <tr><td></td><td>East</td><td>East + Corner</td><td>North-East + 15M Road</td><td>West + Corner + 15M+ View</td></tr>
+                                <tr><td></td><td>West + Corner</td><td>East + View</td><td>North-West + 15M Road</td><td></td></tr>
+                                <tr><td></td><td>West + View</td><td>East + 12M Road</td><td>South-East + 15M Road</td><td></td></tr>
+                                <tr><td></td><td>West + 12M Road</td><td>West + Corner + View</td><td>West + Corner + 12M+ View</td><td></td></tr>
+                                <tr><td></td><td></td><td>South-West + 15M Road</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="eoi-note">*Definition of Preferred PLC</p>
+
+                    <h3 class="eoi-subsection-title" style="margin-top:1rem;">Additional Charges</h3>
+                    <table class="eoi-table"><tbody>
+                        <tr><td>Clubhouse Membership Fees</td><td>&#8377;3,00,000/-</td></tr>
+                        <tr><td>Infrastructure Fees</td><td>&#8377;250 / Sq. Ft.</td></tr>
+                        <tr><td>Legal and Documentation Fees</td><td>&#8377;50,000/-</td></tr>
+                        <tr><td>Corpus Fund</td><td>&#8377;108 / Sq. Ft.</td></tr>
+                    </tbody></table>
+                </div>
+
+                <!-- DOCUMENTS -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Documents</h2>
+                    <p class="eoi-muted">Max 3 MB per file. Accepted: images / PDF.</p>
+                    <div class="row">
+                        <div class="col-3 eoi-field"><label>Passport Size Photo</label>
+                            <input type="file" class="eoi-file-input" accept="image/*" data-category="Passport Photo" onchange={handleFileChange}/></div>
+                        <div class="col-3 eoi-field"><label>Copy of EOI Cheque</label>
+                            <input type="file" class="eoi-file-input" accept="image/*,application/pdf" data-category="EOI Cheque" onchange={handleFileChange}/></div>
+                        <div class="col-3 eoi-field"><label>Address Proof</label>
+                            <input type="file" class="eoi-file-input" accept="image/*,application/pdf" data-category="Address Proof" onchange={handleFileChange}/></div>
+                    </div>
+                    <div class="eoi-previews">
+                        <template for:each={filePreviews} for:item="p">
+                            <div key={p.category} class="eoi-preview-row">
+                                <span>{p.category}: {p.name}</span>
+                                <template lwc:if={p.imgUrl}><img src={p.imgUrl} class="eoi-thumb" alt={p.name}/></template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- CHEQUE NOTE -->
+                <div class="eoi-card eoi-note-card">
+                    <p>*EOI Cheque of &#8377;5,00,000/- (Five Lakhs) to be made favouring <strong>SSK INFINITY VENTURES LLP</strong>, A/c no: 005305014510.</p>
+                    <p>**The EOI cheque provided by customer will not be encashed without intimation.</p>
+                    <p>***Copy of Cheque to be attached with EOI Form.</p>
+                </div>
+
+                <!-- DECLARATION -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">Declaration</h2>
+                    <div class="eoi-legal">
+                        <p>I/We, the Applicant(s), declare our understanding / satisfaction on the following:</p>
+                        <ol>
+                            <li>The allotment of the plot will be at the sole discretion of the developer and may be done post regulatory approvals and the official launch of the said project.</li>
+                            <li>In case an allotment is not made to me in the said project or the project is not launched due to any reason whatsoever, the advance payment made by me shall be refunded without any interest/deductions and I shall have no claims whatsoever on the developer, except to the extent of refund of the advance payment made by me.</li>
+                            <li>I understand the plans, designs, specifications and Amenities shown to me at this level are tentative and may change during the launch.</li>
+                            <li>If this EOI is accepted as per the developer&rsquo;s process and an allotment of plot is made to me on allotment day, I will submit the complete Application Form within Two (2) days from the date of formal mail communication regarding the acceptance of my EOI and Allotment.</li>
+                            <li>I understand that if the Application Form is delayed without the developer&rsquo;s prior written approval, the allotment will be considered invalid, and the developer reserves the right to allot the plot to other parties.</li>
+                            <li>I understand that the booking will be confirmed only after I sign the Application Form and the developer approves it. Consequently, the terms and conditions outlined in the Application Form will govern the booking moving forward.</li>
+                            <li>At any stage, prior to submitting the application form for booking of plot, I can avail full refund of my advance payment.</li>
+                            <li>Post launch, once I have submitted the duly signed application form and made the booking in the project, I shall be bound by the terms and conditions as stated in the application form.</li>
+                        </ol>
+                        <p>I request you to consider this expression of interest favourably and allot a plot to the undersigned in your upcoming Codename X project in Nelamangala &ndash; Chikkaballapura Road, Bangalore as and when the project is launched.</p>
+                    </div>
+                    <label class="eoi-check"><input type="checkbox" data-field="Declaration_Accepted__c" data-id="declCheck"/> I have read and accept the Declaration above</label>
+                </div>
+
+                <!-- DPDP -->
+                <div class="eoi-card">
+                    <h2 class="eoi-section-title">DPDP Act, 2023 &mdash; Consent</h2>
+                    <div class="eoi-legal">
+                        <p class="eoi-bold">CONSENT FOR COLLECTION, USE AND SHARING OF PERSONAL DATA BY THE PROMOTER</p>
+                        <p><em>(Pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023)</em></p>
+                        <p>This Consent Form is executed pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023, by the EOI Applicant in favour of Promoter.</p>
+                        <p class="eoi-bold">1. Details of the Data Fiduciary</p>
+                        <p>Name of Promoter: SSK Infinity Ventures LLP<br/>Registered Address: 750, 33rd A Cross, 9th Main, Jayanagar 4th Block, Jayanagar III Block, Jayanagar Police Station, Bangalore South, Bangalore - 560011, Karnataka, India<br/>Email (Grievance / Data Protection): pampannabe@gmail.com</p>
+                        <p class="eoi-bold">2. Details of Data Processor</p>
+                        <p>Name of the Data Processor: Salesforce.Com India Private Limited<br/>Registered Address: Third Floor, Torrey Pines, Embassy Golf Links Business Park, Varthur Hobli, Challaghatta Village, Bengaluru Urban, Karnataka, 560071</p>
+                        <p class="eoi-bold">3. Details of the Data Principal (EOI Applicant)</p>
+                        <div class="eoi-principal">
+                            <div><span class="eoi-principal-label">Name:</span> <strong>{dpName}</strong></div>
+                            <div><span class="eoi-principal-label">Mobile Number:</span> <strong>{dpMobile}</strong></div>
+                            <div><span class="eoi-principal-label">Email ID:</span> <strong>{dpEmail}</strong></div>
+                            <div><span class="eoi-principal-label">Address:</span> <strong>{dpAddress}</strong></div>
+                        </div>
+                        <p class="eoi-note">(Auto-filled from the details you entered above.)</p>
+                        <p class="eoi-bold">4. Consent and Purpose</p>
+                        <p>I, the undersigned EOI Applicant (&ldquo;Data Principal&rdquo;), hereby provide my free, specific, informed, unconditional, and unambiguous consent to the Promoter and its authorized representatives, to collect, use, store, access, share, and otherwise process my personal data strictly for lawful and legitimate purposes connected with the sales process, including but not limited to:</p>
+                        <ul>
+                            <li>Lead generation, customer onboarding, and site visits;</li>
+                            <li>Follow-ups, communication, and facilitation of booking;</li>
+                            <li>Sharing of project information, pricing, availability, and offers;</li>
+                            <li>Verification, documentation, internal record-keeping, and audit;</li>
+                            <li>Raising of invoices, issuance of receipts and refund, if any; and</li>
+                            <li>Compliance with applicable laws, regulations, and contractual obligations.</li>
+                        </ul>
+                        <p class="eoi-bold">5. Nature of Personal Data</p>
+                        <p>The personal data collected and processed may include, without limitation:</p>
+                        <ul>
+                            <li>Name, contact details, and address as mentioned in personal/professional detail in EOI Form;</li>
+                            <li>Identity or verification details (where required);</li>
+                            <li>Information relating to preferences, budget, and transaction interest; and</li>
+                            <li>Any other personal information voluntarily shared during the engagement.</li>
+                        </ul>
+                        <p class="eoi-bold">6. Consent for Sharing with Promoter</p>
+                        <p>I expressly acknowledge and consent that:</p>
+                        <ul>
+                            <li>My personal data may be shared by the Promoter with the statutory and government authorities as may be required under law from time to time; and</li>
+                            <li>My personal data may be shared with banks and financial institutions for the purposes of loan and verification of my KYC.</li>
+                        </ul>
+                        <p class="eoi-bold">7. Data Security and Retention</p>
+                        <p>I understand and acknowledge that:</p>
+                        <ul>
+                            <li>Reasonable technical and organizational security safeguards shall be implemented by the Promoter to protect my personal data against unauthorized access, misuse, loss, alteration, or disclosure;</li>
+                            <li>My personal data shall be retained only for such period as necessary to fulfill the stated purpose or as required under applicable law, and shall thereafter be erased.</li>
+                        </ul>
+                        <p class="eoi-bold">8. Rights of the Data Principal</p>
+                        <p>I am aware of and acknowledge my rights under the DPDP Act, including the right to:</p>
+                        <ul>
+                            <li>Seek information regarding processing of my personal data;</li>
+                            <li>Request correction or erasure of my personal data;</li>
+                            <li>Withdraw my consent at any time;</li>
+                            <li>Seek grievance redressal; and</li>
+                            <li>Nominate a person to exercise my rights in the event of death or incapacity.</li>
+                        </ul>
+                        <p>Requests may be addressed to the Promoter at: Mr. Pampanna BE (pampannabe@gmail.com)</p>
+                        <p class="eoi-bold">9. Withdrawal of Consent</p>
+                        <p>I understand that I may withdraw this consent at any time by providing written notice to the Promoter. I acknowledge that such withdrawal may affect the Promoter&rsquo;s ability to continue engagement or complete the intended transaction.</p>
+                        <p class="eoi-bold">10. Declaration</p>
+                        <p>By signing this Annexure, I confirm that:</p>
+                        <ul>
+                            <li>I have read and understood the terms of this Annexure;</li>
+                            <li>This consent is given voluntarily and without coercion; and</li>
+                            <li>The information provided by me is true and accurate.</li>
+                        </ul>
+                        <p class="eoi-bold">11. Signature of Data Principal</p>
+                        <div class="eoi-principal">
+                            <div><span class="eoi-principal-label">Name:</span> <strong>{dpName}</strong></div>
+                            <div><span class="eoi-principal-label">Date:</span> <strong>{dpDate}</strong></div>
+                        </div>
+                    </div>
+                    <label class="eoi-check"><input type="checkbox" data-field="DPDP_Consent_Given__c" data-id="dpdpCheck"/> I provide my consent under the DPDP Act, 2023</label>
+                    <div class="col-3 eoi-field" style="margin-top:.5rem;"><label>Place</label><input class="eoi-input" type="text" data-field="Consent_Place__c"/></div>
+                </div>
+
+                <div class="eoi-actions">
+                    <button type="button" class="eoi-btn" disabled={submitting} onclick={handleSubmit}>{submitLabel}</button>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

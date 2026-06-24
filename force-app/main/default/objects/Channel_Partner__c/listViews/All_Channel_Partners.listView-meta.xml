@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Channel_Partners</fullName>
+    <columns>CREATED_DATE</columns>
+    <columns>NAME</columns>
+    <columns>Company_Name__c</columns>
+    <columns>Select_Region__c</columns>
+    <columns>Approval_Status__c</columns>
+    <columns>Active__c</columns>
+    <columns>Approval_Date__c</columns>
+    <columns>Sourcing_RM__c</columns>
+    <columns>Last_Logged_Time__c</columns>
+    <columns>Training_Completed__c</columns>
+    <columns>No_of_EOI__c</columns>
+    <columns>No_Of_Enquries__c</columns>
+    <columns>No_of_Completed_Site_Visit__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Select_Region__c</field>
+        <operation>contains</operation>
+        <value>Bangalore,Hyderabad</value>
+    </filters>
+    <label>All Channel Partners</label>
+</ListView>

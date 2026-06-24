@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Allocated_Reason__c</fullName>
+    <label>Allocated Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Client Place Visit</fullName>
+                <default>false</default>
+                <label>Client Place Visit</label>
+            </value>
+            <value>
+                <fullName>Direct allocation</fullName>
+                <default>false</default>
+                <label>Direct allocation</label>
+            </value>
+            <value>
+                <fullName>General Enquiry</fullName>
+                <default>false</default>
+                <label>General Enquiry</label>
+            </value>
+            <value>
+                <fullName>Interested In Other project</fullName>
+                <default>false</default>
+                <label>Interested In Other project</label>
+            </value>
+            <value>
+                <fullName>Interested send info</fullName>
+                <default>false</default>
+                <label>Interested send info</label>
+            </value>
+            <value>
+                <fullName>Interested callback</fullName>
+                <default>false</default>
+                <label>Interested callback</label>
+            </value>
+            <value>
+                <fullName>Interested but other location</fullName>
+                <default>false</default>
+                <label>Interested but other location</label>
+            </value>
+            <value>
+                <fullName>Interested in VC</fullName>
+                <default>false</default>
+                <label>Interested in VC</label>
+            </value>
+            <value>
+                <fullName>Investment</fullName>
+                <default>false</default>
+                <label>Investment</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

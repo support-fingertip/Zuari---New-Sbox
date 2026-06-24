@@ -1,0 +1,15 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+    <aura:attribute name="myRecordID" type="String" description="Record to which the files should be attached" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card title="Channel Partner Upload" iconName="custom:custom14" class="slds-p-around_small">
+        <div class="slds-p-vertical_xx-small">      
+         <!--   <c:GenericMultipleFileUpload recordId="{!v.recordId}" sectionName="Profile Photo" />-->
+             <c:GenricFileUploadComponent recordId="{!v.recordId}" picklistValues="Profile Photo,GST Certificate,PAN Card,RERA Certificate,Aadhar Card,
+                                                                                   Address Proof,Cancel cheque,Company Registration,Authorization Letter,
+                                                                                   Board Resolution, Other Document" />
+          
+        </div>
+        
+    </lightning:card>
+</aura:component>

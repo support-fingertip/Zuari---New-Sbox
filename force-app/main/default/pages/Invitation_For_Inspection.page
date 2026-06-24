@@ -1,0 +1,57 @@
+<apex:page standardController="Booking__c"  contenttype="application/pdf" renderas="pdf" title="Unit Ready for Inspection">
+    <table width="100%"   cellpadding="0" cellspacing="0" >
+        <tr><td>
+            <tr>
+                <td style="font-size: 12px;text-align:left;border: none;"> <img src="{!$Resource.Zuari}" width="110px" height="50" /></td>
+                
+                <td style="font-size: 12px;text-align:right;border: none;">
+                    <!--Update on 09-02-2026 by Praveen-->
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City - Plots'}"><img src="{!$Resource.ZuariGardenCity}" width="110px" height="50" /></apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Gangothri Tribhuja'}"><img src="{!$Resource.GangotriLogo}" width="110px" height="50" /></apex:outputText>
+                    
+                    <!-- 
+<img src="{!$Resource.ZuariPlotlogo}" width="110px" height="50" />-->
+                    
+                </td>
+                
+                
+            </tr>
+            </td>
+        </tr>
+    </table>
+    
+    <p style="text-align: left; font-size: 15px; font-family: 'Times New Roman', serif; margin: 20px;">
+        <strong>Sub :</strong> Unit Ready for Inspection – Unit No. {!Booking__c.Plot__r.Name} , at Zuari {!Booking__c.Project1__r.Project_Address__c}
+    </p>
+    
+    <p style="font-size: 15px; line-height: 1.2; font-family: 'Times New Roman', serif; margin: 20px;">
+        Dear Sir/Madam, <br/><br/>
+        
+        <strong>Greetings from Zuari Infraworld India Ltd.</strong> <br/><br/>
+        
+        We are pleased to inform you that the construction of your unit {!Booking__c.Plot__r.Name}, ZGC-Plots at Zuari Garden City has been successfully completed and is now ready for inspection.<br/><br/>
+        
+        We invite you to schedule a joint inspection of your unit along with our Customer Relationship Management (CRM) Team to verify the completion of works and ensure everything is to your satisfaction.<br/><br/>
+        
+        We kindly request you to arrange your visit to the site for the inspection within 15 days from the date of this communication.<br/><br/>
+        
+        In case you are unable to attend in person, you may authorize a family member or friend to conduct the inspection on your behalf. In such a case, please share the complete visitor details with us via email in advance.<br/><br/>
+        
+        Please also note that, as per the agreed milestones outlined in the Agreement for Sale, the final installment will become due prior to possession. A formal demand note will be raised shortly. We request you to make the necessary arrangements for the final payment so that the possession process is seamless and well-coordinated.<br/><br/>
+        
+        Should the inspection not be conducted within the specified timeline, the unit will remain vacant at your sole risk and responsibility. Zuari Infraworld India Ltd. shall not be held liable for any consequences arising due to the delay in inspection or possession.<br/><br/>
+        
+        We take this opportunity to warmly welcome you to the Zuari family and wish you peace and prosperity in your new home.<br/><br/>
+        
+        We also look forward to your continued association with us in all our future endeavours.<br/><br/>
+        
+        <strong>Note: </strong>Kindly confirm your site visit at least 4 working days in advance to help us organize your inspection smoothly.<br/><br/>
+        
+        <strong>Warm Regards,</strong>
+    </p>
+    
+    <p style="text-align: justify; font-size: 14px; line-height: 1.6; font-family: 'Times New Roman', serif; margin: 20px;">
+        <strong style="font-weight: bold; font-family: 'Times New Roman', serif;">Zuari Infraworld India Ltd.</strong>
+    </p>
+    
+</apex:page>

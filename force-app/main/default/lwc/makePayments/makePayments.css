@@ -1,0 +1,20 @@
+.dropdown-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+    background: white;
+    position: relative;
+    z-index: 9999;
+}
+
+.slds-listbox__option:hover {
+    background-color: #f3f2f2;
+    cursor: pointer;
+}
+
+.slds-listbox__option-meta_entity {
+    color: #706e6b;
+    font-size: 0.875rem;
+}

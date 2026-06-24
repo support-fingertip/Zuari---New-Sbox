@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sale_Consideration__c</fullName>
+    <formula>Basic_Cost_for_Plot_land_Area__c  + Floor_Rise_Charge__c  +  Premium_Location_Charge_10__c  +  Club_House_Charges__c  +  Car_Parking__c  +  Air_Conditioning_Charges__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Sale Consideration</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

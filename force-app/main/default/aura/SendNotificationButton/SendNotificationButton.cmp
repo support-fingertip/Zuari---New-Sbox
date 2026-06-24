@@ -1,0 +1,8 @@
+<aura:component 
+    controller="SendNotificationController"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome"
+    access="global">
+	 <aura:attribute name="recordId" type="Id" />
+    
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+</aura:component>

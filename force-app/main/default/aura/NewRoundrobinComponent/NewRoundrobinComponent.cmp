@@ -1,0 +1,118 @@
+<aura:component controller="transferLeadController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride" access="global" >
+    <aura:attribute name="recordTypeId" type="string"/>
+    <aura:attribute name="recordId" type="string" default=""/>
+    <aura:attribute name="isModalOpen" type="boolean" default="true"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="hideProjectName" type="boolean" default="true "/>
+    <aura:attribute name="accounts" type="String[]" default="[]"/>
+    <aura:attribute name="searchText" type="string" default=""/>
+    <aura:attribute name="matchaccounts" type="String[]" default="[]"/>
+    <aura:attribute name="allocatedProject" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    <aura:handler name="change" value="{!v.searchText}" action="{!c.searchText}"></aura:handler>
+    
+    <div >
+        <!--<lightning:button variant="brand"
+                          label="New Lead"
+                          title="New Lead"
+                          onclick="{! c.openModel }" /> -->
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value 0129D000001HYKQQA4-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+            <lightning:recordEditForm objectApiName="Round_Robin__c" recordId="{!v.recordId}" aura:id="myform" onsubmit="{!c.handleSubmit}" onsuccess="{!c.handleSuccess}" onerror="{!c.handleError}">
+                <!-- Modal/Popup Box starts here-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- Modal/Popup Box Header Starts here-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Round Robin</h2>
+                        </header>
+                       
+                        <!--Modal/Popup Box Body Starts here-->
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p><div class="slds-form">
+                                <aura:if isTrue="{!!v.recordId}"> 
+                                <div class="slds-scope">
+                                    <div class="slds-grid slds-wrap slds-text-align_left">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-form-element__control">
+                                            <ul class="slds-lookup__list" role="listbox"> 
+                                                <lightning:input value="{!v.searchText}" aura:id="enter-search" name="enter-search" label="Project Name" type="search" required='true' /><br/>                                      
+                                                <aura:if isTrue="{!v.matchaccounts}">
+                                                    <div class="{!if(not(empty(v.matchaccounts)), 'result-buttom','')}">
+                                                        <aura:iteration items="{!v.matchaccounts}" var="item">
+                                                            <li role="presentation">
+                                                                <span class="slds-lookup__item-action slds-media slds-media--center" role="option">
+                                                                    <div class="slds-media__body">
+                                                                        <div class="slds-input-has-icon slds-input-has-icon--right">
+                                                                            <div class="slds-lookup__result-text" data-id="{!item}" onclick="{!c.update }">
+                                                                                <a role="option" >
+                                                                                    <lightning:icon iconName="standard:account" size="xx-small"/>&nbsp;{!item}
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                            </li>
+                                                        </aura:iteration>
+                                                    </div>
+                                                </aura:if>     
+                                            </ul>
+                                        </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                       
+                                        
+                                    </div>
+                                </div>
+                                    <aura:set attribute="else">
+                                        <lightning:inputField fieldName="Project_Assigned__c" required='true' />
+                                    </aura:set>
+                                </aura:if>
+                                
+                               <div class="slds-scope">
+                                    
+                                    <div class="slds-grid slds-wrap slds-text-align_left">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-form-element__control">
+                                                <lightning:inputField fieldName="Active__c"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                                
+                                </div>
+                            </p>
+                        </div>
+                        <!--Modal/Popup Box Footer Starts here-->
+                        <footer class="slds-modal__footer">
+                            <aura:if isTrue="{!!v.spinner}">
+                                <lightning:button variant="neutral"
+                                                  label="Cancel"
+                                                  title="Cancel"
+                                                  onclick="{! c.closeModel }"/>
+                                <lightning:button variant="brand" type="submit" label="Save" />
+                            </aura:if>
+                        </footer>
+                    </div>
+                    
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                
+            </lightning:recordEditForm>
+        </aura:if>
+        
+    </div>
+    
+    
+    
+</aura:component>

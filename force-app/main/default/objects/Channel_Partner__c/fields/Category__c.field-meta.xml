@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category__c</fullName>
+    <description>IF(
+  AND(Site_Visit__c &gt; 0, No_of_Booking__c &gt; 0), &quot;P1&quot;,
+IF(
+  Site_Visit__c &gt; 0, &quot;P2&quot;,
+IF(
+  No_Of_Enquries__c &gt; 0, &quot;P3&quot;,
+IF(
+  CP_Visited_Project__c, &quot;P4&quot;,
+IF(
+  NOT(ISBLANK(Met_Location__c)), &quot;P5&quot;,
+IF(
+  NOT(ISBLANK(CP_Calling__c)), &quot;P6&quot;,
+  &quot;P7&quot;
+))))))</description>
+    <externalId>false</externalId>
+    <formula>IF(
+  AND(Site_Visit__c &gt; 0, No_of_Booking__c &gt; 0), &quot;P1&quot;,
+IF(
+  Site_Visit__c &gt; 0, &quot;P2&quot;,
+IF(
+  No_of_Leads__c &gt; 0, &quot;P3&quot;,
+IF(
+  CP_Visited_Project__c, &quot;P4&quot;,
+IF(
+  NOT(ISBLANK(Met_Location__c)), &quot;P5&quot;,
+IF(
+  NOT(ISBLANK(CP_Calling__c)), &quot;P6&quot;,
+  &quot;P7&quot;
+))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Category</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

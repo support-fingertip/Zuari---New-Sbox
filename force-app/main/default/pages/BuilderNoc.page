@@ -1,0 +1,102 @@
+<apex:page renderAs="pdf" standardController="Booking__c" extensions="NOCController" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false">
+    <head>
+        <style>
+            @page {
+            size: A4;
+            margin: 100px 50px 50px 50px;
+
+            @top-center {
+                content: element(header);
+            }
+            }
+            
+            body {
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+            }
+
+            div.header {
+            position: running(header);
+            
+            }
+            
+            h2 {
+            text-align: center;
+            text-decoration: underline;
+            font-weight: bold;
+            margin-bottom: 20px;
+            }
+            
+            p {
+            text-align: justify;
+            margin-bottom: 10px;
+            }
+            
+            .center-text {
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            }
+            
+            .page-break {
+            page-break-before: always;
+            }
+        </style>
+    </head>
+    
+    <body  style="font-size: 14px; margin-top:30px">
+
+        <div class="header" style="margin-top:50px;margin-bottom:20px" >
+            <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-size: 12px; text-align: left; border: none;">
+                <img src="{!$Resource.Zuari}" width="110px" height="50" />
+            </td>
+            <td style="font-size: 12px; text-align: right; border: none;">
+                <apex:image url="{!projectLogoUrl}" width="150px" height="60" rendered="{!NOT(ISBLANK(projectLogoUrl))}" />
+            </td>
+        </tr>
+    </table>
+        </div>
+
+        <p style="text-align:Right;">Date :&nbsp; <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText></p>
+        <div>
+            The Manager <br/>
+            {!Booking__c.Loan_Bank_Name__c} Ltd.,<br/>
+            {!Booking__c.Loan_Bank_Address__c},<br/><br/>
+            
+            Dear Sir,
+        </div>
+        <p style="text-align: justify;"> This is to confirm that {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} aged about {!age} years, S/o. Mr. {!Booking__c.Son_Daughter_Wife_of1__c} have purchased Flat No {!Booking__c.Plot__r.Name} measuring 117.00 square meters, in the land called. {!Booking__c.Project1__r.Name} Flat No  {!Booking__c.Plot__r.Name} on  the Project Land measuring 40630.438 Sq meters –falling under survey Nos. 5/1, 105, 107/1, 107/2, 107/3, 107/4, 111/2, 111/1A, 111/1B, 121 &amp; 123 etc., - situated at Hulikere Village, Belagola Hobli, Sriranagapatna Taluk, Mandya District, Karnataka,  for a total consideration of<B> Rs.<apex:outputText value="₹ {0, number, ##,##,##0.00}"> <apex:param value="{!Booking__c.GRAND_TOTAL__c}" /></apex:outputText> /-( {!amountInWords})</B> We confirm that we have obtained necessary permissions/approvals/sanctions for construction of the said land from all the concerned competent authorities and the development of the said Plots as well as of the Flat No  {!Booking__c.Plot__r.Name} is in accordance with approved plans.</p>
+        <p style="text-align: justify;">We assure that the development Flat No {!Booking__c.Plot__r.Name} the land appurtenant thereto is not subject to any encumbrance, charge or liability of any kind whatsoever and that the entire property is free and marketable. We have a clear, legal and marketable title to the said property and every part thereof..</p>
+        <p style="text-align: justify;">We have no objection to your giving a loan to the above buyer/s and his/her/their mortgaging the said Flat to your Bank by way of security for repayment, not with standing anything to the contrary contained in the Sale Agreement dated<B> &nbsp;<apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Agreement_Executed_Date__c}"/></apex:outputText> </B>entered into between us and {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</p>
+        <p style="text-align: justify;">We also undertake to inform and give proper notice to the co-operative housing society as and when formed, about the Flat being so mortgaged.</p>
+        <p style="text-align: justify;">We hereby undertake to forward the original title deed as and when the same is executed and duly registered directly to  {!Booking__c.Loan_Bank_Name__c} Ltd. {!Booking__c.Loan_Bank_Address__c} without parting the same with the purchaser of the  Flat No {!Booking__c.Plot__r.Name} during the pendency of the loan. It is agreed by us that until execution of the necessary sale deed we shall retain the possession of the Flat No {!Booking__c.Plot__r.Name} for and on behalf of {!Booking__c.Loan_Bank_Name__c} Ltd. We undertake that we shall execute the sale deed/transfer deed in favour of {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} on or before &nbsp;<apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Sale_Deed_Date__c}"/></apex:outputText></p>
+        <p style="text-align: justify;">If {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} defaults on his/her/thier loan account with  {!Booking__c.Loan_Bank_Name__c} Ltd., and the Bank writes to us in this context, asking us not to hand over possession, then we will not handover possession to the said customer till the time  {!Booking__c.Loan_Bank_Name__c} Ltd., informs us to do so. This will hold good for cases where  {!Booking__c.Loan_Bank_Name__c} Ltd. informs us before handing over the above specified  Flat No  {!Booking__c.Plot__r.Name} to the said customer.</p>
+        <p style="text-align: justify;">We agree that in the event {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}, being the Borrower/s of your Bank defaults in making the payment of the EMI for {!emiMonths} months, your Bank if required shall have the right to substitute the purchaser in its sole discretion after payment of transfer charges (if any) to us.</p>
+        <p style="text-align: justify;">We agree and undertake that, in case of cancellation of the allotment of the above Plot for whatsoever reason, we shall deduct Rs. {!Booking__c.Cancellation_Charge__c}/- of the total consideration and /or as provided in the agreement and refund to you, directly, the balance amount to the extent financed by you. The remaining balance amount will be refunded to the Purchaser/s. </p>
+        <p style="text-align: justify;">We will not permit <B>{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</B> to transfer, assign, sell off or in any way deal with the said Plot prejudicial to the interest of {!Booking__c.Loan_Bank_Name__c} Ltd., without the prior written consent of {!Booking__c.Loan_Bank_Name__c} Ltd. </p>
+        <br/><br/>
+        <div>
+            
+            Yours faithfully, 
+            
+            <br/><br/>
+            <apex:outputText value="{!IF(
+                                    OR(
+                                    Booking__c.Project1__r.Name = 'Select Item 2',
+                                    Booking__c.Project1__r.Name = 'Zuari Gangothri Tribhuja'
+                                    ),
+                                    'Gangothri Infraedge Pvt Ltd.',
+                                    'Zuari Infraworld India Ltd'
+                                    )}"/>
+            
+            
+            <br/><br/>
+            Authorized Signatory        
+            
+        </div>
+    </body>
+</apex:page>

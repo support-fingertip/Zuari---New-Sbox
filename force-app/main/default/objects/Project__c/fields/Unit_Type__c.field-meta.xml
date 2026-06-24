@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Type__c</fullName>
+    <label>Unit Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Villa</fullName>
+                <default>false</default>
+                <label>Villa</label>
+            </value>
+            <value>
+                <fullName>Duplex Villa</fullName>
+                <default>false</default>
+                <label>Duplex Villa</label>
+            </value>
+            <value>
+                <fullName>Apartments</fullName>
+                <default>false</default>
+                <label>Apartments</label>
+            </value>
+            <value>
+                <fullName>Plots</fullName>
+                <default>false</default>
+                <label>Plots</label>
+            </value>
+            <value>
+                <fullName>Villaments</fullName>
+                <default>false</default>
+                <label>Villaments</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>3</visibleLines>
+</CustomField>

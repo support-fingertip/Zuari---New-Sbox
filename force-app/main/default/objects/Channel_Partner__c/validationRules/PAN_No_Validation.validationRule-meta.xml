@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PAN_No_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(
+NOT(ISBLANK(PAN_Card_No__c)) &amp;&amp;
+NOT(REGEX(PAN_Card_No__c ,
+        &quot;^[A-Z]{5}[0-9]{4}[A-Z]{1}$&quot;)),
+
+NOT(ISBLANK(Company_PAN_Card_No__c)) &amp;&amp;
+NOT(REGEX(Company_PAN_Card_No__c ,
+        &quot;^[A-Z]{5}[0-9]{4}[A-Z]{1}$&quot;))
+)</errorConditionFormula>
+    <errorMessage>Enter a valid PAN number (Format: ABCDE1234F).</errorMessage>
+</ValidationRule>

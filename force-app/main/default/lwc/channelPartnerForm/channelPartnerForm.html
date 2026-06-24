@@ -1,0 +1,979 @@
+<template>
+    <!-- ================= MAIN SCREEN ================= -->
+    <template if:false={showThankYouScreen}>
+
+        <!-- ================= FORM SECTION ================= -->
+        <template if:true={showForm}>
+            <div class="form-container">
+                <lightning-card class="cp-card">
+                    <div class="cp-logo-wrap">
+                            <img src={logoUrl} alt="Logo" class="header-logo" />
+                    </div>
+
+
+                    <!-- HEADER -->
+                    <div slot="title">
+                        
+                        <div class="header-content">
+
+                            <lightning-icon
+                                icon-name="standard:account"
+                                size="small"
+                                class="header-icon">
+                            </lightning-icon>
+                            <h1 class="slds-text-heading_medium">
+                               Zuari Infraworld Channel Partner Registration Form
+                            </h1>
+                        </div>
+                        
+                            
+                    </div>
+
+                    <div class="slds-p-horizontal_large slds-p-vertical_medium" style="background-color: antiquewhite;">
+
+                        <!-- INFO TEXT -->
+                        <p class="slds-text-body_regular slds-text-color_weak slds-m-bottom_large">
+                            Select Entity, fill the form, attach the required documents, then click Submit Application. The record and files are saved together.
+                        </p>
+
+                        <!-- ALERT -->
+                        <template if:true={showAlert}>
+                            <div class={alertClass} role="alert">
+                                <lightning-icon
+                                    icon-name={alertIcon}
+                                    size="small"
+                                    variant="inverse"
+                                    class="slds-m-right_small">
+                                </lightning-icon>
+                                <h2>{alertMessage}</h2>
+                                <button
+                                    class="slds-button slds-button_icon slds-notify__close"
+                                    onclick={closeAlert}>
+                                    <lightning-icon
+                                        icon-name="utility:close"
+                                        size="x-small"
+                                        variant="inverse">
+                                    </lightning-icon>
+                                </button>
+                            </div>
+                        </template>
+
+                        <!-- ================= ENTITY SELECTION ================= -->
+                        <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                            <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                                <lightning-icon icon-name="utility:company" size="x-small"
+                                    class="slds-m-right_x-small"></lightning-icon>
+                                Select Entity
+                            </h2>
+
+                            <lightning-combobox
+                                name="entityType"
+                                label="Entity Type"
+                                value={formData.Entity_Type__c}
+                                options={entityOptions}
+                                onchange={handleEntityChange}>
+                            </lightning-combobox>
+
+                            <template if:true={showDeclaration}>
+                                <div class="slds-m-top_medium">
+                                    <lightning-formatted-rich-text
+                                        value={declarationText}>
+                                    </lightning-formatted-rich-text>
+
+                                    <lightning-input
+                                        type="checkbox"
+                                        label={declarationCheckboxLabel}
+                                        checked={declarationChecked}
+                                        onchange={handleDeclarationChange}>
+                                    </lightning-input>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- ================= COMPANY FORM ================= -->
+                        <template if:true={showCompanyForm}>
+                              
+                <div class="form-wrapper">
+                    <!-- Section 1: Company Information -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:company" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Company Information
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                
+                                <lightning-input 
+                                    label="Company Name" 
+                                    name="Company_Name__c" 
+                                    value={formData.Company_Name__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="Representative Name" 
+                                    name="Name" 
+                                    value={formData.Name}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="Company Head Name" 
+                                    name="Company_Head_Name__c"
+                                    value={formData.Company_Head_Name__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="Company Owner Name" 
+                                    name="Company_Owner_Name__c"
+                                    value={formData.Company_Owner_Name__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="number" 
+                                    label="Team Strength" 
+                                    name="Team_Strength__c"
+                                    value={formData.Team_Strength__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="url" 
+                                    label="Company Website" 
+                                    name="Company_Website__c"
+                                    value={formData.Company_Website__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Contact Information -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:email" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Contact Information
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="email" 
+                                    label="Representative Email" 
+                                    name="Email__c"
+                                    value={formData.Email__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                            <!--
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="phone" 
+                                    label="Representative Mobile Number" 
+                                    name="Mobile_Number__c"
+                                    value={formData.Mobile_Number__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                            -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                 <lightning-input 
+                                 type="tel"
+                                    label="Representative Mobile Number"
+                                    name="Mobile_Number__c"
+                                    value={formData.Mobile_Number__c}
+                                    onchange={handleInputChange}
+                                    required
+                                    pattern="[6-9][0-9]{9}"
+                                    message-when-pattern-mismatch="Please enter a valid 10-digit mobile number">
+                                 </lightning-input>
+                            </div>
+
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="email" 
+                                    label="Company Head Email" 
+                                    name="Company_Head_Email_ID__c"
+                                    value={formData.Company_Head_Email_ID__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="email" 
+                                    label="Company Owner Email" 
+                                    name="Company_Owner_Email_ID__c"
+                                    value={formData.Company_Owner_Email_ID__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="tel" 
+                                    label="Company Head Contact No" 
+                                    name="Company_Head_Contact_No__c"
+                                    value={formData.Company_Head_Contact_No__c}
+                                    onchange={handleInputChange}
+                                    pattern="[0-9]{10}"
+                                    message-when-pattern-mismatch="Please enter a valid 10-digit phone number">
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="tel" 
+                                    label="Company Owner Contact No" 
+                                    name="Company_Owner_Contact_No__c"
+                                    value={formData.Company_Owner_Contact_No__c}
+                                    onchange={handleInputChange}
+                                    pattern="[0-9]{10}"
+                                    message-when-pattern-mismatch="Please enter a valid 10-digit phone number">
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Location Details -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:location" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Location Details
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-textarea 
+                                    label="Company Address" 
+                                    name="Company_Address__c"
+                                    value={formData.Company_Address__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-textarea>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="City"
+                                    name="City__c"
+                                    value={formData.City__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="State"
+                                    name="State__c"
+                                    value={formData.State__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="City You Reside In"
+                                    name="City_you_reside_in__c"
+                                    value={formData.City_you_reside_in__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-combobox
+                                    name="Select_Region__c"
+                                    label="Region"
+                                    value={formData.Select_Region__c}
+                                    options={regionOptions}
+                                    onchange={handleRegionChange}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-combobox
+                                    name="Sourcing_RM__c"
+                                    label="Sourcing RM"
+                                    value={formData.Sourcing_RM__c}
+                                    options={sourcingRMOptions}
+                                    onchange={handleSourcingRMChange}
+                                    placeholder="Select Region first"
+                                    disabled={isSourcingRMDisabled}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Tax & Registration Details -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:file" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Tax &amp; Registration Details
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="Company GST No" 
+                                    name="Company_GST_No__c"
+                                    value={formData.Company_GST_No__c}
+                                    onchange={handleInputChange}
+                                    max-length="15"
+                                    pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}"
+                                    message-when-pattern-mismatch="Please enter a valid GST number">
+                                </lightning-input>
+                            </div>
+
+                          
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="PAN Card No" 
+                                    name="PAN_Card_No__c"
+                                    value={formData.PAN_Card_No__c}
+                                    onchange={handleInputChange}
+                                    required
+                                    max-length="10"
+                                    pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                    message-when-pattern-mismatch="Please enter a valid PAN (e.g., ABCDE1234F)">
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="Company RERA No" 
+                                    name="Company_RERA_No__c"
+                                    value={formData.Company_RERA_No__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="date" 
+                                    label="RERA Validity" 
+                                    name="RERA_Validity__c"
+                                    value={formData.RERA_Validity__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Section 5: Other Details -->
+
+                    <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:file" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Other Details
+                        </h2>
+                         <div class="slds-col slds-size_1-of-1">
+    <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">
+            Active Medium
+        </legend>
+
+        <div class="slds-form-element__control slds-grid slds-wrap slds-gutters">
+            <template for:each={mediumOptions} for:item="opt">
+                <div key={opt.value}
+                     class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-input
+                        type="checkbox"
+                        label={opt.label}
+                        value={opt.value}
+                        checked={opt.checked}
+                        onchange={handleMediumChange}>
+                    </lightning-input>
+                </div>
+            </template>
+        </div>
+    </fieldset>
+</div>
+
+
+                    </div>
+
+                </div>
+
+                        </template>
+
+                        <!-- ================= INDIVIDUAL FORM ================= -->
+                        <template if:true={showIndividualForm}>  
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+            <lightning-icon icon-name="utility:call" size="x-small"
+                class="slds-m-right_x-small"></lightning-icon>
+            Contact Information
+        </h2>
+            <div class="slds-grid slds-wrap slds-gutters"> 
+
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                <lightning-input 
+                                    label="Name" 
+                                    name="Name"
+                                    value={formData.Name}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>    
+            </div>
+                             
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                 <lightning-input 
+                                 type="tel"
+                                    label="Mobile Number"
+                                    name="Mobile_Number__c"
+                                    value={formData.Mobile_Number__c}
+                                    onchange={handleInputChange}
+                                    required
+                                    pattern="[6-9][0-9]{9}"
+                                    message-when-pattern-mismatch="Please enter a valid 10-digit mobile number">
+                                 </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="email" 
+                                    label="Email" 
+                                    name="Email__c"
+                                    value={formData.Email__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="number" 
+                                    label="Team Strength" 
+                                    name="Team_Strength__c"
+                                    value={formData.Team_Strength__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="phone" 
+                                    label="Alternate Phone No" 
+                                    name="Alternate_number__c"
+                                    value={formData.Alternate_number__c}
+                                    onchange={handleInputChange}
+                                    >
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="email" 
+                                    label="Alternate Email" 
+                                    name="Email_ID__c"
+                                    value={formData.Email_ID__c}
+                                    onchange={handleInputChange}
+                                    >
+                                </lightning-input>
+                            </div>
+                            
+
+
+
+            </div>
+            </div>  
+            <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:location" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Location Details
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-textarea 
+                                    label="Communication Address" 
+                                    name="Communication_Address__c"
+                                    value={formData.Communication_Address__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-textarea>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="City"
+                                    name="City__c"
+                                    value={formData.City__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="State"
+                                    name="State__c"
+                                    value={formData.State__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input
+                                    label="City of Primary Work"
+                                    name="City_of_Primary_Work__c"
+                                    value={formData.City_of_Primary_Work__c}
+                                    onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-combobox
+                                    name="Select_Region__c"
+                                    label="Region"
+                                    value={formData.Select_Region__c}
+                                    options={regionOptions}
+                                    onchange={handleRegionChange}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-combobox
+                                    name="Sourcing_RM__c"
+                                    label="Sourcing RM"
+                                    value={formData.Sourcing_RM__c}
+                                    options={sourcingRMOptions}
+                                    onchange={handleSourcingRMChange}
+                                    placeholder="Select Region first"
+                                    disabled={isSourcingRMDisabled}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+
+             <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:file" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Tax &amp; Registration Details
+                        </h2>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+    <lightning-input
+        type="checkbox"
+        label="Are you GST Registered?"
+        name="Are_you_GST_Registered__c"
+        checked={formData.Are_you_GST_Registered__c}
+        onchange={handleGSTCheckboxChange}>
+    </lightning-input>
+</div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+    label="GST No" 
+    name="GST__c"
+    value={formData.GST__c}
+    onchange={handleInputChange}
+    disabled={isGSTDisabled}
+    required={isGSTRequired}
+    pattern={gstPattern}
+    message-when-pattern-mismatch="Please enter a valid GST number">
+</lightning-input>
+
+
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="RERA No" 
+                                    name="RERA__c"
+                                    value={formData.RERA__c}
+                                    onchange={handleInputChange}
+                                   required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    label="PAN No" 
+                                    name="PAN_Card_No__c"
+                                    value={formData.PAN_Card_No__c}
+                                    onchange={handleInputChange}
+                                    required
+                                    max-length="10"
+                                    pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                    message-when-pattern-mismatch="Please enter a valid PAN (e.g., ABCDE1234F)"
+                                    >
+                                </lightning-input>
+                            </div>
+
+                            
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input 
+                                    type="date" 
+                                    label="RERA Validity" 
+                                    name="RERA_Validity__c"
+                                    value={formData.RERA_Validity__c}
+                                    onchange={handleInputChange}
+                                    required>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+     <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                            <lightning-icon icon-name="utility:file" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            Other Details
+                        </h2>
+                        <div class="slds-col slds-size_1-of-1">
+    <fieldset class="slds-form-element">
+        <legend class="slds-form-element__legend slds-form-element__label">
+            Active Medium
+        </legend>
+
+        <div class="slds-form-element__control slds-grid slds-wrap slds-gutters">
+            <template for:each={mediumOptions} for:item="opt">
+                <div key={opt.value}
+                     class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-input
+                        type="checkbox"
+                        label={opt.label}
+                        value={opt.value}
+                        checked={opt.checked}
+                        onchange={handleMediumChange}>
+                    </lightning-input>
+                </div>
+            </template>
+        </div>
+    </fieldset>
+</div>
+
+
+                        </div>
+             </template>
+
+                        <!-- ================= UPLOAD SECTION ================= -->
+                        <template if:true={declarationChecked}>
+                            <div class="slds-box slds-theme_shade slds-m-top_large">
+                                <h2 class="slds-text-heading_small slds-m-bottom_small section-header">
+                                    <lightning-icon icon-name="utility:attach" size="x-small"
+                                        class="slds-m-right_x-small"></lightning-icon>
+                                    Document Upload
+                                </h2>
+                                <p class="slds-text-color_error slds-m-bottom_medium" style="font-weight: bold;">
+                                    ⚠️ Only 2MB PDF documents are allowed. Image formats (JPEG, JPG, PNG) are not permitted.
+                                </p>
+
+        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+            Documents marked with <span class="slds-text-color_error">*</span> are mandatory and must be uploaded before the application can be submitted. They are saved together with your application when you click <b>Submit Application</b>.
+        </p>
+
+        <div class="slds-grid slds-wrap slds-gutters">
+
+            <!-- PAN -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        PAN Card <span class="slds-text-color_error">*</span>
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="PAN Card"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.pan}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.pan}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Aadhar -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        Aadhaar Card <span class="slds-text-color_error">*</span>
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="Aadhaar Card"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.aadhar}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.aadhar}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Cancel Cheque -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        Cancelled Cheque <span class="slds-text-color_error">*</span>
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="Cancel Cheque"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.cancelCheque}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.cancelCheque}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- RERA -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        RERA Certificate <span class="slds-text-color_error">*</span>
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="RERA Certificate"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.rera}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.rera}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Optional documents heading -->
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-m-top_medium slds-m-bottom_small slds-text-heading_small">
+                    Optional Documents
+                </div>
+            </div>
+
+            <!-- GST -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        GST Certificate
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="GST Certificate"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.gst}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.gst}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Address Proof -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:pdf" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        Address Proof
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="Address Proof"
+                           onchange={handleFileSelect}
+                           class="file-input" />
+                    <template if:true={uploadStatus.addressProof}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.addressProof}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- ================= COMPANY ONLY ================= -->
+            <template if:true={isCompany}>
+                <!-- Company Registration -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="upload-section">
+                        <label class="slds-form-element__label upload-label">
+                            <lightning-icon icon-name="doctype:pdf" size="x-small"
+                                class="slds-m-right_xx-small"></lightning-icon>
+                            Company Registration Certificate
+                        </label>
+                        <input type="file"
+                               accept=".pdf"
+                               data-document-type="Company Registration"
+                               onchange={handleFileSelect}
+                               class="file-input" />
+                        <template if:true={uploadStatus.companyRegistration}>
+                            <div class="upload-success">
+                                <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                                <span>{uploadStatus.companyRegistration}</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Authorization Letter -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="upload-section">
+                        <label class="slds-form-element__label upload-label">
+                            <lightning-icon icon-name="doctype:pdf" size="x-small"
+                                class="slds-m-right_xx-small"></lightning-icon>
+                            Authorization Letter
+                        </label>
+                        <input type="file"
+                               accept=".pdf"
+                               data-document-type="Authorization Letter"
+                               onchange={handleFileSelect}
+                               class="file-input" />
+                        <template if:true={uploadStatus.authorization}>
+                            <div class="upload-success">
+                                <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                                <span>{uploadStatus.authorization}</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Board Resolution -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="upload-section">
+                        <label class="slds-form-element__label upload-label">
+                            <lightning-icon icon-name="doctype:pdf" size="x-small"
+                                class="slds-m-right_xx-small"></lightning-icon>
+                            Board Resolution
+                        </label>
+                        <input type="file"
+                               accept=".pdf"
+                               data-document-type="Board Resolution"
+                               onchange={handleFileSelect}
+                               class="file-input" />
+                        <template if:true={uploadStatus.board}>
+                            <div class="upload-success">
+                                <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                                <span>{uploadStatus.board}</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Other Docs -->
+            <div class="slds-col slds-size_1-of-1">
+                <div class="upload-section">
+                    <label class="slds-form-element__label upload-label">
+                        <lightning-icon icon-name="doctype:attachment" size="x-small"
+                            class="slds-m-right_xx-small"></lightning-icon>
+                        Other Documents (Optional)
+                    </label>
+                    <input type="file"
+                           accept=".pdf"
+                           data-document-type="Other Document"
+                           onchange={handleFileSelect}
+                           multiple
+                           class="file-input" />
+                    <template if:true={uploadStatus.other}>
+                        <div class="upload-success">
+                            <lightning-icon icon-name="utility:success" size="xx-small"></lightning-icon>
+                            <span>{uploadStatus.other}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+                            </div>
+                        </template>
+
+                        <!-- ================= SUBMIT BUTTON ================= -->
+                        <template if:true={declarationChecked}>
+                            <div class="slds-text-align_center slds-m-top_large slds-m-bottom_medium">
+                                <lightning-button
+                                    label={saveButtonLabel}
+                                    variant="brand"
+                                    icon-name="utility:check"
+                                    class="submit-button"
+                                    disabled={isSaving}
+                                    onclick={handleSave}>
+                                </lightning-button>
+                            </div>
+                        </template>
+
+                    </div>
+                </lightning-card>
+            </div>
+        </template>
+    </template>
+
+    <!-- ================= THANK YOU SCREEN ================= -->
+    <template if:true={showThankYouScreen}>
+        <div class="slds-align_absolute-center slds-p-around_xx-large">
+            <lightning-card>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon
+                        icon-name="utility:success"
+                        size="large"
+                        variant="success">
+                    </lightning-icon>
+
+                    <h1 class="slds-text-heading_large slds-m-top_medium">
+                        Thank You!
+                    </h1>
+
+                    <p class="slds-m-top_small">
+                        Thank you for registering as a <b>Channel Partner</b> with <b>Zuari Infra</b>.
+                    </p>
+
+                    <p class="slds-text-color_weak slds-m-top_small">
+                        Our team will review your application and get back to you shortly.
+                    </p>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+
+</template>

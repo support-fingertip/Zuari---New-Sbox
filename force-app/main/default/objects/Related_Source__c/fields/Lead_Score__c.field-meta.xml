@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Score__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+   NOT(ISBLANK(Phone__c)),
+    IF( NOT(ISBLANK(Email__c)), 2, 1 ) +
+    IF(NOT(ISBLANK(Secondary_Phone__c)), 1, 0) +
+    IF(NOT(ISBLANK(Secondary_Email__c)), 1, 0) +
+    IF(NOT(ISBLANK(Organization_Name__c)), 1, 0) +
+    /* Check that Occupation is not blank AND not the &quot;None&quot; value */
+    IF(NOT(ISPICKVAL(Occupation__c, &quot;&quot;)), 1, 0) +
+    IF(NOT(ISBLANK(Address__c)), 1, 0) +
+    IF(NOT(ISPICKVAL(Budget__c, &quot;&quot;)), 1, 0) +
+    IF(NOT(ISBLANK(First_Site_Visit_Date_Time__c)), 1, 0) +
+    IF(NOT(ISPICKVAL(How_soon_do_you_intend_to_buy_it__c, &quot;&quot;)), 1, 0) +
+    IF(NOT(ISBLANK(No_of_Site_Visit__c)) &amp;&amp; No_of_Site_Visit__c &gt; 0, 1, 0),
+    0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Lead Score</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

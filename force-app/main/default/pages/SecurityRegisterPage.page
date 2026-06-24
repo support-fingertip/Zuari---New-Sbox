@@ -1,0 +1,70 @@
+<apex:page showHeader="false"
+    sidebar="false"
+    standardStylesheets="false"
+    applyBodyTag="false"
+    applyHtmlTag="false"
+    docType="html-5.0"
+    title="Zuari Infraworld - Security Register">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+
+    <!-- ✅ KEY: tells mobile browsers to use real device width, no zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <apex:includeLightning />
+
+    <style>
+        /* ── Hard reset: remove ALL browser/VF default spacing ── */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: antiquewhite;
+            /* Prevent horizontal scroll on mobile */
+            overflow-x: hidden;
+            /* Use system font stack for crisp mobile rendering */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* VF injects a wrapper div — reset it too */
+        #lightningvf,
+        #lightningvf > * {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="lightningvf"></div>
+
+    <script>
+        $Lightning.use("c:SecurityRegisterApp", function() {
+            $Lightning.createComponent(
+                "c:securityRegisterFormUpdated",
+                {},
+                "lightningvf",
+                function(cmp) {
+                    console.log("securityRegisterForm loaded");
+                }
+            );
+        });
+    </script>
+</body>
+</html>
+</apex:page>

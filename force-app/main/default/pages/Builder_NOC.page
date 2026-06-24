@@ -1,0 +1,37 @@
+<apex:page standardController="Booking__c" renderAs="pdf">
+    <div style="font-size:14px;">
+  <p style="text-align: right;">Date: <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText></p>
+
+  <p>The Manager<br/>
+  Axis Bank Ltd.,<br/>
+  Retail Asset Center,<br/>
+  Bangalore</p>
+  
+  <p style="text-align: justify;">Dear Sir,</p>
+
+  <p style="text-align: justify;">This is to confirm that Mr. Ajay Thejus S M aged about 35 years, S/o. Mr. S M Manjunath have purchased Plot No 96 measuring 117.00 square meters, in the land called Zuari Garden City – Plots – Plots on the Project Land measuring 40630.438 Sq meters – falling under survey Nos. 5/1, 105, 107/1, 107/2, 107/3, 107/4, 111/2, 111/1A, 111/1B, 121 &amp; 123 etc., - situated at Hulikere Village, Belagola Hobli, Sriranagapatna Taluk, Mandya District, Karnataka, for a total consideration of<strong> Rs.48,03,135/- (Rupees Forty Eight Lakhs Three Thousand One Hundred and Thirty Five Only)</strong>.
+    We confirm that we have obtained necessary permissions/approvals/sanctions for construction of the said land from all the concerned competent authorities and the development of the said Plots as well as of the Plot is in accordance with approved plans.</p>
+
+  <p style="text-align: justify;">We assure that the development of Plot No-96 and the land appurtenant thereto is not subject to any encumbrance, charge or liability of any kind whatsoever and that the entire property is free and marketable. We have a clear, legal and marketable title to the said property and every part thereof.</p>
+
+  <p style="text-align: justify;">We have no objection to your giving a loan to the above buyer/s and his/her/their mortgaging the said Plot to your Bank by way of security for repayment, notwithstanding anything to the contrary contained in the Sale Agreement dated <strong>23-8-2024 </strong>entered into between us and Mr. Ajay Thejus S M.</p>
+
+  <p style="text-align: justify;">We also undertake to inform and give proper notice to the co-operative housing society as and when formed, about the Plot being so mortgaged.</p>
+
+  <p style="text-align: justify;">We hereby undertake to forward the original title deed as and when the same is executed and duly registered directly to Axis Bank Ltd. Retail Asset Center, ITPL Main Road, Kundanahalli, Bangalore-560037 without parting the same with the purchaser of the Plot during the pendency of the loan. It is agreed by us that until execution of the necessary sale deed we shall retain the possession of the Plot for and on behalf of Axis Bank Ltd. We undertake that we shall execute the sale deed/transfer deed in favour of Mr. Ajay Thejus S M on or before 31-3-2026.</p>
+
+  <p style="text-align: justify;">If Mr. Ajay Thejus S M defaults on his/her/their loan account with Axis Bank Ltd., and the Bank writes to us in this context, asking us not to hand over possession, then we will not hand over possession to the said customer till the time Axis Bank Ltd. informs us to do so. This will hold good for cases where Axis Bank Ltd. informs us before handing over the above specified Plot to the said customer.</p>
+
+  <p style="text-align: justify;">We agree that in the event Mr. Ajay Thejus S M, being the Borrower/s of your Bank defaults in making the payment of the EMI for _________ months, your Bank if required shall have the right to substitute the purchaser in its sole discretion after payment of transfer charges (if any) to us.</p>
+
+  <p style="text-align: justify;">We agree and undertake that, in case of cancellation of the allotment of the above Plot for whatsoever reason, we shall deduct __________of the total consideration and/or as provided in the agreement and refund to you, directly, the balance amount to the extent financed by you. The remaining balance amount will be refunded to the Purchaser/s.</p>
+
+  <p style="text-align: justify;">We will not permit <strong>Mr. Ajay Thejus S M </strong>to transfer, assign, sell off or in any way deal with the said Plot prejudicial to the interest of Axis Bank Ltd., without the prior written consent of Axis Bank Ltd.</p>
+        <br/>
+  <p style="text-align: justify;">Yours faithfully,</p>
+
+  <p style="text-align: justify;">Zuari Infraworld India Ltd.</p>
+
+  <p style="text-align: justify;">Authorized Signatory</p>
+     </div>
+</apex:page>

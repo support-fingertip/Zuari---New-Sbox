@@ -1,0 +1,13 @@
+<aura:component controller="mCubeController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" ></aura:handler>
+	<aura:attribute name="recordId"  type="Id" ></aura:attribute>
+    <aura:attribute name="leadRecID"  type="String" ></aura:attribute>
+    <aura:attribute name="callComp"  type="boolean" default="false"></aura:attribute>
+    <aura:attribute name="fromQucickAction" type="boolean" default="false"/>
+     <header class="slds-modal__header">
+                  Call Customer
+                </header>
+    <aura:if isTrue="{!v.callComp}">
+    	<c:MakeCall recordId="{!v.leadRecID}" fromQucickAction = "true"/>
+    </aura:if>
+ </aura:component>

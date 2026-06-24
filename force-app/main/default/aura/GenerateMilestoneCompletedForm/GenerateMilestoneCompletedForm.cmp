@@ -1,0 +1,35 @@
+<aura:component controller="MilestoneCompletionVFPController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction"
+                access="global">
+
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="showPreview" type="Boolean" default="false" />
+    <aura:attribute name="pdfUrl" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:html tag="style">
+        .slds-modal__container{
+            width: 75vw !important;
+            max-width: 75vw !important;
+            height: 108vh !important;
+            max-height: 108vh !important;
+        }
+        .slds-modal__content{
+            height: 98vh !important;
+            max-height: 98vh !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+        }
+        .slds-modal{
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+        }
+    </aura:html>
+
+    <div class="milestone-container">
+        <aura:if isTrue="{!v.showPreview}">
+            <iframe src="{!v.pdfUrl}" class="milestone-preview-frame" frameborder="0"></iframe>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,70 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading" class="popup-header">Add Comment</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={isLoading}>
+                        <lightning-spinner alternative-text="Saving..." size="small"></lightning-spinner>
+                    </template>
+
+                    <lightning-textarea
+                        label="Comment"
+                        name="comment"
+                        value={comment}
+                        onchange={handleCommentChange}
+                        required
+                        message-when-value-missing="Please enter a comment."
+                        class="slds-m-bottom_medium">
+                    </lightning-textarea>
+
+                    <!-- File Upload Section -->
+                    <div class="file-upload-section">
+                        <lightning-input
+                            type="file"
+                            label="Attach Files (Optional)"
+                            multiple
+                            onchange={handleFilesChange}>
+                        </lightning-input>
+
+                        <template if:true={hasFiles}>
+                            <div class="file-list slds-m-top_small">
+                                <template for:each={selectedFiles} for:item="file">
+                                    <div key={file.key} class="file-item slds-grid slds-grid_vertical-align-center">
+                                        <lightning-icon icon-name="doctype:attachment" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                        <span class="file-name slds-truncate" title={file.name}>{file.name}</span>
+                                        <span class="file-size slds-m-left_x-small">({file.sizeLabel})</span>
+                                        <button
+                                            class="slds-button slds-button_icon slds-m-left_x-small remove-btn"
+                                            title="Remove file"
+                                            data-key={file.key}
+                                            onclick={handleRemoveFile}>
+                                            <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Remove"></lightning-icon>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer slds-text-align_right">
+                    <lightning-button
+                        label="Cancel"
+                        variant="neutral"
+                        onclick={handleCancel}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+                    <lightning-button
+                        label={saveButtonLabel}
+                        variant="brand"
+                        onclick={handleSave}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

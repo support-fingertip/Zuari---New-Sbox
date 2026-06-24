@@ -1,0 +1,1156 @@
+<apex:page extensions="SalesAgreementController" standardController="Booking__c" showHeader="false" standardStylesheets="false"  applyBodyTag="false" applyHtmlTag="false" renderAs="pdf" >
+    <head>
+        <style type="text/css" media="print">
+            *{
+            
+            font-family: "Helvetica", Times, serif;
+            line-height:1.6;
+            
+            
+            }
+            
+            @page {
+            size: A4;
+            margin-left:50px;
+            margin-right:50px;
+            
+            margin-top:80px;
+            margin-bottom: 150px;
+            @bottom-left {
+            content: "            Zuari Infraworld India Limited\A \A \A             Authorized Signatory";
+            white-space: pre;
+            color: black;
+            margin-left: 40px; 
+            }
+            @bottom-right {
+            content: "Page | " counter(page) "\A\A\A              ";
+            white-space: pre;
+            color: black;
+            margin-right: 20px;
+            }
+            }
+            
+            p{font-size:13.25px;font-family: "Helvetica", Times, serif;line-height:1.6;}
+            .margi{
+            margin-left:75px;
+            margin-right:75px;
+            font-size:12px;
+            }
+            ol{
+            font-size:11.5px;
+            font-family: "Times New Roman", Times, serif;
+            text-align:left; 
+            line-height:1.5;
+            
+            
+            }
+            .footer {
+            position: fixed;
+            position: running(footer);
+            /* height: 190px;
+            padding-top: 10px;
+            margin-bottom:20px;*/
+            margin-left:60px;
+            margin-right:50px;
+            
+            color: black;
+            }
+            .page-break { page-break-before: always; } 
+            .no-break { page-break-inside: avoid; } 
+            
+            
+            
+            div.parastyle{
+            text-align:justify;
+            line-height:1.5; 
+            font-size:12px;
+            width:100%;
+            }
+            .speci{
+            text-align:justify;
+            line-height:1.5; 
+            font-size:13.5px;
+            width:100%;
+            
+            }
+            .row1{
+            width: 6%;
+            }
+            .row2{
+            width: 11%;
+            }
+            
+            
+            strong{
+            font-weight:800;
+            }
+            
+            
+        </style>
+    </head>
+    <!---------- <div class="footer">
+<table width="100%">
+<tr>
+<td width="80%"><b>Zuari Infraworld India Limited, </b></td>
+<td width="20%">Page | 1</td>
+</tr>
+</table>
+<div style="padding-top:15px"></div>
+<table>
+<tr>
+<td><b>Authorized Signatory </b></td>
+<td></td>
+</tr>
+</table>
+
+
+
+</div>-->
+    
+    <div style="font-size:13.25px;text-align: justify">
+        <div style="padding-top:80px">  </div>
+        
+        
+        <p style="text-align:center">
+            <b>AGREEMENT FOR SALE</b>
+        </p>
+        <p>
+            <b>THIS AGREEMENT FOR SALE  (</b>hereafter referred to as <b>“Agreement”) IS MADE AND EXECUTED ON THIS {!agreementDayOrdinal} DAY OF {!agreementMonth} Two Thousand and {!agreementYearWords}   ({!formattedAgreementDate}),AT BANGALORE:-:</b>
+        </p>
+        
+        <u><b>BETWEEN:</b></u>
+        
+        <p>
+            <b> ZUARI INFRAWORLD INDIA LTD.</b> (CIN No. U45309KA2007PLC043161)  a public limited company registered under the Companies Act, 1956 having its registered and Corporate Office at <b>Adventz Centre,1st Floor , Off Cubbon Road, BENGALURU 560001(PAN No.</b> AAACZ3205D ) represented by its Authorized signatory  <b>MR. Ajay Kumar Bhagat (Aadhaar No.</b> 2574  6755 7559)  authorized vide Board resolution dated 12.05.2022   authorized vide Board resolution dated <b>12.05.2022 </b>
+        </p>
+        <p>
+            (Hereinafter referred to as the <b>“Promoter” </b>(which expression shall unless repugnant to the context or meaning thereof be deemed to mean and include its successor-in-interest, executors, administrators and permitted assignees); <b>OF THE ONE PART:</b>
+            
+            
+        </p>
+        <u><b>AND</b></u>
+        <p>
+            <b>{!Booking__c.S__c}&nbsp;{!Booking__c.First_Applicant_Name__c}</b>, aged about {!applicantage},&nbsp;{!Booking__c.Son_Daughter_Wife_of__c}&nbsp;{!Booking__c.Son_Daughter_Wife_of1__c}
+            <b>(Aadhaar No. {!applicantAadhaar})&nbsp;(PAN No:&nbsp;{!Booking__c.PAN_Number__c}) </b>&nbsp;&nbsp;&nbsp;
+            
+           <apex:outputPanel rendered="{!NOT(ISBLANK(firstCoApplicant.Name))}"><br/>
+            &amp;<br/>
+        <b>{!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}</b>, aged about {!coapplicantage}, {!firstCoApplicant.Son2_Daughter_Wife_of__c} {!firstCoApplicant.Son_Daughter_Wife_of__c} <b>(Aadhaar No. {!coapplicantAadhaar}) (PAN No: {!firstCoApplicant.PAN_Number__c})</b></apex:outputPanel>
+
+        </p>
+        <p>
+            residing at  {!Booking__c.Correspondence_Address__Street__s}, {!Booking__c.Correspondence_Address__City__s }, {!Booking__c.Correspondence_Address__PostalCode__s }.
+        </p>
+        <p>
+            Herein-after referred to as the “<b>Allottee</b>” (which expression shall unless repugnant to the context or meaning thereof be deemed to mean and include his/her heirs, executors, administrators, successors–in–interest and permitted assigns) of the <b>Second Part.</b>
+            
+            
+        </p>
+        <p>
+            The Promoter and the Allottee are hereinafter collectively referred to as the “<b>Parties</b>” and individually as a “<b>Party</b>”. <b>OF THE OTHER PART</b>
+        </p>
+        <p>
+            <b>DEFINITIONS:</b>
+        </p> 
+        
+        <p>
+            For the purpose of this Agreement of Sale, unless the context otherwise requires:–
+        </p>
+        <table width="100%">
+            <tr>
+                <td class="row1">a)</td>
+                <td width="">“Act” means the Real Estate (Regulation and Development) Act, 2016 (16 of 2016)</td>
+            </tr>
+            <tr>
+                <td width="">b)</td>
+                <td width="">“appropriate Government” means the State Government of Karnataka;</td>
+            </tr>
+            <tr>
+                <td width="">c)</td>
+                <td width="">“Rules” means the Karnataka Real Estate (Regulation and Development) Rules, 2017</td>
+            </tr>
+            <tr>
+                <td width="">d)</td>
+                <td width="">“Regulations” means the Regulations made under the Real Estate (Regulation and Development) Act, 2016;</td>
+            </tr>
+            <tr>
+                <td width="">e)</td>
+                <td width="">“Section” means a section of the Act.</td>
+            </tr>
+        </table>
+        <p>
+            <b>WHEREAS</b>
+        </p>
+        <table>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>A.</b></td>
+                <td>The immoveable properties situated at Hulikere Village, Belagola Hobli, Srirangapatna Taluk, Mandya District, Karnataka, were originally allotted to Mandya National Paper Mills Limited (“<b>MNPML</b>”) by the Government of Mysore as per the Mysore Gazette Notification dated April 14, 1961 bearing No. RDH 109 LCI 61 and possession was handed over to MNPML. Subsequently, MNPML was ordered to be wound up vide the order of the Hon’ble High Court of Karnataka in Company Petition bearing No. 112/1994 dated October 20, 2000, and the properties of MNPML were ordered to be put up for public auction, under the supervision of the Official Liquidator.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>B.</b></td>
+                <td>The Promoter, earlier known as Anil Kumar M.N. Promoters Private Limited, purchased from the official liquidator appointed by the High Court of Karnataka in respect of the winding-up proceedings of MNPML, the immoveable properties bearing survey nos. 51/, 5/2, 5/3, 5/5, 7, 8/1, 8/2, 9/1, 9/2, 9/3, 10/1/, 10/2, 10/3, 11, 12, 104/1, 104/2, 105, 106/1, 106/2, 107/1, 107/2, 107/3, 107/4, 111/1A, 111/1B, 111/2, 121, 123,124, 147, 150 and 151 all forming a contiguous block having access to the main road, admeasuring 73 acres and  26  Guntas (Seventy Three Acres Twenty Six Guntas) situated at Hulikere Village, Belagola Hobli, Srirangapatna Taluk, Mandya District, Karnataka, (hereinafter referred to as the "<b>Said Land</b>") vide a sale deed dated December 12, 2007, registered as document bearing No. SRP-1-04879-2007-2008, stored in CD No. SRPD34. The said sale deed was rectified on September 26, 2008 by way of a registered document bearing No. SRP-1-02121-2008-2009, stored in CD No. SRPD40, in the office of the Sub-Registrar, Srirangapatna Taluk, Mandya District. Subsequently another rectification deed dated 14.10.2014 bearing Document No. SRP-1-03554-2014-15, stored in CD No. SRPD99, in the office of the Sub-Registrar, Srirangapatna Taluk, Mandya District was executed by the Official liquidator appointed by the High Court of Karnataka in favour of the promoter herein.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>C.</b></td>
+                <td> The Promoter has conceived a scheme of development to develop the immoveable properties bearing survey nos. 5/1, 5/2, 5/3, 5/4, 5/5, 7, 8/1, 8/2,  9/1, 9/2, 9/3, 10/1, 10/2, 10/3, 11, 12, 104/1, 104/2, 105, 106/1, 106/2, 107/1, 107/2, 107/3, 107/4, 111/1A, 111/1B, 111/2, 121, 123, 124, 147, 150 and 151, admeasuring 73 Acres 26 Guntas situated at Hulikere Village, Belagola Hobli, Srirangapatna Taluk, Mandya District, Karnataka, into various phases which are developed at different point of time at the sole discretion and as per the policy decision of the Promoter. The said development is a mixed use development and the total development for the sake of identification only shall be known as Zuari Garden City. The Allottee is aware of the said scheme of Development of the Promoter and acknowledges that the said scheme of development is phase wise.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>D.</b></td>
+                <td>The Promoter is developing the said Land into a residential township known as ‘<b>{!booking__c.Project1__r.Name}</b>’ 
+                    (“Township”) and a portion of the said land measuring 10.04 Acres forming part of land under 
+                    survey nos. 5/1, 105, 107/1, 107/2, 107/3, 107/4, 111/2, 111/1A, 111/1B, 121 &amp; 123 etc.,, herein after referred to as Project Land,
+                    is being used for the purpose of developing plots in the name and style of Zuari Garden City-Plots (hereafter referred to as the “Project”)
+                    and the Project Land is more fully described in the<b> Schedule A </b>hereunder (“<b>Schedule A Property</b>”).</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>E.</b></td>
+                <td>The sanctioned plan and commencement certificate vide No. 208/2022-23, dated 21st March 2023 has been granted to the Promoter by Mysuru Urban 
+                    Development Authority (MUDA). The Promoter agrees and undertakes that it shall not make any changes to these approved plans except in strict 
+                    compliance with Section 14 of the Act and other laws as applicable and subject to approval of such modifications from MUDA.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>F.</b></td>
+                <td>The Promoter has registered the Project under the provisions of the Act with the Karnataka Real Estate Regulatory Authority at Bangalore 
+                    on 10.10.2023 vide Registration No.<b> PRM/KA/RERA/1267/374/PR/101023/006309</b> and the registration is valid and subsisting.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>G.</b></td>
+                <td>The Allottee having gone through the relevant documents, being satisfied of the right, title and interest, having understood the entire scheme
+                    of phase wise development of Project Zuari Garden City-Plots and after satisfying themselves about the same, being desirous of owning the plot,
+                    the Allottee had applied for a plot in the Project “Zuari Garden City-Plots” (“Phase IV”) vide application/booking form dated <b><apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText></b>
+                    and has been allotted <b>a plot bearing No.{!booking__c.Unit_No__c}  </b> measuring {!booking__c.Plot__r.Super_Built_up_Area_Sq_Mt__c} Sq. mts. i.e.<b> {!booking__c.Plot__r.Super_Built_up_Area__c}</b> sq. ft. (hereinafter referred to as the 
+                    “<b>Plot</b>” more particularly described in <b>Schedule B</b> and the Layout  plan of the plots  is annexed hereto and marked as <b>Schedule C</b>).
+                    
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>H.</b></td>
+                <td>The Parties have gone through all the terms and conditions set out in this Agreement and understood the mutual rights and obligations detailed herein.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>I.</b></td>
+                <td>The Promoter is developing the Township Zuari Garden City in phases and has already completed and handed over some of the phases of the said Project to the respective owners</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>J.</b></td>
+                <td>The Parties hereby confirm that they are signing this Agreement with full knowledge of all the laws, rules, regulations, specifications etc., applicable to the project.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>K.</b></td>
+                <td>The parties relying on the confirmations, representations and assurances of each other to faithfully abide by all the terms, conditions and stipulations contained herein this Agreement and applicable laws are now willing to enter in to this Agreement on the terms and conditions hereinafter appearing.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>L.</b></td>
+                <td>In accordance with the terms and conditions set out in this Agreement and as mutually agreed upon by and between the parties, the Promoter hereby agrees to sell ‘B’ Schedule land and and the Allottee agrees to purchase plot described in <b>Schedule B</b> below and the Allottee agrees to purchase it</td>
+            </tr>
+            
+            
+        </table>
+        <p>
+            <b>NOW THEREFORE</b>, in consideration of the mutual representations, covenants, assurances, promises and agreements contained herein and other good and valuable consideration it is hereby agreed by and between the parties as follows:
+        </p>
+        <table>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.</b></td>
+                <td><b>TERMS</b></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.1</b></td>
+                <td>Subject to the terms and conditions as detailed in this Agreement, the Promoter agrees to sell to the Allottee and the Allottee hereby agrees to purchase, the plot as specified in para G</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.2</b></td>
+                <td>The Total Price for the Plot is Rs.<b>{!formattedGrandTotal}</b> (Rupees <b>{!grandTotalWords})</b> ("Total Price") <span><u>as provided in Annexure D</u></span></td>
+            </tr>
+        </table>
+        <p>
+            <b>Explanation:</b>
+        </p>
+        <table>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>i</b></td>
+                <td>The Total Price above includes the application money paid by the allottee to the Promoter towards application for purchase of the Plot</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>ii</b></td>
+                <td>The Total Price above excludes Taxes (consisting of tax paid or payable by the Promoter by way of Goods and Service Tax (GST), or any other similar taxes which may be levied, in connection with the development of the Project, by whatever name called) and the same shall be payable by the Allottee on or before handing over the possession of the plot to the allottee and the project to the association of the Allottees or the competent authority, as the case may be, after obtaining the completion certificate/release order; </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b></b></td>
+                <td>Provided that in case there is any change / modification in the taxes, the subsequent amount payable by the allottee to the promoter shall be increased/reduced based on such change / modification: </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b></b></td>
+                <td>Provided further that if any increase in the taxes after the expiry of the schedule date of completion of the project as per registration with the authority which shall include the extension of registration, if any, granted to the said project by the Authority as per the Act, the same shall not be charged from the allottee</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>iii</b></td>
+                <td>The Promoter shall periodically intimate in writing to the Allottee, the amount payable as stated in (i) above and the Allottee shall make payment demanded by the Promoter within the time and in the manners specified therein. In addition, the Promoter shall provide to the Allottee the details of the taxes paid or demanded along with the acts/rules/notifications together with dates from which such taxes/levies etc. have been imposed or become effective
+                    
+                    
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>iv</b></td>
+                <td>The Total Price of Plot includes recovery of price of land, development charges, cost of providing electric transformer / feeder pillar, provision for electrical connectivity to the plot and includes cost for providing all other facilities, amenities and specifications to be provided upto the Plot and within the Project</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.3</b></td>
+                <td>The Total Price is escalation-free, save and except increases which the Allottee
+                    hereby agrees to pay, due to increase on account of development charges
+                    payable to the competent authority and/or any other increase in charges which
+                    may be levied or imposed by the competent authority from time to time. The
+                    Promoter undertakes and agrees that while raising a demand on the Allottee for
+                    increase in development charges, cost/charges imposed by the competent
+                    authorities, the Promoter shall enclose the said notification/order/rule/regulation
+                    to that effect along with the ydemand letter being issued to the Allottee, which
+                    shall only be applicable on subsequent payments. Provided that if there is any
+                    new imposition or increase of any development charges after the expiry of the
+                    scheduled date of completion of the project as per registration with the Authority,
+                    which shall include the extension of registration, if any, granted to the said project
+                    by the Authority, as per the Act, the same shall not be charged from the allottee.
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.4</b></td>
+                <td>The Allottee(s) shall make the payment as per the payment plan set out in Schedule D (“Payment Plan”)</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.5</b></td>
+                <td>It is agreed that the Promoter shall not make any additions and alterations in the sanctioned plans, layout plans and specifications and the nature of amenities described herein at Schedule ‘E’ (which shall be in conformity with the advertisement, prospectus etc., on the basis of which sale is effected) in respect of the plot, without the previous written consent of the Allottee as per the provisions of the Act. Provided that the Promoter may make such minor additions or alterations as may be required by the Allottee, or such minor changes or alterations as per the provisions of the Act</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.6</b></td>
+                <td>The Promoter shall confirm to the final Plot area that has been allotted to the Allottee after the release order / Completion certificate is granted by the competent authority, by furnishing details of the changes, if any, in the Plot  Area. The total price payable for the Plot Area shall be recalculated upon confirmation by the Promoter. If there is any reduction in the Plot Area then the Promoter shall adjust the excess money paid by Allottee in next instalment. If there is any increase in the Plot Area, allotted to Allottee, the Promoter may demand that from the Allottee as per the next milestone of the Payment Plan as provided in Schedule-D. All these monetary adjustments shall be made at the same rate as agreed in para 1.2 of this Agreement.</td>
+            </tr>
+            
+        </table>
+        <p style="margin-left:45px">
+            Subject to para 9.3 the Promoter agrees and acknowledges, the Allottee shall have the right to the Plot as mentioned below:
+        </p>
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" ><b>i</b></td>
+                <td>The Allottee shall have exclusive ownership of the Plot</td>
+            </tr>
+            <tr>
+                <td class="row2" ><b>ii</b></td>
+                <td>It is clarified that the promoter shall hand over the common areas to the association of allottees or the competent authority /local body, as the case may be, after duly obtaining the completion certificate/release order from the competent authority as provided in the Act</td>
+            </tr>
+            <tr>
+                <td class="row2" ><b>iii</b></td>
+                <td>That the computation of the price of the Plot includes recovery of price of land, development charges, cost of providing electric transformer / feeder pillar, water line, sewer line etc. upto the plot</td>
+            </tr>
+            <tr>
+                <td class="row2" ><b>iv</b></td>
+                <td>The Allottee has the right to visit the project site to assess the extent of development of the project and his plot, as the case may be.</td>
+            </tr>
+            
+        </table>
+        <table>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.7</b></td>
+                <td>It is made clear by the Promoter and the Allottee agrees that the Plot shall be treated as a single indivisible unit for all purposes. It is agreed that the Project is a phase/part of larger township project namely Zuari Garden City and shall form a part of and/or/linked/combined with other phases of the Township in its vicinity for the purpose of integration of infrastructure for the benefit of the Allottee. It is clarified that Project’s facilities and amenities shall be available for use and enjoyment of the Allottees of the Project upon payment of applicable share cost. </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.8</b></td>
+                <td>The Promoter agrees to pay all outgoings before transferring the physical
+                    possession of the plot to the Allottees, which it has collected from
+                    the Allottees, for the payment of outgoings (including land cost, ground
+                    rent, municipal or other local taxes, charges for water or electricity provision,
+                    mortgage loan and interest on mortgages or other encumbrances and such other liabilities payable to competent authorities, banks and financial institutions, which are related to the project). 
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>1.9</b></td>
+                <td>The Allottee has paid a sum of Rs. {!formattedBookingAmount}/- (Rupees {!bookingAmountInWords} )  as booking  amount being part payment towards the Total Price of the Plot at the time of application, the receipt of which the Promoter hereby acknowledges and the Allottee hereby agrees to pay the remaining price of the Plot as prescribed in the Payment Plan [Schedule D] as may be demanded by the Promoter within the time and in the manner specified therein: Provided that if the allottee delays in payment towards any amount which is payable; he shall be liable to pay interest at the rate specified in the Rules</td>
+            </tr>
+        </table>
+        <div style="padding-top:20px"></div>
+        
+        
+        <table width="100%">
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>2.</b></td>
+                <td><b>MODE OF PAYMENT
+                    
+                    </b></td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b></b></td>
+                <td>Subject to the terms of the Agreement and the Promoter abiding by the payment timeline, the Allottee shall make all payments, on demand by the Promoter/voluntarily by the allottee, within the stipulated time as mentioned in the Payment Plan [Schedule D] through A/c Payee cheque/demand draft/bankers cheque or online payment (as applicable) in favour of  <b>Zuari Infraworld India Limited, ICICI Bank, A/c No: 000205037142, IFSC Code: ICIC0000002</b> payable at MG Road, Bengaluru, Karnataka</td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>3.</b></td>
+                <td><b>COMPLIANCE OF LAWS RELATING TO REMITTANCES:</b></td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>3.1</b></td>
+                <td>The Allottee if resident outside India, shall be solely responsible for complying with the necessary formalities as laid down in Foreign Exchange Management Act, 1999, RBI Act, 1934 and the Rules and Regulations made thereunder or any statutory amendment(s) modification(s) made thereof and all other applicable laws including that of remittance of payment/ acquisition/ sale/transfer of immovable properties in India etc. and provide the Promoter with such permission, approvals which would enable the Promoter to fulfill its obligations under this Agreement. Any refund, transfer of security, if provided in terms of the Agreement shall be made in accordance with the provisions of Foreign Exchange Management Act, 1999 or the statutory enactments or amendments thereof and the Rules and Regulations of the RBI or any other applicable law. The Allottee understands and agrees that in the event of his failure on his/her part to comply with the applicable guidelines issued by RBI he/she shall be liable for any action under the said laws as applicable, as amended from time to time.</td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>3.2</b></td>
+                <td>The Promoter accepts no responsibility in regard to matters specified in para 3.1 above. The Allottee shall keep the Promoter fully indemnified and harmless in this regard. Whenever there is any change in the residential status of the Allottee subsequent to the signing of this Agreement, it shall be the sole responsibility of the Allottee to intimate the same in writing to the Promoter immediately and comply with necessary formalities if any under the applicable laws. The Promoter shall not be responsible towards any third party making payment/remittances on behalf of any Allottee and such third party shall not have any right in the application/allotment of the said plot applied for herein in any way and the Promoter shall be issuing the payment receipts in favour of the Allottee only</td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>4</b></td>
+                <td><b>ADJUSTMENT/APPROPRIATION OF PAYMENTS:</b></td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b></b></td>
+                <td>The Allottee authorizes the Promoter to adjust/appropriate all payments made by him/her under any head(s) of dues against lawful outstanding of the allottee against the Plot, if any, in his/her name and the Allottee undertakes not to object/demand/direct the Promoter to adjust his payments in any manner</td>
+            </tr>
+            
+            <tr>
+                <td style="vertical-align:top" class="row1"><b>5</b></td>
+                <td><b>TIME IS ESSENCE:</b></td>
+            </tr>
+        </table>
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>a</b></td>
+                <td>The Promoter shall abide by the time schedule for completing the project as disclosed at the time of registration of the project with the Authority and towards handing over the Plot to the Allottee and the common areas to the association of the allottees or the competent authority/local body, as the case may be</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>b</b></td>
+                <td>The Promoter shall at its discretion may complete the said Project even before the time schedule disclosed at the time of registration of the project with the Authority and may collect the payments in accordance with the development</td>
+            </tr>
+            
+            
+        </table>
+        <table width="100%">
+            <tr>
+                <td class="row1" ><b>6</b></td>
+                <td><b>DEVELOPMENT OF THE PLOT:</b></td>
+            </tr>
+        </table>
+        
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>6.1</b></td>
+                <td>The Allottee has seen the proposed layout plan, specifications, amenities and facilities of associated with the Plot and accepted the payment plan and the specifications, amenities and facilities mentioned in Schedule D and E which has been approved by the competent authority, as represented by the Promoter. The Promoter shall develop the Project in accordance with the said layout plans, specifications, amenities and facilities as per the statutory norms</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>6.2</b></td>
+                <td>The Allottee has understood and agreed that there may be variations in the measurement of the plots as per the release orders issued by the competent authority and that the allottee will make final payment as per the measurement of the Plot (Schedule ‘B’ Property) mentioned in the release orders issued by the competent authority and the allottee will not dispute the same since it is not in the hands of the Promoter</td>
+            </tr>
+        </table>
+        <table width="100%">
+            <tr>
+                <td class="row1" ><b>7.</b></td>
+                <td><b>POSSESSION OF THE PLOT:</b></td>
+            </tr>
+        </table>
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.1</b></td>
+                <td><b>Schedule for possession of the said Plot</b> - The Promoter agrees and understands that timely delivery of possession of the Plot to the allottee and the common areas to the association of allottees or the competent authority, as the case may be, is the essence of the Agreement. The Promoter assures to hand over possession of the ready Plot along with all specifications, amenities and facilities of the phase in place by 31.03.2026, unless there is delay or failure due to war, flood, drought, fire, epidemic / pandemic, cyclone, earthquake or any other calamity caused by nature affecting the regular development of the real estate project (“Force Majeure”). If, however, the completion of the Project is delayed due to the Force Majeure conditions then the Allottee agrees that the Promoter shall be entitled to the extension of time for delivery of possession of the Plot. The Allottee agrees and confirms that, in the event it becomes impossible for the Promoter to implement the project due to Force Majeure conditions, then this allotment shall stand terminated and the Promoter shall refund to the Allottee the entire amount received by the Promoter from the allotment within 60 days from that date. The Promoter shall intimate the allottee about such termination at least thirty days prior to such termination. After refund of the money paid by the Allottee, the Allottee agrees that he/she shall not have any rights, claims etc. against the Promoter and that the Promoter shall be released and discharged from all its obligations and liabilities under this Agreement</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.2</b></td>
+                <td><b>Procedure for taking possession </b>- The Promoter, upon obtaining the release order from the competent authority shall offer in writing the possession of the Plot, to the Allottee in terms of this Agreement to be taken within two months from the date of issuance of release order. The Promoter agrees and undertakes to indemnify the allottee in case of failure of fulfillment of any of the provisions, formalities, documentation on part of the Promoter. The Allottee, after taking the possession, agree(s) to pay the maintenance deposit and charges as determined by the Promoter/association of allottees, as the case may be after the issuance of the completion certificate/release order for the Project. The promoter shall hand over the copy of occupancy certificate/release order of the plot, as the case may be, to the allottee at the time of conveyance</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.3</b></td>
+                <td><b>Failure of Allottee to take Possession of Plot </b>- Upon receiving a written intimation from the Promoter as per para 7.2, the Allottee shall take possession of the Plot from the Promoter by executing necessary indemnities, undertakings and such other documentation as prescribed in this Agreement, and the Promoter shall give possession of the Plot to the allottee. In case the Allottee fails to take possession within the time provided in para 7.2, such Allottee shall continue to be liable to pay maintenance charges as specified in para 7.2 and penalty as per the Act. Further, in such event, the Allottee, in addition to  maintenance charges and penalty and without prejudice to the rights of the Promoter, undertakes to pay charges @110/- per sq. mt. per month to the Promoter for such delayed period as holding charge.
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.4</b></td>
+                <td><b>Possession by the Allottee </b>- After obtaining the release orders and handing over physical possession of the Plot to the Allottees, it shall be the responsibility of the Promoter to hand over the necessary documents and plans, including common areas, to the association of Allottees or the competent authority/local body, as the case may be, as per the local laws</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.5</b></td>
+                <td><b>Cancellation by Allottee</b> – The Allottee shall have the right to cancel/withdraw his allotment in the Project as provided in the Act:
+                    Provided that where the Allottee proposes to cancel/withdraw from the project without any fault of the Promoter, the Promoter herein is entitled to forfeit the booking amount paid for the allotment. The balance amount of money paid by the Allottee shall be refunded by the Promoter to the Allottee within 60 days of receiving the notice of such cancellation
+                </td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>7.6</b></td>
+                <td><b>Compensation</b> - The Promoter shall compensate the Allottee in case of any loss caused to him due to defective title of the land, on which the project is being developed or has been developed, in the manner as provided under the Act and the claim for interest and compensation under this provision shall not be barred by limitation provided under any law for the time being in force.<br/>
+                    Except for occurrence of a Force Majeure event, if the promoter fails to complete or is unable to give possession of the Plot (i) in accordance with the terms of this Agreement, duly completed by the date specified in para 7.1; or (ii) due to discontinuance of his business as a developer on account of suspension or revocation of the registration under the Act; or for any other reason; the Promoter shall be liable, on demand to the allottees, in case the Allottee wishes to withdraw from the Project, without prejudice to any other remedy available, to return the total amount received by him in respect of the Plot, with interest at the rate prescribed in the Rules including compensation in the manner as provided under the Act within sixty days of it becoming due. Provided that where if the Allottee does not intend to withdraw from the Project, the Promoter shall pay the Allottee interest at the rate prescribed in the Rules for every month of delay, till the handing over of the possession of the Plot, which shall be paid by the promoter to the allottee within Sixty days of it becoming due.
+                </td>
+            </tr>
+            
+        </table>
+        <div style="padding-top:20px"></div>
+        <table width="100%">
+            <tr>
+                <td class="row1" ><b>8.</b></td>
+                <td><b>REPRESENTATIONS AND WARRANTIES OF THE PROMOTER :</b></td>
+            </tr>
+        </table>
+        <p>
+            The Promoter hereby represents and warrants to the Allottee as follows:
+        </p>
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>i</b></td>
+                <td>The Promoter has absolute, clear and marketable title with respect to the said Land; the requisite rights to carry out development upon the said Land and absolute, actual, physical and legal possession of the said Land for the Project</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>ii</b></td>
+                <td>The Promoter has lawful rights and requisite approvals from the competent Authorities to carry out development of the Project</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>iii</b></td>
+                <td>There are no encumbrances upon the said Land or the Project; </td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>iv</b></td>
+                <td>There are no litigations pending before any Court of law or Authority with respect to the said Project Land</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>v</b></td>
+                <td>All approvals, licenses and permits issued by the competent authorities with respect to the Project, Project Land and Plot are valid and subsisting and have been obtained by following due process of law. Further, the Promoter has been and shall, at all times, remain to be in compliance with all applicable laws in relation to the Project, said Land, Plot and common areas.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>vi</b></td>
+                <td>The Promoter has the right to enter into this Agreement and has not committed or omitted to perform any act or thing, whereby the right, title and interest of the Allottee created herein, may prejudicially be affected.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>vii</b></td>
+                <td>The Promoter has not entered into any agreement for sale and/or development agreement or any other agreement / arrangement with any person or party with respect to the said Plot which will, in any manner, affect the rights of Allottee under this Agreement.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>viii</b></td>
+                <td>The Promoter confirms that the Promoter is not restricted in any manner whatsoever from selling the said Plot to the Allottee in the manner contemplated in this Agreement.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>ix</b></td>
+                <td>At the time of execution of the conveyance deed the Promoter shall handover lawful, vacant, peaceful, physical possession of the Plot to the Allottee and the common areas to the Association of the allottees or the competent authority, as the case may be.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>x</b></td>
+                <td>The Schedule Property is not the subject matter of any HUF and that no part thereof is owned by any minor and/or no minor has any right, title and claim over the Schedule Property.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>xi</b></td>
+                <td>The Promoter has duly paid and shall continue to pay and discharge all 
+                    governmental dues, rates, charges and taxes and other monies, levies,
+                    impositions, premiums, damages and/or penalties and other outgoings,
+                    whatsoever, payable with respect to the said project to the competent Authorities
+                    till the release order has been issued and possession of apartment, plot or
+                    buildings, as the case may be, along with common areas (equipped with all the
+                    specifications, amenities and facilities) has been handed over to the allottee and the
+                    association of allottees or the competent authority, as the case may be;
+                </td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>xii</b></td>
+                <td>No notice from the Government or any legislative enactment, government ordinance, order, notification (including any notice for acquisition or requisition of the said property) has been received by or served upon the Promoter in respect of the said Land and/or the Project.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>xiii</b></td>
+                <td>The allottee is aware that the clubhouse membership subscription is only for one family/one house per plot. If there are more than one family/one house in one plot separate clubhouse membership subscription has to be subscribed for each family/each house by paying necessary subscription fee as prescribed by the developer/promoter.</td>
+            </tr>
+            
+        </table>
+        <table width="100%">
+            <tr>
+                <td class="row1" ><b>9.</b></td>
+                <td><b>EVENTS OF DEFAULTS AND CONSEQUENCES:</b></td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>9.1</b></td>
+                <td>Subject to the Force Majeure clause, the Promoter shall be considered under a condition of Default, in the following events:</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(i) Promoter fails to provide ready to move in possession of the Plot to the Allottee within the time period specified in para 7.1 or fails to complete the project within the stipulated time disclosed at the time of registration of the project with the Authority. For the purpose of this para, ‘ready to move in possession’ shall mean that the plot shall be complete in all respect including the provision of all specifications, amenities and facilities, as agreed to between the parties, and for which release order and completion certificate, as the case may be, has been issued by the competent authority.</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(ii) Discontinuance of the Promoter’s business as a developer on account of suspension or revocation of his registration under the provisions of the Act or the rules or regulations made thereunder.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>9.2</b></td>
+                <td> In case of Default by Promoter (as mentioned in para 9.1 only) under the conditions listed above, Allottee is entitled to the following:</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(i)Stop making further payments to Promoter as demanded by the Promoter. If the Allottee stops making payments, the Promoter shall correct the situation by completing the development and only thereafter the Allottee be required to make the next payment without any interest; or</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(ii) The Allottee shall have the option of terminating the Agreement in which case the Promoter shall be liable to refund the entire money paid by the Allottee towards the purchase of the plot, upon receiving the termination notice: Provided that where an Allottee does not intend to withdraw from the project or terminate the Agreement, he shall be paid, by the promoter, interest at the rate prescribed in the Rules.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>9.3</b></td>
+                <td>The Allottee shall be considered under a condition of Default, on the occurrence of the following events:</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(i) In case the Allottee fails to make payments for any one consecutive demands made by the Promoter as per the Payment Plan annexed hereto, despite having been issued notice in that regard the allottee shall be liable to pay interest to the promoter on the unpaid amount at the rate prescribed in the Rules</td>
+            </tr>
+            <tr>
+                <td class="row2" ></td>
+                <td>(ii) In case of Default by Allottee under the condition listed above continues for a period beyond a consecutive month after notice from the Promoter in this regard, the Promoter may cancel the allotment of the Plot, in favour of the Allottee and refund the money paid to him by the allottee by deducting the booking amount and the interest liabilities and this Agreement shall thereupon stand terminated. Provided that the Promoter shall intimate the allottee about such termination at least fifteen days prior to such termination.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>10.</b></td>
+                <td><b>CONVEYANCE OF THE SAID PLOT:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>The Promoter, on receipt of Total Price of the Plot as per clause 1.2 under the Agreement from the Allottee, shall execute a conveyance deed and convey the title of the Plot within 3 months from the date of issuance of the release order, as the case may be, to the allottee. However, in case the Allottee fails to deposit the stamp duty and / or registration charges within the period mentioned in the notice, the allottee authorizes the Promoter to withhold registration of the conveyance deed in his/her favour till payment of stamp duty and registration charges to the Promoter is made by the allottee. </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>11.</b></td>
+                <td><b>MAINTENANCE OF THE SAID PLOT:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>The Promoter shall be responsible to provide and maintain essential services in the Project till the issuance of the completion certificate/release order of the project. If any advance maintenance is collected by the Promoter, the Promoter shall maintain the said phase till the advance maintenance money collected, if any, is exhausted. If there is any shortfall of maintenance during the maintenance by the Promoter from the advance maintenance money collected, the allottee will pay the short fall maintenance amount to the Promoter. If there is any excess maintenance fee, the same will be transferred to the Association, without interest.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>12.</b></td>
+                <td ><b>DEFECT LIABILITY:</b></td>
+            </tr><tr>
+            <td class="row1" style="font-weight: bold;"></td>
+            <td >It is agreed that in case any defect in 
+                workmanship, quality or provision of services or any other obligations of the
+                Promoter as per the agreement for sale relating to such development is brought to
+                the notice of the Promoter within a period of 5 (five) years by the Allottee from
+                the date of handing over possession, it shall be the duty of the Promoter to rectify
+                such defects without further charge, within 30 (thirty) days, and in the event of
+                Promoter’s failure to rectify such defects within such time, the aggrieved
+                Allottees shall be entitled to receive appropriate compensation in the manner as
+                provided under the Act .
+            </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>13.</b></td>
+                <td><b>RIGHT TO ENTER THE PLOT FOR REPAIRS:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td >The Promoter /maintenance agency /association of allottees shall have rights of
+                    unrestricted access of all Common Areas, garages/covered parking and parking
+                    spaces for providing necessary maintenance services and the Allottee agrees to
+                    permit the association of Allottees and/or maintenance agency to enter into the
+                    Plot or any part thereof, after due notice and during the normal working
+                    hours, unless the circumstances warrant otherwise, with a view to set right any
+                    defect.
+                </td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>14.</b></td>
+                <td ><B>USAGE</B>: The Allottee shall not be permitted to use the services areas in any manner whatsoever, save and except as permitted under the applicable law <br/></td>
+                
+            </tr>
+            
+            <tr>
+                <td class="row1" ><b>15.</b></td>
+                <td><b>GENERAL COMPLIANCE WITH RESPECT TO THE PLOT:</b></td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>15.1</b></td>
+                <td>The Allottee shall, after taking possession, be solely responsible to maintain the Plot at his/her own cost, in good condition and shall not do or suffer to be done anything in or to the Plot or common passages, corridors, circulation areas, atrium or the compound which may be in violation of any laws or rules of any authority and keep the  Plot , its walls and partitions, sewers, drains, pipe and appurtenances thereto or belonging thereto, in good and tenantable condition and maintain the same in a fit and proper condition and ensure that the support, shelter etc. of the Building is not in any way damaged or jeopardized.</td>
+            </tr>
+            <tr>
+                 <td class="row2" style="vertical-align:top" ><b>15.2</b></td>
+                <td>The Allottee further undertakes, assures and guarantees that he/she would not put any sign-board / name-plate, neon light, publicity material or advertisement material etc. on the face / facade of the Building or anywhere on the exterior of the Project, buildings therein or Common Areas. Further the Allottee shall not store any hazardous or combustible goods in the Plot or place any heavy material in the common passages.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>15.3</b></td>
+                <td>The Allottee shall plan and distribute its electrical load in conformity with the electrical systems installed by the Promoter and thereafter the association of Allottees and/or maintenance agency appointed by association of Allottees. The Allottee shall be responsible for any loss or damages arising out of breach of any of the aforesaid conditions.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>16.</b></td>
+                <td><b>COMPLIANCE OF LAWS, NOTIFICATIONS ETC. BY PARTIES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td> The parties are entering into this Agreement for the allotment of a Plot with the full knowledge of all laws, rules, regulations, notifications applicable to the Project.</td>
+            </tr>
+            
+            <tr>
+                <td class="row1" ><b>17.</b></td>
+                <td><b>ADDITIONAL CONSTRUCTIONS:</b></td>
+            </tr>
+            <tr>
+                <td ></td>
+                <td>The Promoter undertakes that it has no right to make additions or to put up additional structure(s) anywhere in the Project after the building plan, layout plan, sanction plan and specifications, amenities and facilities, has been approved by the competent authority(ies) and disclosed, except for as provided in the Act.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>18.</b></td>
+                <td><b>PROMOTER SHALL NOT MORTGAGE OR CREATE A CHARGE:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>After the Promoter executes this Agreement he shall not mortgage or create a charge
+                    on the Plot and if any such mortgage or charge is made or
+                    created then notwithstanding anything contained in any other law for the time being
+                    in force, such mortgage or charge shall not affect the right and interest of the
+                    Allottee who has taken or agreed to take such Plot.
+                </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>19.</b></td>
+                <td><b>THE KARNATAKA APARTMENT OWNERSHIP ACT, 1972 and THE
+                    KARNATAKA OWNERSHIP
+                    </b></td>
+            </tr>
+            <tr><td class="row1"></td>
+            <td><b> FLATS (REGULATION OF THE PROMOTION OF THE CONSTRUCTION, SALE, MANAGEMENT AND TRANSFER) ACT, 1972:</b></td></tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>The Promoter understands that the provisions of the Karnataka Apartment of Ownership Act,
+                    1972(Karnataka Act 17 of 1973) and the Karnataka Ownership Flats (Regulation of
+                    the Promotion of the Construction, Sale, Management and Transfer) Act, 1971 are not applicable on sale of plots . 
+                </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>20.</b></td>
+                <td><b>BINDING EFFECT:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>Forwarding this Agreement to the Allottee by the Promoter does not create a binding obligation on the part of the Promoter or the Allottee until, the Allottee signs and delivers this Agreement with all the schedules along with the payments due as stipulated in the Payment Plan within 30 (Thirty) days from the date of receipt by the Allottee and secondly appears before the Sub-Registrar for registration of the same if the Allottee(s) fails to execute and deliver to the Promoter this Agreement within 30 (thirty) days from the date of its receipt by the Allottee, then the Promoter shall serve a notice to the Allottee for rectifying the default, which if not rectified within 30 (thirty) days from the date of its receipt by the Allottee, application of the Allottee shall be treated as cancelled and the booking amount shall be forfeited.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>21.</b></td>
+                <td><b>ENTIRE AGREEMENT:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>This Agreement, along with its schedules, constitutes the entire Agreement between the Parties with respect to the subject matter hereof and supersedes any and all understandings, any other agreements, allotment letter, correspondences, arrangements whether written or oral, if any, between the Parties in regard to the said plot, as the case may be.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>22.</b></td>
+                <td><b>RIGHT TO AMEND:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>This Agreement may only be amended through written consent of the Parties.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>23.</b></td>
+                <td><b>PROVISIONS OF THIS AGREEMENT APPLICABLE ON ALLOTTEE OR SUBSEQUENT ALLOTTEES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>It is clearly understood and so agreed by and between the Parties hereto that all the provisions contained herein and the obligations arising hereunder in respect of the Plot and the project shall equally be applicable to and enforceable against and by any subsequent Allottees of the Plot, in case of a transfer, as the said obligations go along with the Plot for all intents and purposes.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>24.</b></td>
+                <td><b>WAIVER NOT A LIMITATION TO ENFORCE:</b></td>
+            </tr>
+        </table>
+        <table style="margin-left:43px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>24.1</b></td>
+                <td>The Promoter may, at its sole option and discretion, without prejudice to its rights as set out in this Agreement, waive the breach by the Allottee in not making payments as per the Payment Plan [Schedule D] including waiving the payment of interest for delayed payment. It is made clear and so agreed by the Allottee that exercise of discretion by the Promoter in the case of one Allottee shall not be construed to be a precedent and /or binding on the Promoter to exercise such discretion in the case of other Allottees.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>24.2</b></td>
+                <td>Failure on the part of the Promoter to enforce at any time or for any period of time the provisions hereof shall not be construed to be a waiver of any provisions or of the right thereafter to enforce each and every provision.</td>
+            </tr>
+        </table>
+        
+        
+        <table width="100%">
+            <tr>
+                <td class="row1" ><b>25.</b></td>
+                <td><b>SEVERABILITY:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>If any provision of this Agreement shall be determined to be void or unenforceable under the Act or the Rules and Regulations made thereunder or under other applicable laws, such provisions of the Agreement shall be deemed amended or deleted in so far as reasonably inconsistent with the purpose of this Agreement and to the extent necessary to conform to Act or the Rules and Regulations made thereunder or the applicable law, as the case may be, and the remaining provisions of this Agreement shall remain valid and enforceable as applicable at the time of execution of this Agreement.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>26</b></td>
+                <td><b>METHOD OF CALCULATION OF PROPORTIONATE SHARE WHEREVER REFERRED TO IN THE</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td><b>AGREEMENT:</b></td>
+            </tr>
+            
+            <tr>
+                <td class="row1" ></td>
+                <td>Wherever in this Agreement it is stipulated that the Allottee has to make any payment, in common with other Allottee(s) in Project, the same shall be the proportion which the area of the Plot bears to the total area of all the Plots in the Project.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>27.</b></td>
+                <td><b>FURTHER ASSURANCES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>Both Parties agree that they shall execute, acknowledge and deliver to the other such instruments and take such other actions, in additions to the instruments and actions specifically provided for herein, as may be reasonably required in order to effectuate the provisions of this Agreement or of any transaction contemplated herein or to confirm or perfect any right to be created or transferred hereunder or pursuant to any such transaction.
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>28.</b></td>
+                <td><b>PLACE OF EXECUTION:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>The execution of this Agreement shall be complete only upon its execution by the Promoter through its authorized signatory at the Promoter’s Office, or at some other place, which may be mutually agreed between the Promoter and the Allottee. This Agreement shall be deemed to have been executed at Zuari Garden City.</td>
+            </tr><br/>
+            
+            <tr>
+                <td class="row1" ><b>29.</b></td>
+                <td><b>NOTICES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>That all notices to be served on the Allottee and the Promoter as contemplated by this Agreement shall be deemed to have been duly served if sent to the Allottee or the Promoter by Registered Post at their respective addresses specified below:</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td><b>ALLOTTEE:</b></td>
+            </tr>
+            
+            
+        </table>
+         <table style="margin-left:130px">
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>{!Booking__c.S__c}&nbsp;{!Booking__c.First_Applicant_Name__c}&nbsp;</b></td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>{!firstCoApplicant.Salutation__c} &nbsp;{!firstCoApplicant.Name}</b></td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" ><b>{!PermanentFullAddress}</b></td>
+            </tr>
+            
+        </table>
+       
+
+        <table>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td><b>PROMOTER:</b></td>
+            </tr>
+        </table>
+        <table style="margin-left:130px">
+            <tr>
+                <td class="row2" style="vertical-align:top" >M/s. ZUARI INFRAWORLD INDIA LTD.</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" >Adventz Centre,1st Floor ,</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" >Off Cubbon Road,</td>
+            </tr>
+            <tr>
+                <td class="row2" style="vertical-align:top" >BENGALURU 560001.</td>
+            </tr>
+            
+        </table>
+        <table>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>It shall be the duty of the Allottee and the Promoter to inform each other of any change in address subsequent to the execution of this Agreement in the above address by Registered Post/Email failing which all communications and letters posted at the above address shall be deemed to have been received by the Promoter or the Allottee, as the case may be.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>30.</b></td>
+                <td><b>JOINT ALLOTTEES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>That in case there are Joint Allottees all communications shall be sent by the Promoter to the Allottee whose name appears first and at the address given by him/her which shall for all intents and purposes to consider as properly served on all the Allottees.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>31.</b></td>
+                <td><b>SAVINGS:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>Any application letter, allotment letter, agreement, or any other document signed by the allottee, in respect of the plot prior to the execution of this Agreement for Sale for such plot shall not be constructed to limit the rights and interest of the allottee under the Agreement of Sale or under the Act or the rules or the regulations made thereunder.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>32.</b></td>
+                <td><b>GOVERNING LAW:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>That the rights and obligations of the parties under or arising out of this Agreement shall be construed and enforced in accordance with the Act and the Rules and Regulations made there under including other applicable laws of India for the time being in force.
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>33.</b></td>
+                <td><b>DISPUTE RESOLUTION.-</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>All or any disputes arising out or touching upon or in relation to the terms and conditions of this Agreement, including the interpretation and validity of the terms thereof and the respective rights and obligations of the Parties, shall be settled amicably by mutual discussion, failing which the parties concerned may seek resolution of such issues as per the provisions of the Act, Rules and Regulations framed by the Karnataka Real Estate Regulatory Authority.</td>
+            </tr>
+            
+        </table><br/><br/>
+        <div style="padding-left:43px">
+            <p style="text-align:center"><b><u>SCHEDULE A</u></b></p> 
+            <p style="text-align:center"><b>[Description of Schedule A Property / Project Land]</b></p>
+            <p>
+                All that piece and parcel of the immovable residential property of the township known as Zuari Garden City in  project known as Zuari Garden City – Plots on the Project Land measuring 40630.438 Sq meters –falling under survey Nos. 5/1, 105, 107/1, 107/2, 107/3, 107/4, 111/2, 111/1A, 111/1B, 121 &amp; 123 etc., - situated at Hulikere Village, Belagola Hobli, Sriranagapatna Taluk, Mandya District, Karnataka, forming part of the Township.
+            </p>
+            <table width="100%">
+                <tr>
+                    <td width="35%">East  : Private Property</td>
+                    <td width="65%">North : Other phases in Zuari Garden City</td>
+                </tr>
+                <tr>
+                    <td>West : Other phases in Zuari </td>
+                    <td>South : KRS Road Garden City</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style="padding-top:40px"></div>
+        
+        <div style="padding-left:43px">
+            <p style="text-align:center"><b><u>SCHEDULE B</u></b></p> 
+            <p style="text-align:center"><b>[Description of Schedule B Property]</b></p>
+            <p>
+                Exclusive right to own and enjoy plot area of {!booking__c.Plot__r.Super_Built_up_Area_Sq_Mt__c} square meters,Plot No {!booking__c.Unit_No__c} that forms a part of the Schedule which is bounded on the :
+            </p>
+            <table width="100%"  border="1" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; border:1.01px solid black;">
+                <tr>
+                    <td width="50%">East: {!booking__c.Plot__r.East_By__c}</td>
+                    <td width="50%">North:{!booking__c.Plot__r.North_By__c}</td>
+                </tr>
+                <tr>
+                    <td>West: {!booking__c.Plot__r.West_By__c} </td>
+                    <td>South: {!booking__c.Plot__r.South_By__c}</td>
+                </tr>
+            </table>
+        </div>
+        <p style="text-align:center">
+            <b>SCHEDULE C – LAYOUT PLAN</b>
+        </p>
+        <div style="text-align:center">
+            <apex:image url="{!URLFOR($Resource.unitImage)}" width="600" height="350"/>
+        </div>
+        
+        
+      <!----  <div style="text-align: center; margin-top: 20px;"> 
+            <apex:image url="{!plotImageBase64}" width="200" height="150"/>
+        </div>--->
+        
+        <p style="text-align:center">
+            <b>SCHEDULE ‘D’ - PAYMENT PLAN BY THE ALLOTTEE </b>
+        </p>
+        <br/>
+        <div>
+            <table width="100%" style="border:.5px solid #000; border-collapse:collapse; cellspacing:0">
+                <tr>
+                    <td style="border:.5px solid #000; text-align:center;"><b>Sl. No.</b></td>
+                    <td style="border:.5px solid #000; text-align:center;"><b>Milestones Schedule</b></td>
+                    <td style="border:.5px solid #000; text-align:center;"><b>Percentage</b></td>
+                  <!--  <td style="border:.5px solid #000; text-align:center;"><b>Amount</b></td>-->
+                    
+                </tr>
+                <apex:repeat value="{!paymentSchedules}" var="ps">
+                    <tr>
+                        <td style="border:.5px solid #000; text-align:center;">{!ps.S_No__c}</td>
+                        <td style="border:.5px solid #000; text-align:center;">{!ps.Name}</td>
+                        <td style="border:.5px solid #000; text-align:center;"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!ps.Payment_percent__c}" /></apex:outputText>%</td>
+                        <!--<td style="border:.5px solid #000; text-align:center;">Rs. <apex:outputText value="{0, number, #,##0}"><apex:param value="{!ps.Total_Payable_Amount__c}" /></apex:outputText></td>-->
+                        
+                    </tr>
+                </apex:repeat>
+            </table>
+        </div>
+        <div style="padding-top:50px"></div>
+        
+        <table width="100%" style="border:.5px solid #000; border-collapse:collapse; cellspacing:0">
+            <tr>
+                <td width="50%" style="border:.5px solid #000; text-align:center; vertical-align:top">Clubhouse Membership Charges</td>
+                <td style="border:.5px solid #000; text-align:center;  vertical-align:top">1.5Lacs + GST</td>
+            </tr>
+            <tr>
+                <td style="border:.5px solid #000; text-align:center;  vertical-align:top">Maintenance Deposit</td>
+                <td style="border:.5px solid #000; text-align:center;  vertical-align:top">The Allottee, agree(s) to pay the maintenance 
+                    deposit and charges as determined by the Promoter/association of allottees, as the case may be from the date issuance of the completion certificate/release order for the Project is issued. Approximately 2/Sqft + GST for 12 Months
+                </td>
+            </tr>
+            <tr>
+                <td style="border:.5px solid #000; text-align:center;  vertical-align:top">GST</td>
+                <td style="border:.5px solid #000; text-align:center;  vertical-align:top">GST payable to the government authorities with respect to the development charges.</td>
+            </tr>
+        </table>
+        
+        <p style="text-align:center">
+            <b>SCHEDULE ‘E’</b>
+        </p>
+        <p style="text-align:center">
+            <b>SPECIFICATIONS, AMENITIES, FACILITIES</b>
+        </p>
+        <p style="text-align:center">
+            <b>(WHICH ARE PART OF THE ENTIRE ZUARI GARDEN CITY PROJECT)</b>
+        </p>
+        <p>
+            Right to use along with other unit owners of the various phases / projects comprised within the larger development known as ‘Zuari Garden City’, all the common facilities provided in the said Land of which <b>Schedule A Property</b> forms a part, with a corresponding obligation to pay proportionately, the Allottees share of common expenses incurred for the maintenance/usage charges of all Common Facilities and areas in the said Land, including the <b>Schedule A Property</b>. “Common Facilities” shall mean and include:
+        </p>
+        <div style="margin-left:80px">
+            <table>
+                <tr>
+                    <td>(i)</td>
+                    <td>Clubhouse with pool</td>
+                </tr>
+                <tr>
+                    <td>(ii)</td>
+                    <td>Lighting in the common areas and Common Facilities in the Schedule A Property </td>
+                </tr>
+                <tr>
+                    <td>(iii)</td>
+                    <td>Parks</td>
+                </tr>
+            </table>
+        </div>
+        <p>
+            The allottee is aware that the Promoter is developing Zuari Garden City in Phases and certain common amenities (clubhouse and swimming pool) shall be developed at a later stage reasonably estimate to be in the month of December, 2026.
+        </p>
+        <p style="text-align:center">
+            <b>SPECIFICATIONS, AMENITIES, FACILITIES</b>
+        </p>
+        <p style="text-align:center">
+            <b>(WHICH ARE PART OF THE ZUARI GARDEN CITY - PLOTS)</b>
+        </p>
+        <table>
+            <tr>
+                <td class="row1" ><b>1.</b></td>
+                <td><b> INFRASTRUCTURE</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>    ROADS AND PATHWAYS:</td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>    Road laid with Asphalt for driveway. Strom water gutter drain along the driveway.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>2.</b></td>
+                <td><b> ELECTRICAL, PLUMBING &amp; SERVICES</b></td>
+            </tr>
+            <tr>
+                <td class="row1" >(i)</td>
+                <td>    ELECTRICAL:</td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>        Underground power lines to distribute power through feeder pillar upto the plot.</td>
+            </tr>
+            <tr>
+                <td class="row1" >(ii)</td>
+                <td>    PLUMBING:</td>
+            </tr>
+            <tr>
+                <td class="row1" ></td>
+                <td>   Underground sewer lines connected to STP. Underground water supply pipe line up to the entry of     plot.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>3.</b></td>
+                <td><b> SERVICES:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>Sewage Treatment Plant.</td>
+            </tr>
+            
+        </table>
+        <p>
+            <b><b>GREEN FEATURES</b></b>
+        </p>
+        <table>
+            
+            <tr>
+                <td class="row1" ><b>4.</b></td>
+                <td><b>WATER CONSERVATION:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>Recharge pit for rainwater harvesting.</td>
+            </tr>
+            <tr>
+                <td class="row1" ><b>5.</b></td>
+                <td><b>ENERGY CONSERVATION:</b></td>
+            </tr>
+            <tr>
+                <td class="row1" ><b></b></td>
+                <td>Energy efficient fixture for common service areas. Timer adjusted electrical streetlights .</td>
+            </tr>
+            
+        </table>
+        <p>
+            <b>IN WITNESS</b>  WHEREOF ,  the parties to this deed  have set  their hands to this AGREEMENT OF SALE on the DAY, MONTH AND YEAR as first mentioned above.
+            
+        </p>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td width="50%" valign="top">
+            <p><b>WITNESS:</b></p>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="30">1.</td>
+                    <td>Signature:</td>
+                </tr>
+                <tr height="20px">
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Name:</td>
+                </tr>
+                <tr>
+                    <td width="30">2.</td>
+                    <td>Signature:</td>
+                </tr>
+                <tr height="20px">
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Name:</td>
+                </tr>
+            </table>
+        </td>
+        <td width="50%" valign="top" align="right">
+            <p><b>PROMOTER/S</b></p>
+            
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">&nbsp;</td>
+        <td valign="top" align="right">
+            <p><b>ALLOTTEE/S</b></p>
+            
+            <p><b>{!Booking__c.S__c}&nbsp;{!Booking__c.First_Applicant_Name__c}</b>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(firstCoApplicant.Name))}"><br/>&amp;<br/><b>{!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}</b><br/></apex:outputPanel></p>
+            <p>residing at {!Booking__c.Correspondence_Address__Street__s}, {!Booking__c.Correspondence_Address__City__s}, {!Booking__c.Correspondence_Address__PostalCode__s}.</p>
+            <table border="0" cellpadding="0" cellspacing="0" align="right">
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+        
+    </div>
+    
+    
+</apex:page>

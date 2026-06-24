@@ -1,0 +1,1827 @@
+<apex:page standardController="Booking__c" extensions="BookingPDFController" renderAs="pdf" showHeader="false" sidebar="false" applyBodyTag="false">
+<html>
+<body style="font-family: Arial, sans-serif; font-size:10px; color:#000; margin:20px;">
+
+<div style=" padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:16px; font-weight:bold; margin-top:5px;">
+        APPLICATION FORM
+    </div>
+
+    <div style="text-align:center; font-size:9px; line-height:1.3;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+
+    <!-- Photo Box -->
+    <div style="position:absolute; top:120px; right:30px; width:110px; height:130px; border:1px solid #000; text-align:center; font-size:9px; padding-top:45px;">
+        <apex:outputPanel rendered="{!NOT(ISBLANK(imageUrl))}">
+            <apex:image url="{!imageUrl}" width="108" height="128" style="margin-top:-45px;"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!ISBLANK(imageUrl)}">
+            Paste Photo<br/>Here
+        </apex:outputPanel>
+    </div>
+
+    <!-- Applicant Details -->
+    <div style="margin-top:15px; font-weight:bold; font-size:13px;">
+        Applicant Details
+    </div>
+
+    <table style="width:100%; border-collapse:collapse;">
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Name: Ms/Mr/Mrs/Dr
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;">{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                S/O, D/O
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Son_Daughter_Wife_of1__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:4px 2px;">Date of Birth</td>
+            <td>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 1, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 2, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 4, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 5, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 7, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 8, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 9, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(dobFormattedWithBars) >= 10, MID(dobFormattedWithBars, 10, 1), "")}</span>
+
+                &nbsp;&nbsp;&nbsp; Country of Residence
+                <span style="display:inline-block; border-bottom:1px dotted #000; width:120px;"><apex:outputText value="{!Booking__c.SLead__r.Country__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                PAN No
+
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.PAN_Number__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Aadhaar No
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Aadhar_No__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Passport No
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Passport_PI_no__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Email
+
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Email__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Primary Contact No
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Mobile__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Alternate Contact No
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Alternate_Contact_No__c}"/></span>
+            </td>
+        </tr>   
+
+        <tr>
+            <td style="white-space:nowrap; padding:4px 2px;">
+                Spouse Name
+            </td>
+            <td>
+                <span style="display:inline-block; width:220px; border-bottom:1px dotted #000; height:12px;"><apex:outputText value="{!Booking__c.Spouse_Name__c}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:4px 2px;">Spouse Date of Birth</td>
+            <td>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 1, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 2, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 4, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 5, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 7, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 8, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 9, 1), "")}</span>
+                <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(spouseDobFormattedWithBars) >= 10, MID(spouseDobFormattedWithBars, 10, 1), "")}</span>
+
+                &nbsp;&nbsp;&nbsp; Anniversary Date
+                <span style="display:inline-block; border-bottom:1px dotted #000; width:120px;"><apex:outputText value="{!anniversaryFormattedWithBars}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:4px 2px;">Permanent Address</td>
+            <td style="border-bottom:1px dotted #000;">{!PermanentFullAddress}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                Pincode
+                <span style="display:inline-block; border-bottom:1px dotted #000; width:100px;"><apex:outputText value="{!Booking__c.Permanent_Address2__PostalCode__s}"/></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:4px 2px;">Communication Address</td>
+            <td style="border-bottom:1px dotted #000;">{!CorrespondenceFullAddress}</td>
+        </tr>
+
+
+        <tr>
+            <td></td>
+            <td>
+                Pincode
+                <span style="display:inline-block; border-bottom:1px dotted #000; width:100px;"><apex:outputText value="{!Booking__c.Correspondence_Address__PostalCode__s}"/></span>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Professional Details -->
+    <div style="margin-top:60px; font-weight:bold; font-size:13px;">
+        Professional Details
+    </div>
+
+    <table style="margin-top:20px; width:100%; font-size:9px;">
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Finance', '[X]', '[ ]')} Financial Services/Banking</td>
+            <td>{!IF(Booking__c.Industry__c == 'Agriculture', '[X]', '[ ]')} Agri Based</td>
+            <td>{!IF(Booking__c.Industry__c == 'Auto and Ancillary', '[X]', '[ ]')} Auto &amp; Ancillary</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Construction', '[X]', '[ ]')} Construction Industry</td>
+            <td>{!IF(Booking__c.Industry__c == 'FMCG', '[X]', '[ ]')} FMCG</td>
+            <td>{!IF(Booking__c.Industry__c == 'IT/ITES', '[X]', '[ ]')} IT/ITES</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Consumer Durables', '[X]', '[ ]')} Consumer Durables</td>
+            <td>{!IF(Booking__c.Industry__c == 'Defence Service', '[X]', '[ ]')} Defence Service</td>
+            <td>{!IF(Booking__c.Industry__c == 'Education', '[X]', '[ ]')} Education</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Government', '[X]', '[ ]')} Govt Organization</td>
+            <td>{!IF(Booking__c.Industry__c == 'Telecommunications', '[X]', '[ ]')} Telecom</td>
+            <td>{!IF(Booking__c.Industry__c == 'Travel', '[X]', '[ ]')} Travel</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Media', '[X]', '[ ]')} Media Entertainment</td>
+            <td>{!IF(Booking__c.Industry__c == 'Metal &amp; Mining', '[X]', '[ ]')} Metal &amp; Mining</td>
+            <td>{!IF(Booking__c.Industry__c == 'Oil, Gas and Power', '[X]', '[ ]')} Oil, Gas and Power</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Healthcare', '[X]', '[ ]')} Healthcare/Pharma</td>
+            <td>{!IF(Booking__c.Industry__c == 'Textiles', '[X]', '[ ]')} Textiles</td>
+            <td>{!IF(Booking__c.Industry__c == 'Service Sector', '[X]', '[ ]')} Service Sector</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(Booking__c.Industry__c == 'Retail', '[X]', '[ ]')} Retail &amp; E-Commerce</td>
+            <td>{!IF(Booking__c.Industry__c == 'Other', '[X]', '[ ]')} Other (Specify)</td>
+            <td><apex:outputText value="{!Booking__c.Other_Profession__c}"/></td>
+        </tr>
+    </table>
+
+    <table style="width:100%; margin-top:10px;">
+        <tr>
+            <td>Company/Firm </td>
+        </tr>
+            <td>
+                Name
+                <span style="display:inline-block; border-bottom:1px dotted #000; width:100px;"><apex:outputText value="{!Booking__c.Employeed_at__c}"/></span>
+            </td>
+    </table>
+
+    <!-- Footer -->
+    <table style="width:100%; margin-top:120px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+
+
+</div>
+<div style="page-break-before: always;"></div>
+
+
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+
+    <!-- Office Address -->
+    <div style="margin-top:10px;">
+        Office Address:
+        <span style="display:inline-block; width:350px; border-bottom:1px dotted #000;">{!OfficeFullAddress}</span>
+        Pincode:
+        <span style="display:inline-block; width:100px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Office_Address1__PostalCode__s}"/></span>
+    </div>
+
+    <!-- Designation -->
+    <div style="margin-top:8px;">
+        Designation:
+        <span style="display:inline-block; width:500px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Designation__c}"/></span>
+    </div>
+
+    <!-- Qualification -->
+    <div style="margin-top:8px;">
+        Qualification:
+        {!IF(Booking__c.Qualification__c == 'Graduate', '[X]', '[ ]')} Graduate &nbsp;&nbsp;
+        {!IF(Booking__c.Qualification__c == 'Post Graduate', '[X]', '[ ]')} Post Graduate &nbsp;&nbsp;
+        {!IF(Booking__c.Qualification__c == 'Professional', '[X]', '[ ]')} Professional &nbsp;&nbsp;
+        {!IF(Booking__c.Qualification__c == 'Others', '[X]', '[ ]')} Others
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Other_Qualification__c}"/></span>
+    </div>
+
+    <!-- Second Applicant -->
+    <div style="margin-top:65px; font-size:13px; font-weight:bold;">
+        Second Applicant Details
+    </div>
+
+    <!-- Photo Box -->
+    <div style="position:absolute; top:220px; right:30px; width:110px; height:130px; border:1px solid #000; text-align:center; font-size:9px; padding-top:45px;">
+        <apex:outputPanel rendered="{!NOT(ISBLANK(imageUrl2))}">
+            <apex:image url="{!imageUrl2}" width="108" height="128" style="margin-top:-45px;"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!ISBLANK(imageUrl2)}">
+            Paste Photo<br/>Here
+        </apex:outputPanel>
+    </div>
+
+    <!-- Name -->
+    <div style="margin-top:5px;">
+        Name: Ms/Mr/Mrs/Dr/Ms:
+        <span style="display:inline-block; width:300px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Name}"/></span>
+    </div>
+
+    <!-- DOB + Country -->
+    <div style="margin-top:5px;">
+        Date of Birth:
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 1, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 2, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 4, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 5, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 7, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(codobFormattedWithBars) >= 10, MID(codobFormattedWithBars, 8, 1), "")}</span>
+        &nbsp;&nbsp;
+        Country of Residence:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Country_of_Residence__c}"/></span>
+    </div>
+
+    <!-- PAN + Aadhaar -->
+    <div style="margin-top:5px;">
+        Pan No:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.PAN_Number__c}"/></span>
+        Aadhaar No:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Aadhar_Number__c}"/></span>
+    </div>
+
+    <!-- Passport + Email -->
+    <div style="margin-top:5px;">
+        Passport No:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Passport_Number__c}"/></span>
+        Email:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Email__c}"/></span>
+    </div>
+
+    <!-- Contact -->
+    <div style="margin-top:5px;">
+        Primary Contact No:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Primary_Phone__c}"/></span>
+        
+    </div>
+    <!-- Contact -->
+        <div style="margin-top:5px;">
+         
+            Alternate Contact No:
+            <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Alternate_Contact_No__c}"/></span>
+        </div>
+
+    <!-- Spouse -->
+    <div style="margin-top:5px;">
+        Spouse Name:
+        <span style="display:inline-block; width:350px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Spouse_Name__c}"/></span>
+    </div>
+
+    <!-- Spouse DOB -->
+    <div style="margin-top:5px;">
+        Spouse Date of Birth:
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(cospouseDobFormattedWithBars) >= 10, MID(cospouseDobFormattedWithBars, 1, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(cospouseDobFormattedWithBars) >= 10, MID(cospouseDobFormattedWithBars, 2, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(cospouseDobFormattedWithBars) >= 10, MID(cospouseDobFormattedWithBars, 4, 1), "")}</span>
+        <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; text-align:center; font-size:9px; line-height:12px;">{!IF(LEN(cospouseDobFormattedWithBars) >= 10, MID(cospouseDobFormattedWithBars, 5, 1), "")}</span>
+        &nbsp;&nbsp;
+        Anniversary Date:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!coanniversaryFormattedWithBars}"/></span>
+    </div>
+
+    <!-- Address -->
+    <div style="margin-top:5px;">
+        Permanent Address:
+        <span style="display:inline-block; width:400px; border-bottom:1px dotted #000;">{!FirstCoApplicantPermanentFullAddress}</span>
+    </div>
+
+    <div style="margin-top:5px;">
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+        Pincode:
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Permanent_Address1__PostalCode__s}"/></span>
+    </div>
+
+    <!-- Communication -->
+    <div style="margin-top:5px;">
+        Communication Address:
+        <span style="display:inline-block; width:400px; border-bottom:1px dotted #000;">{!FirstCoApplicantCommunicationFullAddress}</span>
+    </div>
+
+    <div style="margin-top:5px;">
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+        Pincode:
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Communication_Address1__PostalCode__s}"/></span>
+    </div>
+
+    <!-- Professional Details -->
+    <div style="margin-top:60px; font-weight:bold; font-size:13px;">
+        Professional Details
+    </div>
+
+    <table style="width:100%; font-size:9px;">
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Finance', '[X]', '[ ]')} Financial Services/Banking</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Agriculture', '[X]', '[ ]')} Agri Based</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Auto and Ancillary', '[X]', '[ ]')} Auto &amp; Ancillary</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Construction', '[X]', '[ ]')} Construction Industry</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'FMCG', '[X]', '[ ]')} FMCG</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'IT/ITES', '[X]', '[ ]')} IT/ITES</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Consumer Durables', '[X]', '[ ]')} Consumer Durables</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Defence Service', '[X]', '[ ]')} Defence Service</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Education', '[X]', '[ ]')} Education</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Government', '[X]', '[ ]')} Govt Organization</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Telecommunications', '[X]', '[ ]')} Telecom</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Travel', '[X]', '[ ]')} Travel</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Media', '[X]', '[ ]')} Media Entertainment</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Metal &amp; Mining', '[X]', '[ ]')} Metal &amp; Mining</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Oil, Gas and Power', '[X]', '[ ]')} Oil, Gas and Power</td>
+        </tr>
+        <tr style="margin-top:50px"></tr>
+        <tr>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Healthcare', '[X]', '[ ]')} Healthcare/Pharma</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Textiles', '[X]', '[ ]')} Textiles</td>
+            <td>{!IF(firstCoApplicant.Industry__c == 'Service Sector', '[X]', '[ ]')} Service Sector</td>
+        </tr>
+        
+    </table>
+
+    <!-- Footer -->
+    <table style="width:100%; margin-top:210px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+
+
+</div>
+<div style="page-break-before: always;"></div>
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+
+    <!-- Top Options -->
+    <div style="margin-top:50px;">
+        {!IF(firstCoApplicant.Industry__c == 'Retail', '[X]', '[ ]')} Retail &amp; E-Commerce
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        {!IF(firstCoApplicant.Industry__c == 'Others', '[X]', '[ ]')} Other (Specify:
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Other_Industry__c}"/></span>)
+    </div>
+
+    <!-- Company -->
+    <div style="margin-top:25px;">
+        Company/Firm Name:
+        <span style="display:inline-block; width:400px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Employeed_at__c}"/></span>
+    </div>
+
+    <!-- Office Address -->
+    <div style="margin-top:25px;">
+        Office Address:
+        <span style="display:inline-block; width:350px; border-bottom:1px dotted #000;">{!FirstCoApplicantOfficeFullAddress}</span>
+        Pincode:
+        <span style="display:inline-block; width:100px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Office_Address1__PostalCode__s}"/></span>
+    </div>
+
+    <!-- Designation -->
+    <div style="margin-top:25px;">
+        Designation:
+        <span style="display:inline-block; width:500px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Designation__c}"/></span>
+    </div>
+
+    <!-- Qualification -->
+    <div style="margin-top:25px;">
+        Qualification:
+        {!IF(firstCoApplicant.Qualification__c == 'Graduate', '[X]', '[ ]')} Graduate &nbsp;&nbsp;
+        {!IF(firstCoApplicant.Qualification__c == 'Post Graduate', '[X]', '[ ]')} Post Graduate &nbsp;&nbsp;
+        {!IF(firstCoApplicant.Qualification__c == 'Professional', '[X]', '[ ]')} Professional &nbsp;&nbsp;
+        {!IF(firstCoApplicant.Qualification__c == 'Others', '[X]', '[ ]')} Others
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!firstCoApplicant.Other_Qualification__c}"/></span>
+    </div>
+
+    <!-- Other Details -->
+    <div style="margin-top:35px; font-size:13px; font-weight:bold;">
+        Other Details
+    </div>
+
+    <!-- Income -->
+    <div style="margin-top:35px;">
+        Annual Household Income:
+        &nbsp;&nbsp;{!IF(Booking__c.Annual_House_Hold_Income__c == '5 - 10 Lakhs', '[X]', '[ ]')} ₹5 - 10 Lakhs
+        &nbsp;&nbsp;{!IF(Booking__c.Annual_House_Hold_Income__c == '10 - 20 Lakhs', '[X]', '[ ]')} ₹10 - 20 Lakhs
+        &nbsp;&nbsp;{!IF(Booking__c.Annual_House_Hold_Income__c == '20 - 30 Lakhs', '[X]', '[ ]')} ₹20 - 30 Lakhs
+        <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {!IF(Booking__c.Annual_House_Hold_Income__c == '30 - 50 Lakhs', '[X]', '[ ]')} ₹30 - 50 Lakhs
+        &nbsp;&nbsp;{!IF(Booking__c.Annual_House_Hold_Income__c == '50 Lakhs', '[X]', '[ ]')} ₹50 Lakhs
+    </div>
+
+    <!-- Purpose -->
+    <div style="margin-top:35px;">
+        Purpose of Purchase:
+        &nbsp;&nbsp;{!IF(Booking__c.Purpose_of_Purchase__c == 'Investment Purpose', '[X]', '[ ]')} Investment Purpose
+        &nbsp;&nbsp;{!IF(Booking__c.Purpose_of_Purchase__c == 'Purchasing for Self', '[X]', '[ ]')} Purchasing for Self
+        <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {!IF(Booking__c.Purpose_of_Purchase__c == 'Moving to a better place', '[X]', '[ ]')} Moving to a better place
+        &nbsp;&nbsp;{!IF(Booking__c.Purpose_of_Purchase__c == 'Purchasing for Family', '[X]', '[ ]')} Purchasing for Family
+        <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        [ ] Other (Specify:
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"></span>)
+    </div>
+
+    <!-- How did you know -->
+    <div style="margin-top:10px;">
+        How did you get to know about us?
+    </div>
+
+    <table style="width:100%; font-size:9px; margin-top:5px; border-collapse:collapse;">
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Banking', '[X]', '[ ]')} Banking</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'BTL Activity', '[X]', '[ ]')} BTL Activity</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Corporate Activity', '[X]', '[ ]')} Corporate Activity</td>
+    </tr>
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Channel partner', '[X]', '[ ]')} Channel Partner</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Digital Marketing', '[X]', '[ ]')} Digital Marketing</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Exhibition/Event', '[X]', '[ ]')} Exhibition/Event</td>
+    </tr>
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Hoarding', '[X]', '[ ]')} Hoarding</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Direct Walkin/Site Branding', '[X]', '[ ]')} Direct Walk-In</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Print Media', '[X]', '[ ]')} Print Media</td>
+    </tr>
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Radio', '[X]', '[ ]')} Radio</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Group employee Referral', '[X]', '[ ]')} Group Employee Referral</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Referral', '[X]', '[ ]')} Referral</td>
+    </tr>
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'REAP', '[X]', '[ ]')} REAP</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Real Estate Portals', '[X]', '[ ]')} Real Estate Portals</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Self Generated', '[X]', '[ ]')} Self-Generated</td>
+    </tr>
+
+    <tr>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'TV', '[X]', '[ ]')} TV</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Website', '[X]', '[ ]')} Website</td>
+        <td style="padding-bottom:6px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Word of Mouth', '[X]', '[ ]')} Word of Mouth</td>
+    </tr>
+
+    <!-- Last Row -->
+    <tr>
+        <td style="padding-top:8px;">
+            [ ] Others (Specify:
+        </td>
+        <td colspan="2" style="padding-top:8px;">
+            <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Other_sourceType__c}"/></span>
+        </td>
+    </tr>
+
+</table>
+
+    <!-- Referral -->
+    <div style="margin-top:10px;">
+        If Referred by Friends/Relatives/Self:
+        Name:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Customer_Name__c}"/></span>
+        Project Name:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Customer_Project_Name__c}"/></span>
+    </div>
+
+    <div style="margin-top:5px;">
+        Contact No:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Customer_Mobile_No__c}"/></span>
+        Email ID:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Customer_Email__c}"/></span>
+    </div>
+
+    <!-- Channel Partner -->
+    <div style="margin-top:5px;">
+        If Referred by Channel Partner:
+        Name:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.ContactPerson__c}"/></span>
+        RERA No:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Project_Name__c}"/></span>
+    </div>
+
+    
+    <!-- Footer -->
+    <table style="width:100%; margin-top:100px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+
+</div>
+
+<div style="page-break-before: always;"></div>
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+
+    <!-- Top Fields -->
+    <div style="margin-top:10px;">
+        Id:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Name}"/></span>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        Contact No:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Mobile_Number__c}"/></span>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        Email:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Email__c}"/></span>
+    </div>
+
+    <div style="margin-top:5px;">
+        If Corporate Activity:
+        Company Name:
+        <span style="display:inline-block; width:300px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Company_Name__c}"/></span>
+    </div>
+
+    <!-- Unit Details -->
+    <div style="margin-top:35px; font-weight:bold; font-size:13px;">
+        Unit Details
+    </div>
+
+    <div style="margin-top:5px; text-align:justify;">
+        I/We, the Applicant(s), request you to allot the unit mentioned below based on this application and the booking amount of Rs.
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!Booking__c.Booking_Amount__c}"/></apex:outputText></span>
+        (in words
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!bookingAmount}"/></span>)
+    </div>
+
+    <div style="margin-top:5px;">
+        Being paid by me / us vide Cheque / DD No. / Transaction ID:
+        <span style="display:inline-block; width:300px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Transaction_ID__c}"/></span>
+    </div>
+
+    <div style="margin-top:5px;">
+        Date:
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"><apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText></span>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        Drawn On (Bank):
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Bank_Name__c}"/></span>
+    </div>
+
+    <div style="margin-top:5px; font-size:9px;">
+        *Note: Please refer Annexure for complete Unit details with Cost Breakup and Payment Schedule.
+    </div>
+
+    <!-- Terms -->
+    <div style="margin-top:35px; font-weight:bold;">
+        TERMS &amp; CONDITIONS
+    </div>
+
+    <div style="margin-top:15px; font-size:12px; text-align:justify; line-height:1.8;">
+
+        <ol style="padding-left:15px; margin:0;">
+
+            <li style="margin-bottom:8px;">
+                In the event of any person signing this Application Form on behalf of Applicant(s)/Firm/Company,
+                such person shall submit proper documentation i.e. Authorization/Power of Attorney/Board Resolution.
+                Once the sign is affixed, the terms shall be irrevocable and binding.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                The Applicant(s) shall solely be responsible for compliance with all applicable laws, notifications,
+                guidelines, FEMA/RBI regulations etc. for purchase of immovable property in India.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                Car Parking Allocation: Car parking will be allotted to the Applicant(s) at the time of handover/possession.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                In the event the Applicant fails to pay 10% of the Total Agreement Value, within thirty (30) days from the
+                booking date, the booking shall be cancelled with applicable statutory deductions.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                If the Applicant(s) cancels the booking without any fault of the Promoter, cancellation charges along with
+                statutory deductions shall apply.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                Refund shall be made by the Promoter within 90 days from cancellation or resale of the unit,
+                whichever is later.
+            </li>
+
+            <li style="margin-bottom:8px;">
+                The Applicant(s) agrees to pay all instalments on time as per the Payment Schedule and adhere to
+                RERA guidelines for delayed payments.cancel the booking in case of delay of such payments / instalments exceeds 2 months and allot/alienate this booking to any third party without any further notice to the Applicant(s). The amount paid by the Applicant(s) shall be refunded subject to the deductions, as per the terms and condition mentioned herein. The refund, if any, shall be made by Promoter within 90 days form the cancellation date or when the particular Unit is resold by the Promoter to an alternative buyer, whichever is later. 
+            </li>
+
+        </ol>
+
+    </div>
+
+    <!-- Footer -->
+    <table style="width:100%; margin-top:60px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+
+</div>
+
+<div style="page-break-before: always;"></div>
+
+
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+    <div style="margin-top:15px; font-size:12px; text-align:justify; line-height:1.8;">
+
+        <ol style="padding-left:15px; margin:0;">
+            <div style="margin-bottom:8px;">
+                            8.  The Applicant(s)  shall not assign, transfer or shift the booking/s till execution of Sale Agreement.<br/>
+
+            </div >
+
+            <div style="margin-bottom:8px;">
+                            9.  The Applicant(s) undertakes to execute and register the Agreement for Sale and appear before the Sub-Registrar concerned for the said purpose as and when intimated by the Promoter. However, in case, the Applicant(s) decides to cancel the booking without the fault of Promoter then Clause 4 or 5 shall apply, as the case may be.
+
+            </div>
+
+            
+            <div style="margin-bottom:8px;">
+                            10. The payments shall be paid/transferred from Applicant(s) account only by way of Account payee Cheque / Demand Draft / RTGS favouring “Gangothri Infraedge Pvt. Ltd.”. In case of cheque dishonour/return, an amount of Rs.500/- per each return will be charged as cheque dishonour/return charges. Interest will accrue from the due date and Promoter reserves the right to avail legal remedies as available to the Promoter in addition to charging of interest. 
+            </div>
+
+
+            <div style="margin-bottom:8px;">
+                            11. The Applicant(s) shall contribute Rs.100/- Per Sq. ft. on Saleable Area towards the corpus fund (non-refundable) meant for the purpose of long term maintenance of the Project. This amount shall be paid to the Promoter before the Registration of the Sale deed. The non-refundable corpus fund will be transferred to Association along with transfer of maintenance of the common area of the Project to the Association. No interest accrues on the corpus fund. 
+            </div>
+
+            <div style="margin-bottom:8px;">
+                            12. The Applicant(s) shall contribute/pay Rs.4/- Per Sq.ft. on Saleable Area of the Flat towards regular maintenance charges for First Two (2) years. The common date of commencement of maintenance period will be from the date of receipt of Occupancy Certificate or from the date on which the Promoter announces in writing on commencement of administration and maintenance became operational whichever is later. The Project shall be managed either by the Promoter or by its nominated Maintenance Agency during the initial period. 
+            </div>
+
+
+            <div style="margin-bottom:8px;">
+                            13. All statutory charges, GST and any other levies including any incidence of enhancement therein demanded or imposed by the Concerned Authorities shall be payable by the Applicant(s) as per the demand made by the Promoter. 
+            </div>
+
+
+            <div style="margin-bottom:8px;">
+                            14. Applicant(s) having NRI/PIO status or being foreign nationals shall be solely responsible to comply with the necessary formalities as laid down in Foreign Exchange Management Act 1999 and/or any other statutory provisions governing this transaction which may inter-alia involve remittance of payments/considerations and acquisition of immovable assets in India. For NRI’s - Payments are to be made from their Own NRI A/c, NRE or NRO A/c only. If payment is made from NRE or NRO A/c, PAN Card details should be submitted (Xerox copy). 
+            </div>
+        </ol>
+    </div>
+<!-- Footer -->
+    <table style="width:100%; margin-top:120px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+            
+  </div>
+
+<div style="page-break-before: always;"></div>
+
+
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+    <div style="margin-top:15px; font-size:12px; text-align:justify; line-height:1.8;">
+
+        <ol style="padding-left:15px; margin:0;">
+            <div style="margin-bottom:8px;">
+                            15. The Applicant(s) shall register his/her/their complete postal address and email id with the Promoter at the time of booking and it shall be his/her/their responsibility to inform the Promoter by registered A.D letter/registered email id about all subsequent changes in his/her/their complete postal address and email id, failing which all demand notices and letters posted at the first registered address/email id will be deemed to have been received by Applicant(s) at the time when those should originally reach at such address/email id. The Applicant(s) shall not be entitled to claim or derive any benefit arising out of any change in his/her postal address or email ID unless prior written intimation of such change is duly provided to the Promoter. In the absence of such intimation, Applicant(s) shall be solely responsible for any consequences arising from failure to intimate such change and shall fully indemnify and compensate the Promoter for any loss, cost, damage, or liability incurred as a result thereof.        </div>
+
+            <div style="margin-bottom:8px;">
+                            16. In case of Joint Applicant(s), all communications shall be sent by the Promoter to the Applicant whose name appears first in this Application Form at the address given by him/her for mailing and which shall for all purposes be considered as served on to all the Applicants and no separate communication shall be necessary to the other named co-Applicant.             </div>
+        
+
+            
+            <div style="margin-bottom:8px;">
+                            17. The Applicant(s) understands, acknowledges and agrees that visiting a particular Unit during construction is unsafe and also agrees not to ask for permission to visit the Unit until it is completed in all aspects and thereafter, agrees to visit the Unit at a predetermined time as mutually decided and undertakes to comply with all safety procedures and protocols.             </div>
+
+
+            <div style="margin-bottom:8px;">
+                            18. Architectural features like Elevation, Colour / Colour Combinations or any other feature affecting the aesthetics of the building, shown in the Marketing Brochures / Collaterals are indicative and for representational purposes only, Promoter reserves the right to change the same.             </div>
+
+            <div style="margin-bottom:8px;">
+                            19. The Applicant(s) understands, acknowledges and agrees that there shall be no requests for any (minor or major) modifications/customizations in the Unit (either internal or external)and any such request, if made, shall not be entertained.             </div>
+
+
+            <div style="margin-bottom:8px;">
+                            20. All interior works shall be allowed only after the particular Unit is handed over/taken over by the Applicant(s).             </div>
+
+
+            <div style="margin-bottom:8px;">
+                            21. The Applicant(s) is hereby informed that the Promoter may raise finance/loan from any institution / company / bank by any mode or manner by way of charge/mortgage/securitization of the Unit / Project or the land underneath or the receivables, subject to the condition that the Unit shall be made free from all encumbrances at the time of execution of Sale Deed in favour of the Applicant(s).             </div>
+        </ol>
+    </div>
+<!-- Footer -->
+    <table style="width:100%; margin-top:80px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+            
+  </div>
+
+<div style="page-break-before: always;"></div>
+
+
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+    <div style="margin-top:15px; font-size:12px; text-align:justify; line-height:1.8;">
+
+        <ol style="padding-left:15px; margin:0;">
+            <div style="margin-bottom:8px;">
+                    22. The terms and conditions mentioned in this Application form will be superseded by the Agreement of Sale upon execution of the same. 
+            </div>
+            <div style="margin-bottom:8px;">
+                    23. The Courts at Hyderabad District shall have the exclusive jurisdiction in case of any dispute.         
+                </div>
+            
+            <div style="margin-bottom:8px;">
+                    I/We the above Applicant(s) do herein declare that the above particulars given by me/us are true and correct to the best of my/our knowledge &amp; information. Any booking against this application is subject to the terms and conditions enclosed to this application and as per the Agreement of Sale upon its execution. I/We undertake to inform the Promoter of any change in my/our address or in any other particulars/information given above.
+
+                         </div>
+        </ol>
+    </div>
+
+    <!--  Declaration  -->
+        <div style="margin-top:35px; font-size:13px; font-weight:bold;">
+             Declaration 
+        </div>
+
+        <div style="margin-top:15px; font-size:12px; text-align:justify; line-height:1.5;">
+
+    <div style="margin-bottom:8px;">
+        I/We, the Applicant(s), declare our understanding and satisfaction on the following:
+    </div>
+
+    <ol style="padding-left:18px; margin:0;">
+
+        <li style="margin-bottom:6px;">
+            The details pertaining to the project viz. location, specifications, amenities, unit layout, sanction plans,
+            payment and completion schedule, etc., have been explained by the Promoter. I/We am/are completely satisfied
+            with the information shared during the visit to the project site, website of the Promoter, and RERA.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            All communications (primarily through electronic mode) shall be sent to the email ID/postal address of the first applicant.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            I/We shall be solely responsible for updating any changes in email ID, postal address, or personal details
+            to the Promoter. Failing this, any communication made based on the details provided in the Application Form
+            shall be deemed to have been received and considered valid for all purposes.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            All deposits, charges, taxes, and levies payable to government authorities, as applicable from time to time,
+            shall be borne by me/us and shall not be claimed from the Promoter under any circumstances.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            Parking spaces will be marked and made available after completion of the project.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            In case I/We wish to change or substitute the Applicant(s) name(s) after execution and registration of the
+            Agreement of Sale, all associated charges, costs, and expenses—including documentation, stamping,
+            franking, and related formalities—shall be borne exclusively by the Applicant(s).
+        </li>
+
+        <li style="margin-bottom:6px;">
+            Upon cancellation of booking as per the terms herein, the Promoter shall have full rights to sell or allot
+            the cancelled unit to any third party at its sole discretion. I/We shall have no further claim on the unit.
+        </li>
+
+        <li style="margin-bottom:6px;">
+            I/We shall be solely responsible for payment of TDS applicable to this transaction.
+        </li>
+
+    </ol>
+
+    <div style="margin-top:10px;">
+        I/We confirm that these terms and conditions shall be binding upon me/us and our respective legal heirs and successors.
+        I/We further affirm that I/we have fully read and understood the contents, obtained independent legal advice,
+        and agree to comply with and be bound by these terms and conditions.
+    </div>
+
+</div>
+<!-- Footer -->
+    <table style="width:100%; margin-top:30px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+            
+  </div>
+
+
+<div style="page-break-before: always;"></div>
+
+
+
+<div style="padding:15px; position:relative;">
+
+    <!-- Logo -->
+    <div style="text-align:center;">
+        <apex:image url="{!URLFOR($Resource.Tribhuj)}" height="40"/>
+    </div>
+
+    <!-- Header -->
+    <div style="text-align:center; font-size:14px; font-weight:bold;">APPLICATION FORM</div>
+    <div style="text-align:center; font-size:9px;">
+        Zuari Gangothri Tribhuja (Phase 1, 2 &amp; 3)<br/>
+        RERA No: P01100010650, P01100010651 &amp; P01100010652<br/>
+        https://rera.telangana.gov.in/
+    </div>
+    <div style="width:100%; padding:20px; box-sizing:border-box; font-family:Arial; font-size:10px; color:#000;">
+
+    <!-- Title -->
+    <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:10px;">
+        FOR OFFICE USE ONLY
+    </div>
+
+    <!-- Enquiry -->
+    <div>
+        Enquiry Reference No:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Name}"/></span>
+
+        &nbsp;&nbsp;&nbsp;
+
+        Scheme:
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Quote__r.Name}"/></span>
+    </div>
+
+    <!-- Marketing Source -->
+    <div style="margin-top:35px; font-weight:bold; font-size:16px;">
+        Marketing Source
+    </div>
+
+    <div style="margin-top:15px;">
+        Channel:
+        &nbsp;&nbsp;{!IF(Booking__c.SLead__r.Source_Type__c == 'Channel partner', '[X]', '[ ]')} Retail &nbsp;&nbsp;
+        {!IF(Booking__c.SLead__r.Source_Type__c == 'Corporate Activity', '[X]', '[ ]')} Institutional
+    </div>
+
+    <div style="margin-top:5px;">
+        Payout through:
+        &nbsp;&nbsp;[ ] Portal &nbsp;&nbsp;
+        [ ] Adjustment post Agreement
+    </div>
+
+    <div style="margin-top:5px;">
+        Others:
+        [ ] Primary
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"></span>
+        [ ] Secondary
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"></span>
+        [ ] Tertiary
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- Sub Source -->
+    <div style="margin-top:8px;">
+        Sub Source: <apex:outputText value="{!Booking__c.SLead__r.Source_Type__c}"/>
+        &nbsp;&nbsp; Brokerage payout %:
+        <span style="display:inline-block; width:100px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- Name + PAN -->
+    <div style="margin-top:8px;">
+        Name:
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.ContactPerson__c}"/></span>
+
+        &nbsp;&nbsp;
+
+        PAN:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- RERA -->
+    <div style="margin-top:8px;">
+        RERA No:
+        <span style="display:inline-block; width:450px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Project_Name__c}"/></span>
+    </div>
+
+    <!-- Corporate -->
+    <div style="margin-top:8px;">
+        Corporate Employee Name:
+        <span style="display:inline-block; width:250px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.SLead__r.Customer_Name__c}"/></span>
+
+        &nbsp;&nbsp;
+
+        PAN:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- Dept -->
+    <div style="margin-top:8px;">
+        Dept:
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"></span>
+
+        Designation:
+        <span style="display:inline-block; width:150px; border-bottom:1px dotted #000;"></span>
+
+        ID:
+        <span style="display:inline-block; width:120px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- Pre Sales Head -->
+    <div style="margin-top:12px;">
+        Pre Sales Head Name:
+        <span style="display:inline-block; width:300px; border-bottom:1px dotted #000;"></span>
+
+        Signature:
+        <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+    </div>
+
+    <!-- Sales Source -->
+    <div style="margin-top:35px; font-weight:bold; font-size:16px;">
+        Sales Source
+    </div>
+
+    <!-- Sales Table -->
+    <table style="width:100%; margin-top:15px; font-size:12px; border-collapse:collapse;">
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                RM 1: Name &amp; EMP No:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"><apex:outputText value="{!Booking__c.Owner.Name}"/></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                RM 2: Name &amp; EMP No:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                TL 1: Name &amp; EMP No:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                TL 2: Name &amp; EMP No:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                Pre Sales 1: Name &amp; EMP No:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                Business Head <br/>Name:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                 Head of CRM <br/>Name:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding-bottom:6px;">
+                 Head of Sales and Marketing <br/>Name:
+                <span style="display:inline-block; width:200px; border-bottom:1px dotted #000;"></span>
+            </td>
+            <td style="padding-bottom:6px;">
+                Signature:
+                <span style="display:inline-block; width:180px; border-bottom:1px dotted #000;"></span>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+<!-- Footer -->
+    <table style="width:100%; margin-Top:130px; font-size:9px;">
+        <tr>
+            <td>
+                <div>For Gangothri Infraedge Pvt. Ltd</div>
+                <div style="border-top:1px solid #000; width:150px; text-align:center; margin-top:30px;">
+                    Authorized Signatory
+                </div>
+            </td>
+            <td style="text-align:right;">
+
+    <!-- First Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:30px;">
+        (Signature of Sole/First Applicant)
+    </div>
+
+    <!-- Second Signature -->
+    <div style="border-top:1px solid #000; width:150px; margin-left:auto; text-align:center; margin-top:40px;">
+        (Signature of Second Applicant)
+    </div>
+
+</td>
+        </tr>
+    </table>
+            
+  </div>
+
+<div style="page-break-before: always;"></div>
+<div style="padding:15px; position:relative;">
+
+<div style="margin-top:15px; font-family:Arial; font-size:10px; color:#000; line-height:1.5; text-align:justify;">
+
+    <!-- Title -->
+    <div style="text-align:center; font-weight:bold; font-size:12px;">
+        FOR FIRST APPLICANT
+    </div>
+
+    <div style="text-align:center; font-weight:bold; margin-top:5px;">
+        CONSENT FOR COLLECTION, USE AND SHARING OF PERSONAL DATA BY THE PROMOTER
+    </div>
+
+    <div style="text-align:center; font-size:9px;">
+        (Pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023)
+    </div>
+
+    <div style="margin-top:8px;">
+        This Consent Form is executed pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023, by the Applicant in favour of the Promoter.
+    </div>
+
+    <!-- Section 1 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        1. Details of the Data Fiduciary
+    </div>
+
+    <div style="margin-top:5px;">
+        <div>
+            Name of Promoter: Gangothri Infraedge Pvt. Ltd<br/>
+        </div>
+        <div>
+            Registered Address: Plot No. 222, Rd No. 17, Jubilee Hills International Club Exit, Jubilee Hills, Hyderabad - 500033<br/>
+            Email (Grievance / Data Protection): accounts@gangothri.com
+        </div>
+        
+    </div>
+
+    <!-- Section 2 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        2. Details of the Data Principal (Applicant)
+    </div>
+
+    <Table>
+        <tr>
+          <td>Name: {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</td>
+        </tr>
+        <tr>
+          <td>Mobile Number: <apex:outputText value="{!Booking__c.Mobile__c}"/></td>
+        </tr>
+        <tr>
+          <td>EMAIL ID: <apex:outputText value="{!Booking__c.Email__c}"/></td>
+        </tr>
+        <tr>
+          <td>Address: {!PermanentFullAddress}</td>
+        </tr>
+    </Table>
+
+    <!-- Section 3 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        3. Consent and Purpose
+    </div>
+
+    <div style="margin-top:5px;">
+        I, the undersigned Applicant (“Data Principal”), hereby provide my free, specific, informed, unconditional,
+        and unambiguous consent to the Promoter and its authorized representatives to collect, use, store, access,
+        share, and otherwise process my personal data strictly for lawful and legitimate purposes connected with
+        the sales process, including but not limited to:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">Lead generation, customer onboarding, and site visits;</li>
+        <li style="margin-bottom:4px;">Follow-ups, communication, and facilitation of booking;</li>
+        <li style="margin-bottom:4px;">Sharing of project information, pricing, availability, and offers;</li>
+        <li style="margin-bottom:4px;">Verification, documentation, internal record-keeping, and audit;</li>
+        <li style="margin-bottom:4px;">Raising of invoices, issuance of receipts and refunds, if any;</li>
+        <li style="margin-bottom:4px;">Compliance with applicable laws, regulations, and contractual obligations.</li>
+    </ol>
+
+    <!-- Section 4 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        4. Nature of Personal Data
+    </div>
+
+    <div style="margin-top:5px;">
+        The personal data collected and processed may include, without limitation:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            Name, contact details, and address as mentioned in the Application Form;
+        </li>
+        <li style="margin-bottom:4px;">
+            Identity or verification details (where required);
+        </li>
+        <li style="margin-bottom:4px;">
+            Bank account details;
+        </li>
+        <li style="margin-bottom:4px;">
+            Information relating to preferences, budget, and transaction interest;
+        </li>
+        <li style="margin-bottom:4px;">
+            Any other personal information voluntarily shared during the engagement.
+        </li>
+    </ol>
+
+    <!-- Section 5 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        5. Consent for Sharing with Promoter
+    </div>
+
+    <div style="margin-top:5px;">
+        I expressly acknowledge and consent that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            My personal data may be shared by the Promoter with statutory and government authorities as required under applicable law; and
+        </li>
+        <li style="margin-bottom:4px;">
+            My personal data may be shared with banks and financial institutions for the purposes of loan processing and KYC verification.
+        </li>
+    </ol>
+
+    <!-- Section 6 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        6. Data Security and Retention
+    </div>
+
+    <div style="margin-top:5px;">
+        I understand and acknowledge that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            Reasonable technical and organizational safeguards shall be implemented by the Promoter to protect my personal data against unauthorized access, misuse, loss, alteration, or disclosure;
+        </li>
+        <li style="margin-bottom:4px;">
+            My personal data shall be retained only for such period as necessary to fulfill the stated purpose or as required under applicable law, and shall thereafter be erased.
+        </li>
+    </ol>
+
+    
+
+</div>
+    </div>
+
+<div style="page-break-before: always;"></div>
+
+<div style="padding:15px; position:relative;">
+
+<div style="margin-top:15px; font-family:Arial; font-size:10px; color:#000; line-height:1.5; text-align:justify;">
+
+        <!-- Section 7 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        7. Rights of the Data Principal
+    </div>
+
+    <div style="margin-top:5px;">
+        I am aware of and acknowledge my rights under the DPDP Act, including the right to:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">Seek information regarding processing of my personal data;</li>
+        <li style="margin-bottom:4px;">Request correction or erasure of my personal data;</li>
+        <li style="margin-bottom:4px;">Withdraw my consent at any time;</li>
+        <li style="margin-bottom:4px;">Seek grievance redressal;</li>
+        <li style="margin-bottom:4px;">
+            Nominate a person to exercise my rights in the event of death or incapacity.
+        </li>
+    </ol>
+
+    <div style="margin-top:5px;">
+        Requests may be addressed to the Promoter at:
+        <span style="font-weight:bold;">Ms. Madhuri</span>
+        (accounts@gangothri.com)
+    </div>
+
+    <!-- Section 8 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        8. Withdrawal of Consent
+    </div>
+
+    <div style="margin-top:5px;">
+        I understand that I may withdraw this consent at any time by providing written notice to the Promoter.
+        I acknowledge that such withdrawal may affect the Promoter’s ability to continue engagement or complete
+        the intended transaction.
+    </div>
+
+    <!-- Section 9 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        9. Declaration
+    </div>
+
+    <div style="margin-top:5px;">
+        By signing this Annexure, I confirm that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            I have read and understood the terms of this Annexure;
+        </li>
+        <li style="margin-bottom:4px;">
+            This consent is given voluntarily and without coercion; and
+        </li>
+        <li style="margin-bottom:4px;">
+            The information provided by me is true and accurate.
+        </li>
+    </ol>
+        
+<!-- Signature of Data Principal 10 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        10. Signature of Data Principal
+    </div>
+
+    <Table>
+        <tr>
+          <td>Name: {!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</td>
+        </tr>
+        <tr>
+          <td>Signature:</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+        </tr>
+        <tr>
+          <td>Place:</td>
+        </tr>
+    </Table>
+
+<div style="margin-top:15px; font-family:Arial; font-size:10px; color:#000; line-height:1.5; text-align:justify;">
+
+    <!-- Title -->
+    <div style="text-align:center; font-weight:bold; font-size:12px;">
+        FOR OTHER CO-APPLICANT(S)
+    </div>
+
+    <div style="text-align:center; font-weight:bold; margin-top:5px;">
+        CONSENT FOR COLLECTION, USE AND SHARING OF PERSONAL DATA BY THE PROMOTER
+    </div>
+
+    <div style="text-align:center; font-size:9px;">
+        (Pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023)
+    </div>
+
+    <!-- Intro -->
+    <div style="margin-top:8px;">
+        This Consent Form is executed pursuant to Data Protection and Compliance with the Digital Personal Data Protection Act, 2023, by the Co-Applicant(s) in favour of the Promoter.
+    </div>
+
+
+        <!-- Section 1 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        1. Details of the Data Fiduciary
+    </div>
+
+    <div style="margin-top:5px;">
+        <div>
+            Name of Promoter: Gangothri Infraedge Pvt. Ltd<br/>
+        </div>
+        <div>
+            Registered Address: Plot No. 222, Rd No. 17, Jubilee Hills International Club Exit, Jubilee Hills, Hyderabad - 500033<br/>
+            Email (Grievance / Data Protection): accounts@gangothri.com
+        </div>
+        
+    </div>
+
+    <!-- Section 2 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        2. Details of the Data Principal (Applicant)
+    </div>
+
+    <Table>
+        <tr>
+          <td>Name: <apex:outputText value="{!firstCoApplicant.Name}"/></td>
+        </tr>
+        <tr>
+          <td>Mobile Number: <apex:outputText value="{!firstCoApplicant.Primary_Phone__c}"/></td>
+        </tr>
+        <tr>
+          <td>EMAIL ID: <apex:outputText value="{!firstCoApplicant.Email__c}"/></td>
+        </tr>
+        <tr>
+          <td>Address: {!FirstCoApplicantPermanentFullAddress}</td>
+        </tr>
+    </Table>
+
+    <!-- Section 3 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        3. Consent and Purpose
+    </div>
+
+    <div style="margin-top:5px;">
+        I, the undersigned Applicant (“Data Principal”), hereby provide my free, specific, informed, unconditional,
+        and unambiguous consent to the Promoter and its authorized representatives to collect, use, store, access,
+        share, and otherwise process my personal data strictly for lawful and legitimate purposes connected with
+        the sales process, including but not limited to:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">Lead generation, customer onboarding, and site visits;</li>
+        <li style="margin-bottom:4px;">Follow-ups, communication, and facilitation of booking;</li>
+        <li style="margin-bottom:4px;">Sharing of project information, pricing, availability, and offers;</li>
+        <li style="margin-bottom:4px;">Verification, documentation, internal record-keeping, and audit;</li>
+        <li style="margin-bottom:4px;">Raising of invoices, issuance of receipts and refunds, if any;</li>
+        <li style="margin-bottom:4px;">Compliance with applicable laws, regulations, and contractual obligations.</li>
+    </ol>
+
+</div>
+
+
+
+    </div>
+    
+    </div>
+
+<div style="page-break-before: always;"></div>
+
+<div style="padding:15px; position:relative;">
+
+<div style="margin-top:15px; font-family:Arial; font-size:10px; color:#000; line-height:1.5; text-align:justify;">
+    
+
+    <!-- Section 4 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        4. Nature of Personal Data
+    </div>
+
+    <div style="margin-top:5px;">
+        The personal data collected and processed may include, without limitation:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            Name, contact details, and address as mentioned in the Application Form;
+        </li>
+        <li style="margin-bottom:4px;">
+            Identity or verification details (where required);
+        </li>
+        <li style="margin-bottom:4px;">
+            Bank account details;
+        </li>
+        <li style="margin-bottom:4px;">
+            Information relating to preferences, budget, and transaction interest;
+        </li>
+        <li style="margin-bottom:4px;">
+            Any other personal information voluntarily shared during the engagement.
+        </li>
+    </ol>
+
+    <!-- Section 5 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        5. Consent for Sharing with Promoter
+    </div>
+
+    <div style="margin-top:5px;">
+        I expressly acknowledge and consent that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            My personal data may be shared by the Promoter with statutory and government authorities as required under applicable law; and
+        </li>
+        <li style="margin-bottom:4px;">
+            My personal data may be shared with banks and financial institutions for the purposes of loan processing and KYC verification.
+        </li>
+    </ol>
+
+    <!-- Section 6 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        6. Data Security and Retention
+    </div>
+
+    <div style="margin-top:5px;">
+        I understand and acknowledge that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            Reasonable technical and organizational safeguards shall be implemented by the Promoter to protect my personal data against unauthorized access, misuse, loss, alteration, or disclosure;
+        </li>
+        <li style="margin-bottom:4px;">
+            My personal data shall be retained only for such period as necessary to fulfill the stated purpose or as required under applicable law, and shall thereafter be erased.
+        </li>
+    </ol>
+
+        <!-- Section 7 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        7. Rights of the Data Principal
+    </div>
+
+    <div style="margin-top:5px;">
+        I am aware of and acknowledge my rights under the DPDP Act, including the right to:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">Seek information regarding processing of my personal data;</li>
+        <li style="margin-bottom:4px;">Request correction or erasure of my personal data;</li>
+        <li style="margin-bottom:4px;">Withdraw my consent at any time;</li>
+        <li style="margin-bottom:4px;">Seek grievance redressal;</li>
+        <li style="margin-bottom:4px;">
+            Nominate a person to exercise my rights in the event of death or incapacity.
+        </li>
+    </ol>
+
+    <div style="margin-top:5px;">
+        Requests may be addressed to the Promoter at:
+        <span style="font-weight:bold;">Ms. Madhuri</span>
+        (accounts@gangothri.com)
+    </div>
+
+    <!-- Section 8 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        8. Withdrawal of Consent
+    </div>
+
+    <div style="margin-top:5px;">
+        I understand that I may withdraw this consent at any time by providing written notice to the Promoter.
+        I acknowledge that such withdrawal may affect the Promoter’s ability to continue engagement or complete
+        the intended transaction.
+    </div>
+
+    <!-- Section 9 -->
+    <div style="margin-top:8px; font-weight:bold;">
+        9. Declaration
+    </div>
+
+    <div style="margin-top:5px;">
+        By signing this Annexure, I confirm that:
+    </div>
+
+    <ol style="padding-left:18px; margin-top:5px;">
+        <li style="margin-bottom:4px;">
+            I have read and understood the terms of this Annexure;
+        </li>
+        <li style="margin-bottom:4px;">
+            This consent is given voluntarily and without coercion; and
+        </li>
+        <li style="margin-bottom:4px;">
+            The information provided by me is true and accurate.
+        </li>
+    </ol>
+        
+<!-- Signature of Data Principal 0 -->
+    <div style="margin-top:10px; font-weight:bold;">
+        10. Signature of Data Principal
+    </div>
+
+    <Table>
+        <tr>
+          <td>Name: <apex:outputText value="{!firstCoApplicant.Name}"/></td>
+        </tr>
+        <tr>
+          <td>Signature:</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+        </tr>
+        <tr>
+          <td>Place:</td>
+        </tr>
+    </Table>
+    <!-- Footer -->
+    <table style="width:100%; margin-Top:130px; font-size:9px;">
+    </table>
+</div>
+</div>
+
+</body>
+</html>
+</apex:page>

@@ -1,0 +1,67 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" 
+				access="global" 
+                controller="BookingController" >
+  <aura:attribute name="recordId" type="String"/>
+        <aura:attribute name="reason" type="String"/>
+    
+    <aura:attribute name="isPopup" type="boolean" default="true"/>
+
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    
+     <aura:html tag="style">
+        .slds-modal__container{ 
+        max-width: 75rem !important;
+        width:75% !important;
+        } 
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .closeIcon{
+        display:none;
+        }
+        .slds-col{
+        margin-left:5px;
+        }
+    </aura:html >
+    
+    <aura:if isTrue="{!v.isPopup}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <lightning:buttonIcon iconName="utility:close"
+                                      onclick="{! c.doCancel }"
+                                      alternativeText="close"
+                                      variant="bare-inverse"
+                                      class="slds-modal__close"/>
+                
+                <header class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Swap Applicant Request</h1>
+                </header>
+                
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>
+                        <lightning:input  type="textarea" label="Reason for Swap" value="{!v.reason}" required="true"/>
+                    </p>
+                    
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Cancel" title="Cancel" onclick="{!c.doCancel}" />
+            <lightning:button variant="brand"   label="Submit for Approval"   onclick="{!c.handleSwap}"  />
+                </footer>
+            </div>
+        </div> 
+    </aura:if>
+   
+    
+
+       
+</aura:component>

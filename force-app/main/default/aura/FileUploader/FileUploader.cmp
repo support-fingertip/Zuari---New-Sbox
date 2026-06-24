@@ -1,0 +1,19 @@
+<aura:component controller="FileDocumentController" access="global">
+
+    <aura:attribute name="parentId" type="String" required="true"/>
+    <aura:attribute name="recordId" type="string" access="global"/> 
+    <aura:attribute name="docType" type="String" required="true"/>
+    
+    <aura:attribute name="picklistValues" type="String" access="global"/>
+
+    <aura:registerEvent name="uploadComplete" type="c:FileUploadCompleteEvent"/>
+
+    <lightning:fileUpload 
+        label="Upload File"
+        recordId="{!v.parentId}"
+        multiple="false"
+        accept=".png,.jpeg,.jpg,.pdf,.doc,.docx"
+        onuploadfinished="{!c.handleUploadFinished}"
+    />
+
+</aura:component>

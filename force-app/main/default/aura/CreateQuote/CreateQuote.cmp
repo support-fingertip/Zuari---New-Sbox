@@ -1,0 +1,849 @@
+<aura:component controller="CreateQuoteController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutHeader" access="global"  >
+    <aura:attribute name="plots" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="OppRecord" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="matchplots" type="Object[]" default="[]"/>
+    <aura:attribute name="blocks" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="searchText1" type="string" default=""/>
+    <aura:attribute name="searchText2" type="string" default=""/>
+        <aura:attribute name="searchText3" type="string" default=""/>
+    <aura:attribute name="showCostSheet" type="Boolean" default="False" />
+    <aura:attribute name="Showfields" type="Boolean" default="False" />
+    <aura:attribute name="quoteId" type="string" default=""/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="recordTypeName" type="String"/>
+    <aura:attribute name="projectName" type="String" />
+    <aura:attribute name="LeadprojectName" type="String" />
+    <aura:attribute name="projectType" type="String" />
+    <aura:attribute name="flatNumber" type="String" />
+    <!-- <aura:attribute name="FlatCost" type="Decimal" default="0.00"/>-->
+    <aura:attribute name="GrandTotal" type="Decimal"/>
+    <aura:attribute name="oppPlot" type="Booking__c"  default="{}"/>
+    <aura:attribute name="paymentType" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="ismultiplequotes" type="boolean" default="false"/>
+    <aura:attribute name="paymentTypePicklist" type="String[]" />
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="RecTypeId" type="String"/>
+    <aura:attribute name="blockId" type="String"/>
+    <aura:attribute name="showNextCmp" type="boolean" default="false" />
+    
+    <aura:attribute name="showPreview" type="boolean" default="false" />
+    <aura:attribute name="showUnits" type="boolean" default="false" />
+    <aura:attribute name="showPaymentSchCmp" type="Boolean" default="false" />
+    <aura:attribute name="paymentSchedules" type="Payment_schedule__c[]"/>
+    
+    <aura:attribute name = "CustompaymentSchedules" type="object[]"/>
+    <!--  <aura:attribute name="RecivedAmountTotal" type="Decimal" default="0.00"/>
+    <aura:attribute name="totalPercent" type="Decimal" default="0.00"/>-->
+    <aura:attribute name="GrandTotalwithGST" type="Decimal" default="0.00"/>
+    
+    <aura:attribute name="showBlockLookup" type="Boolean" default="false" />
+    
+    
+    <aura:attribute name="carParkingOption" type="Boolean" default="true"/>
+    <aura:attribute name="isSingleCheckboxChecked" type="Boolean" default="false"/>
+    
+    <aura:attribute name="gstOption" type="Boolean" default="true"/>
+    <aura:attribute name="isGSTChecked" type="Boolean" default="false"/>
+    <aura:attribute name="gstonOther" type="Boolean" default="true"/>
+    <aura:attribute name="isgstonOtherChecked" type="Boolean" default="false"/>
+    
+    <aura:attribute name="matchblocks" type="Block__c[]" />
+    
+    <aura:attribute name="matchpaymentplan" type="Object[]" default="[]"/>
+    <aura:attribute name="paymentplan" type="object[]" default="[]"/>
+    <aura:handler name="change" value="{!v.searchText1}" action="{!c.searchText1}"></aura:handler>
+    
+    <aura:handler name="change" value="{!v.searchText2}" action="{!c.searchText2}"></aura:handler>
+    
+    <aura:handler name="change" value="{!v.searchText3}" action="{!c.searchText3}"></aura:handler>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    <aura:html tag="style">
+        .slds-modal__container{ 
+        max-width: 80rem !important;
+        width:80% !important;
+        } 
+        
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .closeIcon{
+        display:none;
+        }
+        .slds-col{
+        margin-left:5px;
+        }
+    </aura:html >
+    
+    <aura:if isTrue="{!Not(v.showNextCmp)}"> 
+        <header class="slds-modal__header">
+            <lightning:buttonIcon iconName="utility:close"
+                                  onclick="{! c.closeModel }"
+                                  alternativeText="close"
+                                  variant="bare-inverse"
+                                  class="slds-modal__close"/>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Quotes</h2>
+        </header>
+        
+        
+        <div class="slds-grid slds-wrap slds-grid_pull-padded-x-medium">
+            
+            <aura:if isTrue="{!v.showBlockLookup}">
+                
+                <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                    
+                    <div class="slds-combobox_container">
+                        <div class="{!not(empty(v.matchblocks)) ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click' }" aura:id="open">
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                <lightning:input value="{!v.searchText2}" aura:id="field1" name="enter-search" label="Block" type="search" required="true" id="combobox-id-1" aria-autocomplete="list" aria-controls="listbox-id-1" aria-expanded="false" aria-haspopup="listbox" autoComplete="off" role="combobox" placeholder="Search..."/>                                      
+                            </div>
+                            <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                    <aura:if isTrue="{!v.matchblocks}">
+                                        <aura:iteration items="{!v.matchblocks}" var="item">
+                                            <li role="presentation" class="slds-listbox__item">
+                                                <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                    <span class="slds-media__figure slds-listbox__option-icon">
+                                                        <span class="slds-icon_container slds-icon-standard-account">
+                                                            <lightning:icon iconName="standard:user" size="xx-small"/>&nbsp;
+                                                        </span>
+                                                    </span>
+                                                    <span class="slds-media__body">
+                                                        <div class="slds-lookup__result-text" data-id="{!item.Id}" onclick="{!c.update2}">
+                                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </aura:iteration> 
+                                    </aura:if>      
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            
+            
+            <aura:if isTrue="{!v.showUnits == true}">
+                
+                
+                <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                    <div class="slds-combobox_container">
+                        <div class="{!not(empty(v.matchplots)) ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click' }" aura:id="open">
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                
+                                <lightning:input value="{!v.searchText1}" aura:id="field1" name="enter-search" label="Unit Number" type="search" required="true" id="combobox-id-1" aria-autocomplete="list" aria-controls="listbox-id-1" aria-expanded="false" aria-haspopup="listbox" autoComplete="off" role="combobox" placeholder="Search..."/>                                      
+                                
+                            </div>
+                            <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                
+                                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                    <aura:if isTrue="{!v.matchplots}">
+                                        <!--<div class="{!if(not(empty(v.matchplots)), 'result-buttom','')}">-->
+                                        <aura:iteration items="{!v.matchplots}" var="item">
+                                            <li role="presentation" class="slds-listbox__item">
+                                                <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                    
+                                                    <span class="slds-media__figure slds-listbox__option-icon">
+                                                        <span class="slds-icon_container slds-icon-standard-account">
+                                                            <lightning:icon iconName="standard:user" size="xx-small"/>&nbsp;
+                                                        </span>
+                                                    </span>
+                                                    <span class="slds-media__body">
+                                                        <div class="slds-lookup__result-text" data-id="{!item.Id}" onclick="{!c.update1 }">
+                                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                                                            <!--<span class="slds-listbox__option-meta slds-listbox__option-meta_entity">Account • Burlington, NC</span>-->
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </aura:iteration> 
+                                    </aura:if>      
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </aura:if>
+            
+            
+            <aura:if isTrue="{!v.searchText1!=''}">
+                <aura:if isTrue="{!v.Showfields}">
+                    <aura:if isTrue="{!v.projectType == 'Apartments'}">
+
+                        <!-- Unit Information -->
+                        <div class="slds-size_8-of-8 slds-p-horizontal_small slds-m-top_small">
+                            <h3 class="slds-text-heading_small slds-text-color_default"><b>Unit Information</b></h3>
+                            <hr/>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Property_Type__c" type="Text" formatter="Text"  disabled="true" label="Property Type" value="{!v.oppPlot.Property_Type__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Tower__c" type="Text" formatter="Text"  disabled="true" label="Tower" value="{!v.oppPlot.Tower__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Floor__c" type="Text" formatter="Text"  disabled="true" label="Floor" value="{!v.oppPlot.Floor__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="flatNumber" type="Text" formatter="Text"  disabled="true" label="Unit No" value="{!v.flatNumber}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="BHK_Type__c" type="Text" formatter="Text"  disabled="true" label="Type of Apartment" value="{!v.oppPlot.BHK_Type__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input  class="custom-disabled" name="Unit_Facing_Direction__c" type="Text" formatter="Text"  disabled="true" label="Facing" value="{!v.oppPlot.Unit_Facing_Direction__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Super_Built_UpArea__c" type="Text" formatter="Number"  disabled="true" label="Super Built-up Area (Sq.ft)"  value="{!v.oppPlot.Super_Built_UpArea__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input  class="custom-disabled" name="Carpet_Area__c" type="Text" formatter="Number"  disabled="true" label="Carpet Area (Sq.ft)"  value="{!v.oppPlot.Carpet_Area__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Balcony_Area_Sq_ft__c" type="Text" formatter="Number"  disabled="true" label="Balcony Area (Sq.ft)"  value="{!v.oppPlot.Balcony_Area_Sq_ft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="UDS_in_Sqyards__c" type="Text" formatter="Number"  disabled="true" label="UDS (Sq.Yard)"  value="{!v.oppPlot.UDS_in_Sqyards__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Corner_Non_Corner__c" type="Text" formatter="Text"  disabled="true" label="Corner/Non-Corner"  value="{!v.oppPlot.Corner_Non_Corner__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Mort_Non_Mortgage__c" type="Text" formatter="Text"  disabled="true" label="Mortgage Status"  value="{!v.oppPlot.Mort_Non_Mortgage__c}" />
+                        </div>
+
+                        <!-- Component of Agreement Value (INR / Sq Ft rates) -->
+                        <div class="slds-size_8-of-8 slds-p-horizontal_small slds-m-top_small">
+                            <h3 class="slds-text-heading_small slds-text-color_default"><b>Component of Agreement Value</b></h3>
+                            <hr/>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Rate_per_sqft__c" type="Text" formatter="Currency"  disabled="false" label="Base Price (Per Sq.ft)"  value="{!v.oppPlot.Rate_per_sqft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Floor_Rise_Charges_Rate__c" type="Text" formatter="Currency"  disabled="true" label="Floor Rise Charges (Per Sq.ft)"  value="{!v.oppPlot.Floor_Rise_Charges_Rate__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Facing_charges__c" type="Text" formatter="Currency"  disabled="true" label="East Facing Charges (Per Sq.ft)"  value="{!v.oppPlot.Facing_charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Corner_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Corner Apartment Charges (Per Sq.ft)"  value="{!v.oppPlot.Corner_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Road_View_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Road View Charges (Per Sq.ft)"  value="{!v.oppPlot.Road_View_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="ORR_View_Charges__c" type="Text" formatter="Currency"  disabled="true" label="ORR View Premium Charges (Per Sq.ft)"  value="{!v.oppPlot.ORR_View_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Garden_View_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Internal Garden/Park View Charges (Per Sq.ft)"  value="{!v.oppPlot.Garden_View_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Discount_Price__c" type="Text" formatter="Currency"  disabled="false" label="Discount (Per Sq.ft)"  value="{!v.oppPlot.Discount_Price__c}" onchange="{!c.handleDiscountChange}" />
+                        </div>
+
+                        <!-- Other Charges (Fixed Amount per Flat) -->
+                        <div class="slds-size_8-of-8 slds-p-horizontal_small slds-m-top_small">
+                            <h3 class="slds-text-heading_small slds-text-color_default"><b>Other Charges</b></h3>
+                            <hr/>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="amenities_charges__c" type="Text" formatter="Currency"  disabled="true" label="Amenities + Club House"  value="{!v.oppPlot.Clubhouse_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Water_Electricity_Rate__c" type="Text" formatter="Currency"  disabled="true" label="Water, Electricity, Gas &amp; Infra (Per Sq.ft)"  value="{!v.oppPlot.Water_Electricity_Rate__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Car_Parking__c" type="Text" formatter="Currency"  disabled="true" label="Car Parking"  value="{!v.oppPlot.Car_Parking__c}" />
+                        </div>
+
+                        <!-- Passthrough Charges -->
+                        <div class="slds-size_8-of-8 slds-p-horizontal_small slds-m-top_small">
+                            <h3 class="slds-text-heading_small slds-text-color_default"><b>Passthrough Charges</b></h3>
+                            <hr/>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Corpus_Fund__c" type="Text" formatter="Currency"  disabled="true" label="Corpus Fund (Per Sq.ft)"  value="{!v.oppPlot.Corpus_Fund__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Maintenance_Charge__c" type="Text" formatter="Currency"  disabled="true" label="Maintenance / CAM (Per Sq.ft / Month)"  value="{!v.oppPlot.Maintenance_Charge__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Legal_Documentation_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Legal &amp; Documentation Charges"  value="{!v.oppPlot.Legal_Documentation_Charges__c}" />
+                        </div>
+
+                        <!-- GST and Payment Options -->
+                        <div class="slds-size_8-of-8 slds-p-horizontal_small slds-m-top_small">
+                            <h3 class="slds-text-heading_small slds-text-color_default"><b>GST &amp; Payment</b></h3>
+                            <hr/>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.gstOption}">
+                                <lightning:select label="With GST" name="gstOption" aura:id="gstSelect" onchange="{!c.handleGSTOptionChange}">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </lightning:select>
+                            </aura:if>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                        </div>
+                        <aura:if isTrue="{!v.isSingleCheckboxChecked}">
+                            <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                                <lightning:input class="custom-disabled" name="GST_for_Aggrement_Value__c" type="number" formatter="number" step="0.01" disabled="true" label="GST on Agreement Value (%)"  value="{!v.oppPlot.GST_for_Aggrement_Value__c}" />
+                            </div>
+                            <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                                <lightning:input class="custom-disabled" name="GST_For_Other_Charges__c" type="number" formatter="number" step="0.01" disabled="true" label="GST on Other Charges (%)"  value="{!v.oppPlot.GST_For_Other_Charges__c}" />
+                            </div>
+                        </aura:if>
+
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:select class="select slds-size_1-of-1" label="Payment Type"  aura:id="select" value="{!v.oppPlot.Payment_Type__c}"   messageWhenValueMissing="Please select this field" disabled="false"  required="true" onchange="{!c.handleChange}">
+                                <option value="None" >None</option>
+                                <aura:iteration items="{!v.paymentTypePicklist}"  var="option">
+                                    <option text="{!option}" ></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        </div>
+                       
+                        
+                        
+                        <!--
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.carParkingOption}">
+                            <lightning:select label="Select Car Parking Option" name="parkingOption" aura:id="parkingSelect" onchange="{!c.handleParkingOptionChange}">
+                                <option value="Yes">Yes</option>
+                            </lightning:select>
+                            
+                        </aura:if>
+                    </div>
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.isSingleCheckboxChecked}">
+                            <lightning:input name="Car_Parking__c" type="number" formatter="currency" step="0.01" disabled="true" label="Car Parking Charge"  value="{!v.oppPlot.Car_Parking__c}" />
+                            
+                        </aura:if>
+                        
+                    </div>
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.gstOption}">
+                            <lightning:select label="Select GST Option For Aggrement" name="gstAggrementOption" aura:id="gstAggremSelect" onchange="{!c.handleGSTAggrementOptionChange}">
+                                <option value="Yes">Yes</option>
+                            </lightning:select>
+                            
+                        </aura:if>
+                    </div>
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.isGSTChecked}">
+                            <lightning:input name="GST_for_Aggrement_Value__c" type="number" formatter="number" step="0.01" disabled="true" label="GST for Aggrement Value"  value="{!v.oppPlot.GST_for_Aggrement_Value__c}" />
+                            
+                        </aura:if>
+                        
+                    </div>
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.gstonOther}">
+                            <lightning:select label="Select GST Option For Other" name="gstOtherrrOption" aura:id="gstOthSelect" onchange="{!c.handleGSTOtherOptionChange}">
+                                <option value="Yes">Yes</option>
+                            </lightning:select>
+                            
+                        </aura:if>
+                    </div>
+                    <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                        <aura:if isTrue="{!v.isgstonOtherChecked}">
+                            <lightning:input name="GST_For_Other_Charges__c" type="number" formatter="number" step="0.01" disabled="true" label="GST for Other Value"  value="{!v.oppPlot.GST_For_Other_Charges__c}" />
+                            
+                        </aura:if>
+                        
+                    </div>
+                    
+                    -->
+                    </aura:if>
+                    <!--  <aura:if isTrue="{!v.projectType == 'Villas'}">
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Project__c" type="Text" formatter="Text"  disabled="true" label="Project" aura:id="pro" value="{!v.oppPlot.Project__c}" />
+                        </div> 
+                         <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Property_Type__c" type="Text" formatter="Text"  disabled="true" label="Project" aura:id="pro" value="{!v.oppPlot.Property_Type__c}" />
+                        </div> 
+                      
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Scheme__c" type="Text" formatter="Text"  disabled="true" label="Scheme" aura:id="pro" value="{!v.oppPlot.Scheme__c}" />
+                        </div> 
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Wing__c" type="Text" formatter="Text"  disabled="true" label="Wing" aura:id="pro" value="{!v.oppPlot.Wing__c}" />
+                        </div> 
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="BHK_Type__c" type="Text" formatter="Text"  disabled="true" label="BHK Type" aura:id="pro" value="{!v.oppPlot.BHK_Type__c}" />
+                        </div> 
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Unit_Facing_Direction__c" type="Text" formatter="Text"  disabled="true" label="Facing" aura:id="pro" value="{!v.oppPlot.Unit_Facing_Direction__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input  type="Text" formatter="Number"  disabled="true" label="Super Built Up Area (Sq.ft)"  value="{!v.oppPlot.Super_Built_UpArea__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Carpet_Area__c" type="Text" formatter="Number"  disabled="true" label="Carpet Area (Sq.ft)"  value="{!v.oppPlot.Carpet_Area__c}" />
+                        </div> 
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Balcony_Area_Sq_ft__c" type="Text" formatter="Currency"  disabled="true" label="Balcony Area (Sq.ft)"  value="{!v.oppPlot.Balcony_Area_Sq_ft__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Sit_Out_Area_Sq_ft__c" type="Text" formatter="Currency"  disabled="true" label="Sit Out Area (Sq.ft)"  value="{!v.oppPlot.Sit_Out_Area_Sq_ft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Terrace_Area_Sq_ft__c" type="Text" formatter="Currency"  disabled="true" label="Terrace Area (Sq.ft)"  value="{!v.oppPlot.Terrace_Area_Sq_ft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Garden_Area_Sq_ft__c" type="Text" formatter="Currency"  disabled="true" label="Garden Area (Sq.ft)"  value="{!v.oppPlot.Garden_Area_Sq_ft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Rate_per_sqft__c" type="Text" formatter="Currency"  disabled="true" label="Rate Per Sq.ft"  value="{!v.oppPlot.Rate_per_sqft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Maintenance_Charge__c" type="Text" formatter="Currency"  disabled="true" label="Maintenance Rate Per Sq.ft"  value="{!v.oppPlot.Maintenance_Charge__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Floor_Rise_Charges_Rate__c" type="Text" formatter="Currency"  disabled="true" label="Floor Rise Rate Per Sq.ft"  value="{!v.oppPlot.Floor_Rise_Charges_Rate__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Water_Electricity_Rate__c" type="Text" formatter="Currency"  disabled="true" label="Water Electricity Rate"  value="{!v.oppPlot.Water_Electricity_Rate__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Clubhouse_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Club Charges"  value="{!v.oppPlot.Clubhouse_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Generator_Charges__c" type="number" formatter="currency"  disabled="true" label="Generator Charges"  value="{!v.oppPlot.Generator_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Piped_Gas__c" type="number" formatter="currency"  disabled="true" label="Pipe Gas Connection"  value="{!v.oppPlot.Piped_Gas_Charges__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Legal_Charges__c" type="number" formatter="currency"  disabled="true" label="Legal Fees"  value="{!v.oppPlot.Legal_Fees__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="W_E_Charges__c" type="number" formatter="currency"  disabled="true" label="W&amp;E Charges"  value="{!v.oppPlot.W_E_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Home_Automation_Rate__c" type="number" formatter="currency"  disabled="true" label="Home Automation Charges"  value="{!v.oppPlot.Home_Automation_Rate__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input name="Guideline_Value__c" type="number" formatter="currency"  disabled="true" label="Guideline Value"  value="{!v.oppPlot.Guideline_Value__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.carParkingOption}">
+                                <lightning:select label="Select Car Parking Option" name="parkingOption" aura:id="parkingSelect" onchange="{!c.handleParkingOptionChange}">
+                                    <option value="Yes">Yes</option>
+                                </lightning:select>
+                                
+                            </aura:if>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.isSingleCheckboxChecked}">
+                                <lightning:input name="Car_Parking__c" type="number" formatter="currency" step="0.01" disabled="true" label="Car Parking Charge"  value="{!v.oppPlot.Car_Parking__c}" />
+                                
+                            </aura:if>
+                            
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.gstOption}">
+                                <lightning:select label="Select GST Option For Aggrement" name="gstAggrementOption" aura:id="gstAggremSelect" onchange="{!c.handleGSTAggrementOptionChange}">
+                                    <option value="Yes">Yes</option>
+                                </lightning:select>
+                                
+                            </aura:if>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.isGSTChecked}">
+                                <lightning:input name="GST_for_Aggrement_Value__c" type="number" formatter="number" step="0.01" disabled="true" label="GST for Aggrement Value"  value="{!v.oppPlot.GST_for_Aggrement_Value__c}" />
+                                
+                            </aura:if>
+                            
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.gstonOther}">
+                                <lightning:select label="Select GST Option For Other" name="gstOtherrrOption" aura:id="gstOthSelect" onchange="{!c.handleGSTOtherOptionChange}">
+                                    <option value="Yes">Yes</option>
+                                </lightning:select>
+                                
+                            </aura:if>
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.isgstonOtherChecked}">
+                                <lightning:input name="GST_For_Other_Charges__c" type="number" formatter="number" step="0.01" disabled="true" label="GST for Other Value"  value="{!v.oppPlot.GST_For_Other_Charges__c}" />
+                                
+                            </aura:if>
+                            
+                        </div>
+                        
+                        
+                        <aura:if isTrue = "{!v.ismultiplequotes == true}">
+                            <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                                <lightning:input name="Discount_Price__c" type="currency" label="Discount Price"  required="true" formatter="Discount Price"  value="{!v.oppPlot.Discount_Price__c}" />
+                            </div>
+                        </aura:if>     
+                        
+                        
+                    </aura:if>-->
+                    <aura:if isTrue="{!v.projectType == 'Plots'}">
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Project__c" type="Text" formatter="Text"  disabled="true" label="Project" aura:id="pro" value="{!v.oppPlot.Project__c}" />
+                        </div> 
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Property_Type__c" type="Text" formatter="Text"  disabled="true" label="Project" aura:id="pro" value="{!v.oppPlot.Property_Type__c}" />
+                        </div> 
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Unit_Facing_Direction__c" type="Text" formatter="Text"  disabled="true" label="Facing" aura:id="pro" value="{!v.oppPlot.Unit_Facing_Direction__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Plot_Type__c" type="Text" formatter="Text"  disabled="true" label="Plot Type" aura:id="pro" value="{!v.oppPlot.Plot_Type__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled"  type="Text" formatter="Number"  disabled="true" label="Plot Land Area (Sq.ft)"  value="{!v.oppPlot.Super_Built_UpArea__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Rate_per_sqft__c" type="Text" formatter="Currency"  disabled="true" label="Rate Per Sq.ft"  value="{!v.oppPlot.Rate_per_sqft__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Infrastructure_Charges_per_sqft__c" type="Text" formatter="Currency"  disabled="true" label="Infrastructure Charges"  value="{!v.oppPlot.Infrastructure_Charges_per_sqft__c}" />
+                        </div>
+                         <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="PLC_Charges__c" type="Text" formatter="Currency"  disabled="true" label="PLC Charges"  value="{!v.oppPlot.PLC_Charges__c}" />
+                        </div>
+                       
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Clubhouse_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Club House Charges"  value="{!v.oppPlot.Clubhouse_Charges__c}" />
+                        </div>
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:input class="custom-disabled" name="Clubhouse_Charges__c" type="Text" formatter="Currency"  disabled="true" label="Maintenance Charges"  value="{!v.oppPlot.Maintenance_Charge__c}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <aura:if isTrue="{!v.gstOption}">
+                                <lightning:select label="With GST" name="gstOption" aura:id="gstSelect" onchange="{!c.handleGSTOptionChange}">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </lightning:select>
+                                
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!v.isSingleCheckboxChecked}">
+                            <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                                <lightning:input class="custom-disabled" name="GST_For_Other_Charges__c" type="number" formatter="number" step="0.01" disabled="true" label="GST for Other Value"  value="{!v.oppPlot.GST_For_Other_Charges__c}" />
+                            </div>
+                            
+                        </aura:if>
+                        
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small">
+                            <lightning:input class="custom-disabled" name="Discount_Price__c" type="currency" label="Discount Price"  required="false" formatter="Discount Price"  value="{!v.oppPlot.Discount_Price__c}" onchange="{!c.handleDiscountChange}" />
+                        </div>
+                        
+                        <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                            <lightning:select class="select slds-size_1-of-1 custom-disabled" label="Payment Type"  aura:id="select" value="{!v.oppPlot.Payment_Type__c}"   messageWhenValueMissing="Please select this field" disabled="false"  required="true" onchange="{!c.handleChange}">
+                                <option value="None" >None</option>
+                                <aura:iteration items="{!v.paymentTypePicklist}"  var="option">
+                                    
+                                    <option text="{!option}" ></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            
+                        </div>
+                        
+                          
+                  
+                    </aura:if>
+                    <aura:if isTrue = "{!v.paymentType == 'Standard'}">
+                        
+                         <div class="slds-size_4-of-8 slds-p-horizontal_small"  >
+                               <div class="slds-combobox_container">
+                                      
+                                            <div class="{!not(empty(v.matchpaymentplan)) ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click' }" aura:id="open">
+                              <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                               
+                               <lightning:input value="{!v.searchText3}" aura:id="field3" name="enter-search" label="Payment Plan" type="search" required="true" id="combobox-id-1" aria-autocomplete="list" aria-controls="listbox-id-1" aria-expanded="false" aria-haspopup="listbox" autoComplete="off" role="combobox" placeholder="Search..."/>                                      
+                                                  
+                        </div>
+                             
+                                <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                                    
+                                                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                        <aura:if isTrue="{!v.matchpaymentplan}">
+                                                            <aura:iteration items="{!v.matchpaymentplan}" var="item">
+                                                                <li role="presentation" class="slds-listbox__item">
+                                                                    <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                                        
+                                                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                                                            <span class="slds-icon_container slds-icon-standard-account">
+                                                                                <lightning:icon iconName="standard:user" size="xx-small"/>&nbsp;
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="slds-media__body">
+                                                                            <div class="slds-lookup__result-text" data-id="{!item.Id}" onclick="{!c.update3 }">
+                                                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                                                                            </div>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </aura:iteration> 
+                                                        </aura:if>      
+                                                    </ul>
+                                                </div>
+                                             
+                        </div>
+                        </div>
+                       
+                        </div>
+                        </aura:if>
+                    
+                    
+                    <br>
+                    </br>
+                    
+                </aura:if>
+            </aura:if>
+            <br>
+            </br>
+            <br>
+            </br> 
+        </div>
+        <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+            <button class="slds-button slds-button_brand" onclick="{!c.closeModel}">Cancel</button>
+            <!-- <lightning:button  variant="brand" label="Save" title="Brand action" onclick="{!c.doSave}" />-->
+            <lightning:button class="slds-m-top_small" variant="brand"  label="Next"  onclick="{!c.navigateToPaymentSchedule}"/>            
+            
+            <!--    <lightning:button class="slds-m-top_small" variant="brand"  label="Next"  onclick="{!c.navigateToPaymentSchedule}"/>            
+
+     <aura:if isTrue="{!v.searchText1!=''}">
+            <button class="slds-button slds-button_brand" onclick="{!c.doSave}" >Save</button>
+            
+        </aura:if>  -->
+        </div>
+        
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.showNextCmp}">
+        
+        <!--<c:PaymentSchCmp Pay="{!v.oppPlot.Payment_Type__c}" project="{!v.oppPlot.Project__c}"  oppPlot="{!v.oppPlot}"/> -->
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <div class="modal-header slds-modal__header slds-size_1-of-1">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"> Payment schedules</h2><br/><br/>
+                    <b>Project Name:</b>&nbsp;&nbsp; {!v.projectName} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Flat Number:</b>&nbsp;&nbsp; {!v.flatNumber} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- <b>FlatCost:</b>&nbsp;&nbsp; {!v.FlatCost}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                    <aura:if isTrue = "{!v.paymentType == 'Standard'}">  
+                        <!--  <span class="red-dot"></span> - to be merged-->
+                    </aura:if>
+                </div>
+                <aura:if isTrue = "{!v.paymentType == 'Standard'}">         
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <div class="slds-scrollable"   style="height:auto">
+                            <table   class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Sl. No</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Payment Schedule Name</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Percent</div></th>
+                                        
+                                        <!--   <th scope="col"><div class="slds-truncate" title="Name">Amount</div></th>-->
+                                        
+                                    <!--     <th scope="col"><div class="slds-truncate" title="Name">Status</div></th>-->
+                                        
+                                        <!--  <th scope="col"><div class="slds-truncate" title="Name">Due Date</div></th>-->
+                                        <!--
+                            <th scope="col"><div class="slds-truncate" title="Name">Is Completed</div></th>
+-->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.paymentSchedules}" var="item" indexVar="index">
+                                        <tr class="{! 'slds-hint-parent ' + (item.status__c == 'Completed' ? 'completed-row' : '')}">
+                                            <td><div class="slds-truncate" title="{!index+1}">{!index +1}</div></td>
+                                            
+                                            <td><div class="slds-truncate" title="{!item.Name}">{!item.Name}</div></td>         
+                                            <td><div class="slds-truncate" title="{!item.Payment_percent__c}">{!item.Payment_percent__c}</div></td>    
+                                            <!--   <td><div class="slds-truncate" title="{!item.Amount__c}">{!item.Amount__c}</div></td>-->
+                                         <!--    <td><div class="slds-truncate" title="{!item.status__c}">{!item.status__c}</div></td>-->
+                                            <!--      <td>
+                                                <aura:if isTrue = "{!item.status__c == 'Completed'}">   
+                                                    <div class="slds-truncate" title="{!item.Payment_Due_Date__c}"><lightning:input type="date" name="input6" label="Due Date"  value="{!item.Payment_Due_Date__c}" onchange="{!c.fillDueDate}"/>
+                                                    </div>
+                                                </aura:if>
+                                            </td>-->
+                                            <!--
+                                <td><div class="slds-truncate" title="{!item.Completed__c}"> <lightning:input type="Checkbox"   disabled="true" name="input6"   checked="{!item.Completed__c}"/></div></td>
+                                -->
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </aura:if> 
+                
+                
+                
+                <aura:if isTrue = "{!v.paymentType == 'Custom'}">         
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <div class="slds-scrollable"   style="height:auto">
+                            <table   class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Sl. No</div></th>
+                                        
+                                        <th scope="col" ><div class="slds-truncate" title="Name">Payment Schedule Name</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Percent</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Status</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Date</div></th>
+                                        
+                                        <th scope="col"><div class="slds-truncate" title="Name">Add/Delete</div></th>
+                                        <!--
+                            <th scope="col"><div class="slds-truncate" title="Name">Is Completed</div></th>
+-->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.CustompaymentSchedules}" var="item" indexVar="index">
+                                        <tr class="slds-hint-parent">
+                                            <td><div class="slds-truncate" title="{!index+1}" >{!index +1}</div></td>
+                                            
+                                            <td ><div class="slds-truncate" title="{!item.Name}"><lightning:input type="text" name="input6" label="Name"  value="{!item.Name}"/></div></td>         
+                                            <td><div class="slds-truncate" title="{!item.Payment_percent__c}"><lightning:input type="number" name="input6" label="Percent"  value="{!item.Payment_percent__c}" onchange="{!c.calculatePaymentPercent}"/></div></td>  
+                                            <td ><div class="slds-truncate" title="{!item.status__c}"><lightning:select name="select1" label="status" value="{!item.status__c}">
+                                                <option value="">choose one...</option>
+                                                <option value="Scheduled">Scheduled</option>
+                                                <option value="Demanded">Demanded</option>
+                                                <option value="Paid">Paid</option>
+                                                </lightning:select></div></td> 
+                                            <td>
+                                                <aura:if isTrue = "{!item.status__c == 'Scheduled' || item.status__c == 'Demanded'}">   
+                                                    <div class="slds-truncate" title="{!item.Payment_Due_Date__c}"><lightning:input type="date" name="input6" label="Due Date"  value="{!item.Payment_Due_Date__c}"/>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue = "{!item.status__c == 'Paid'}">   
+                                                    <div class="slds-truncate" title="{!item.Completed_Date__c}"><lightning:input type="date" name="input6" label="Completed Date"  value="{!item.Completed_Date__c}"/>
+                                                    </div>
+                                                </aura:if>
+                                            </td> 
+                                            <td class="slds-text-align_right">
+                                                <div class="slds-truncate">
+                                                    <lightning:buttonIcon iconName="utility:add" iconClass="green"  size="x-large" variant="success" alternativeText="Add" onclick="{!c.addRow}"/>   
+                                                    <a onclick="{!c.removeRow}" data-record="{!index}">
+                                                        <lightning:buttonIcon iconName="utility:delete" iconClass="red"  size="x-large" variant="destructive" alternativeText="Delete" />
+                                                    </a>
+                                                </div></td>
+                                            <!--
+                                <td><div class="slds-truncate" title="{!item.Completed__c}"> <lightning:input type="Checkbox"   disabled="true" name="input6"   checked="{!item.Completed__c}"/></div></td>
+                                -->
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            
+                            
+                        </div>
+                    </div>
+                </aura:if>         
+                
+                
+                
+                
+                <div class="slds-modal__footer">
+                    <!-- <b>Grand Total :</b>₹{!v.GrandTotal}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b>Grand Total With Tax :</b>₹{!v.GrandTotalwithGST}-->
+                    <div class="slds-align_absolute-center slds-p-top_small "></div>
+                    
+                    <lightning:button variant="brand" label="Previous" title="Brand action" onclick="{!c.handlePrevious}" />
+                    
+                    <lightning:button variant="brand" label="Preview" title="Brand action" onclick="{!c.doPreview}" />
+                    <!--   <lightning:button  variant="brand" label="Save" title="Brand action" onclick="{!c.doSave}" />-->
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div>
+        <aura:if isTrue="{!v.showPreview}">
+            <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="header43" class="slds-text-heading_medium">Quote PDF Preview</h2>
+                    </header>
+                    
+                    <!-- Modal Body with PDF -->
+                    <div class="slds-modal__content slds-p-around_medium" style="height:500px;">
+                        <aura:if isTrue="{!v.recordTypeName == 'Apartments'}">
+                            <iframe src="{!'/apex/apex/ZuariCostSheet?Id=' + v.quoteId}" width="100%" height="500px;" frameBorder="0"/>
+                            <aura:set attribute="else">
+                                <iframe src="{!'/apex/apex/CostSheet?Id=' + v.quoteId}" width="100%" height="500px;" frameBorder="0"/>
+                            </aura:set>
+                        </aura:if>
+                        <!--
+                
+        <iframe src="{!'/apex/apex/CostSheet?Id=' + v.quoteId}" width="100%" height="500px;" frameBorder="0"/>-->
+                    </div>
+                    
+                    
+                    <div class="slds-modal__footer">
+                        
+                        <lightning:button variant="brand" label="Previous" title="Brand action" onclick="{!c.handlePreviewPrevious}" />
+                        <lightning:button  variant="brand" label="Go to Quote" title="Brand action" onclick="{!c.redirectToQuote}" />
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            
+        </aura:if>
+        
+        
+        
+    </aura:if>
+    
+    
+    
+    
+    
+    
+    
+    <div>
+        <aura:if isTrue="{!v.spinner}">
+            <lightning:spinner class="spins" size="large" variant="brand" alternativeText="Loading" />
+        </aura:if>
+    </div>
+    
+</aura:component>

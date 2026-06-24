@@ -1,0 +1,31 @@
+<aura:component controller = "BookingController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="cancellationReason" type="String" />
+    <aura:attribute name="cancellationRemarks" type="String" />
+    <aura:attribute name="cancellationCharges" type="Decimal" />
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>-->
+    
+    <div class="slds-form-element slds-m-bottom--medium">
+        <div class="slds-form-element__control"> 
+            <div class="slds-col slds-size_1-of-1">
+                <lightning:select label="Cancellation Reason" name="Cancellation_Reason" aura:id="mandateFields" value="{!v.cancellationReason}" required="true">
+                    <option value="">-- None--</option>
+                    <option value="Not Attended For Agreement">Not Attended For Agreement</option>
+                    <option value="Budget Issue">Budget Issue</option>
+                    <option value="Found a New Flat">Found a New Flat</option>
+                    <option value="Not Interested">Not Interested</option>
+                    <option value="Others">Others</option>
+                </lightning:select>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <lightning:textArea name="Cancellation_Remarks" type="Text" aura:id="mandateFields" label="Cancellation Remarks"  value="{!v.cancellationRemarks}" required="true" /> 
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <lightning:input name="Cancellation_Charge" type="Number" aura:id="mandateFields"  formatter="Currency" label="Cancellation Charges" required="true" value="{!v.cancellationCharges}" /> 
+            </div>
+        </div>
+    </div>
+    <div>
+        <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.saveCancellationDetails}"/>
+    </div>
+</aura:component>

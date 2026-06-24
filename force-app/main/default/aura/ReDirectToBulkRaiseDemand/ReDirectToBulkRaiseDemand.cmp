@@ -1,0 +1,59 @@
+<aura:component  controller="BulkRaiseDemandController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="standCustType" type="String" />    
+    <aura:attribute name="bookingRecords" type="Booking__c[]" />
+    <aura:attribute name="plots" type="object[]" default="[]" access="global"/>
+    <aura:attribute name="matchplots" type="Object[]" default="[]"/>
+    <aura:attribute name="searchText1" type="string" default=""/>
+    <aura:handler name="change" value="{!v.searchText1}" action="{!c.searchText1}"></aura:handler>
+    
+    <div class="slds-scope">
+        <div class="slds-grid slds-wrap slds-text-align_left">
+            <div class="slds-size_1-of-1 slds-p-horizontal_small">
+                <lightning:select name="selectStandCust" label="Raise Based On" value="{!v.standCustType}" required="true" messageWhenValueMissing="Select type" onchange = "{!c.selectStandCus}">
+                    <option value="choose one">choose one...</option>
+                    <option value="Block">Tower</option>
+                    <!--<option value="Project">Project</option>-->
+                </lightning:select>
+            </div>
+            <div class="slds-size_1-of-1 slds-p-horizontal_small">
+                <aura:if isTrue="{!v.standCustType == 'Block'}">
+                        <div class="slds-combobox_container">
+                            <div class="{!not(empty(v.matchplots)) ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click' }" aura:id="open">
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                    <lightning:input value="{!v.searchText1}" aura:id="field1" name="enter-search" label="Tower" type="search" required="true" id="combobox-id-1" aria-autocomplete="list" aria-controls="listbox-id-1" aria-expanded="false" aria-haspopup="listbox" autoComplete="off" role="combobox" placeholder="Search..."/>                                      
+                                </div>
+                                <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                        <aura:if isTrue="{!v.matchplots}">
+                                            <aura:iteration items="{!v.matchplots}" var="item">
+                                                <li role="presentation" class="slds-listbox__item">
+                                                    <div id="option1" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                                            <span class="slds-icon_container slds-icon-standard-account">
+                                                                <lightning:icon iconName="standard:user" size="xx-small"/>&nbsp;
+                                                            </span>
+                                                        </span>
+                                                        <span class="slds-media__body">
+                                                            <div class="slds-lookup__result-text" data-id="{!item.Id}" onclick="{!c.update1}">
+                                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            </aura:iteration> 
+                                        </aura:if>      
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                </aura:if>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </div>
+</aura:component>

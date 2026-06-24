@@ -1,0 +1,105 @@
+<template>
+    <lightning-card title="Escalation Actions" icon-name="utility:level_up">
+        <div class="slds-p-horizontal_medium">
+
+            <template lwc:if={isClosed}>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    Query is closed. No escalation actions available.
+                </p>
+            </template>
+
+            <template lwc:elseif={hasAnyAction}>
+                <p class="slds-m-bottom_small">
+                    Current level: <strong>{currentLevel}</strong>
+                </p>
+
+                <template lwc:if={showTlActions}>
+                    <lightning-button
+                        label="Escalate to HOD"
+                        variant="brand"
+                        onclick={handleEscalateToHod}
+                        disabled={isBusy}
+                        class="slds-m-right_x-small slds-m-bottom_x-small">
+                    </lightning-button>
+                    <lightning-button
+                        label="Reassign to Executive"
+                        onclick={handleOpenReassign}
+                        disabled={isBusy}
+                        class="slds-m-bottom_x-small">
+                    </lightning-button>
+                </template>
+
+                <template lwc:if={showHodActions}>
+                    <lightning-button
+                        label="Escalate to CFO"
+                        variant="brand"
+                        onclick={handleEscalateToCfo}
+                        disabled={isBusy}
+                        class="slds-m-right_x-small slds-m-bottom_x-small">
+                    </lightning-button>
+                    <lightning-button
+                        label="Reassign (new 7-day SLA)"
+                        onclick={handleOpenReassign}
+                        disabled={isBusy}
+                        class="slds-m-bottom_x-small">
+                    </lightning-button>
+                </template>
+
+                <template lwc:if={showCfoActions}>
+                    <lightning-button
+                        label="Escalate to CEO"
+                        variant="brand"
+                        onclick={handleEscalateToCeo}
+                        disabled={isBusy}
+                        class="slds-m-bottom_x-small">
+                    </lightning-button>
+                </template>
+            </template>
+
+            <template lwc:else>
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    No manual actions are available for you at this level.
+                </p>
+            </template>
+
+            <template lwc:if={showReassign}>
+                <section class="slds-box slds-m-top_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">Reassign Query</h3>
+                    <lightning-combobox
+                        label="New Owner (CRM Executive)"
+                        placeholder="Select a user"
+                        value={reassignOwnerId}
+                        options={userOptions}
+                        onchange={handleOwnerChange}
+                        required>
+                    </lightning-combobox>
+                    <lightning-textarea
+                        label="Reason"
+                        value={reassignReason}
+                        onchange={handleReasonChange}
+                        required
+                        class="slds-m-top_x-small">
+                    </lightning-textarea>
+                    <div class="slds-m-top_small">
+                        <lightning-button
+                            label="Cancel"
+                            onclick={handleCancelReassign}
+                            disabled={isBusy}
+                            class="slds-m-right_x-small">
+                        </lightning-button>
+                        <lightning-button
+                            label="Confirm Reassign"
+                            variant="brand"
+                            onclick={handleConfirmReassign}
+                            disabled={isBusy}>
+                        </lightning-button>
+                    </div>
+                </section>
+            </template>
+
+            <template lwc:if={isBusy}>
+                <lightning-spinner alternative-text="Working..." size="small"></lightning-spinner>
+            </template>
+        </div>
+    </lightning-card>
+</template>

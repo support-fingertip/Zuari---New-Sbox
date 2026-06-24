@@ -1,0 +1,463 @@
+<aura:component controller="newProjectBoardControllerClass"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"></aura:handler>
+    <aura:attribute name="projects" type="object[]" default="[]"/>
+    <aura:attribute name="Plots" type="object[]" default="[]"/>
+    <aura:attribute name="filteredPlots" type="object[]" default="[]"/>
+    <aura:attribute name="showProjects" type="boolean" default="true"/>
+    <aura:attribute name="showPlots" type="boolean" default="false"/>
+    <aura:attribute name="totalSoldUnits" type="integer" default="false"/>
+    <aura:attribute name="totalAvailableUnits" type="integer" default="false"/>
+    <aura:attribute name="projectName" type="String" default=""/>
+    <aura:attribute name="showCreateBooking" type="boolean" default="false"/>
+    <aura:attribute name="unitId" type="Id"/>    
+    
+    <aura:attribute name="plotTypeOptions" type="List" default="[]"/>
+    <aura:attribute name="bhkTypeOptions" type="List" default="[]"/>
+    <aura:attribute name="statusOptions" type="List" default="[]"/>
+    
+    <aura:attribute name="blockNames" type="List" />
+    <aura:attribute name="filterBlock" type="String" />
+    <aura:attribute name="wingNames" type="List" />
+    <aura:attribute name="filterWing" type="String" />
+    
+    <aura:attribute name="filterStatus" type="String" default=""/>
+    <aura:attribute name="filterBHKType" type="String" default=""/>
+    <aura:attribute name="searchText" type="String" default=""/>
+    
+    <aura:attribute name="BookedPlots" type="Object[]" />
+    <aura:attribute name="NotReleasedPlots" type="Object[]" />
+    <aura:attribute name="SoldPlots" type="Object[]" />
+    <aura:attribute name="BlockedPlots" type="Object[]" />
+    <aura:attribute name="AvailablePlots" type="Object[]" />
+    <lightning:navigation aura:id="navService" />
+    <aura:if isTrue="{!v.showProjects}">
+        <div class="projects-section">
+            <div class="app-container">
+                <div class="app-content">
+                    <div class="projects-section">
+                        <div class="projects-section-header">
+                            <p>Projects</p>
+                            <aura:if isTrue="{!($Browser.formFactor=='DESKTOP')}">
+                                <div class="projects-section-line">
+                                    <div class="projects-status">
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.projects.length}</span>
+                                            <span class="status-type">Total Projects</span>
+                                        </div>
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.totalAvailableUnits}</span>
+                                            <span class="status-type">Total units available</span>
+                                        </div>
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.totalSoldUnits}</span>
+                                            <span class="status-type">Total units sold</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!($Browser.formFactor=='PHONE')}">
+                            <div class="projects-section-line">
+                                <div class="projects-status">
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.projects.length}</span>
+                                        <span class="status-type">Total Projects</span>
+                                    </div>
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.totalAvailableUnits}</span>
+                                        <span class="status-type">Total units available</span>
+                                    </div>
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.totalSoldUnits}</span>
+                                        <span class="status-type">Total units sold</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        
+                        <div class="project-boxes jsGridView">
+                            <aura:iteration items="{!v.projects}" var="prj"> 
+                                <div class="project-box-wrapper myColor">
+                                    <div class="project-box">
+                                        <div class="project-box-header">
+                                            <span>{!prj.Name}</span>
+                                        </div>
+                                        <div class="project-box-content-header">
+                                            <p class="box-content-subheader">Total Unit: {!prj.Total_Units__c}</p>
+                                            <p class="box-content-subheader">Available Unit: {!prj.Available_Units__c}</p>
+                                             <p class="box-content-subheader">Blocked Unit: {!prj.Blocked_Units__c}</p>
+                                            <p class="box-content-subheader">Booked Unit: {!prj.Booked_Units__c}</p>
+                                         <!--   <p class="box-content-subheader">Not Released Unit: {!prj.Not_Released_Units__c}</p>
+                                            <p class="box-content-subheader">Hold Unit: {!prj.Blocked_Units__c}</p>
+                                            <p class="box-content-subheader">Sold Unit: {!prj.Sold_Units__c}</p>-->
+                                        </div>
+                                        <div class="box-progress-wrapper">
+                                            <p class="box-progress-header">Booking progress</p>
+                                            <div class="box-progress-bar">
+                                                <span class="box-progress" 
+                                                      style="{! 'width:' + prj.progressWidth +'%;background-color: #096c86'}">
+                                                </span>                                              
+                                            </div>
+                                            <p class="box-progress-percentage">
+                                                {!prj.progressPercentage}
+                                            </p>
+                                        </div>
+                                        <div class="project-box-footer">
+                                            <div class="days-left" style="color: #096c86;" onclick="{!c.loadPlots}" data-id="{!prj.Id}" data-name="{!prj.Project__c}">
+                                                View Units
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <!--
+    <aura:if isTrue="{!v.showPlots}">
+        <div class="projects-section">
+            <div class="app-container">
+                <div class="app-content">
+                    <div class="projects-section">
+                        <div class="projects-section-header">
+                            <p><nav role="navigation" aria-label="Breadcrumbs">
+                                <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                                    <li class="slds-breadcrumb__item">
+                                        <a href="#">Projects</a>
+                                    </li>
+                                    <li class="slds-breadcrumb__item slds-p-left_medium">
+                                        {!v.projectName}
+                                    </li>
+                                </ol>
+                                </nav></p>
+                            <aura:if isTrue="{!($Browser.formFactor=='DESKTOP')}">
+                                <div class="projects-section-line">
+                                    <div class="projects-status">
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.Plots.length}</span>
+                                            <span class="status-type">Total Flats</span>
+                                        </div>
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.AvailablePlots.length}</span>
+                                            <span class="status-type">Available Flats</span>
+                                        </div>
+                                        <div class="item-status">
+                                            <span class="status-number">{!v.SoldPlots.length}</span>
+                                            <span class="status-type">Sold Flats</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!($Browser.formFactor=='PHONE')}">
+                            <div class="projects-section-line">
+                                <div class="projects-status">
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.Plots.length}</span>
+                                        <span class="status-type">Total plots</span>
+                                    </div>
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.AvailablePlots.length}</span>
+                                        <span class="status-type">Available plots</span>
+                                    </div>
+                                    <div class="item-status">
+                                        <span class="status-number">{!v.SoldPlots.length}</span>
+                                        <span class="status-type">Sold plots</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <div  class="filter-section slds-grid ">
+                            <div class="slds-col slds-size_1-of-6">
+                                <lightning:select aura:id="blockSelect" name="filterBlock" label="Block" 
+                                                  value="{!v.filterBlock}" onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.blockNames}" var="block">
+                                        <option value="{!block}">{!block}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                
+                            </div>
+                        
+                        
+                        
+                            <div class="slds-col slds-size_1-of-6">
+                                <lightning:select name="filterWing" label="Wing/Tower" value="{!v.filterWing}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.wingNames}" var="type">
+                                        <option value="{!type.value}">{!type.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                
+                            </div>
+                        
+                        
+                            <div class="slds-col slds-size_1-of-6">
+                                <lightning:select name="bhkTypeFilter" label="BHK Type" value="{!v.filterBHKType}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.bhkTypeOptions}" var="type">
+                                        <option value="{!type.value}">{!type.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </div>
+                            <div class="slds-col slds-size_1-of-6">
+                                <lightning:select name="statusFilter" label="Status" value="{!v.filterStatus}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.statusOptions}" var="status">
+                                        <option value="{!status.value}">{!status.label}</option>
+                                    </aura:iteration>
+                                </lightning:select> </div></div>
+                        
+                        
+                        
+                        <ul class="rwp-chart-legend rwp-chart-legend-Center" aria-hidden="true">
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon avaliable"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Vacant</div>
+                                </div>
+                            </li>      
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon booked"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Booked</div>
+                                </div>
+                            </li>       
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon sold"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Sold</div>
+                                </div>
+                            </li>  
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon blocked"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Hold</div>
+                                </div>
+                            </li> 
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon notreleased"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Not released</div>
+                                </div>
+                            </li> 
+                        </ul>
+                        
+                        
+                        <div class="project-boxes jsGridView ">
+                            <aura:iteration items="{!v.filteredPlots}" var="plot">
+                                <div class="project-box-wrapper-plot">
+                                    <div class="{!plot.Status__c =='Vacant'?'project-box-plot avaliable':plot.Status__c =='Booked'?'project-box-plot booked':plot.Status__c =='NFS'?'project-box-plot notreleased':plot.Status__c =='Sold'?'project-box-plot sold':plot.Status__c =='Hold'?'project-box-plot blocked':'project-box-plot'}">
+                                        <div class="project-box-header-plot">
+                                            <span>{!plot.Status__c}</span>
+                                        </div>
+                                        <div class="project-box-content-header-plot">
+                                            <p class="box-content-header-plot">{!plot.Name}</p>
+                                            <p class="box-content-subheader">Rate per sft.: र{!plot.Rate_per_sqft__c	}</p>
+                                            <p class="box-content-subheader">Built up area: {!plot.Super_Built_up_Area__c}</p>
+                                            <p class="box-content-subheader">Block Name: {!plot.Block_Name__c}</p>
+                                            <p class="box-content-subheader">Wing: {!plot.Wing__c}</p>
+                                            <p class="box-content-subheader">BHK Type: {!plot.BHK_Type__c}</p>
+                                        </div>
+                                        <div class="project-box-footer-plot">
+                                            <div class="days-left-plot" style="color: #096c86;" onclick="{!c.navigatePlots}" data-id="{!plot.Id}">
+                                                Go to Unit
+                                            </div>
+                                            <aura:if isTrue="{!plot.Status__c == 'Available'}">
+                                                <div class="days-left-plot" style="color: #096c86;" onclick="{!c.handleCreateBooking}" data-id="{!plot.Id}">
+                                                    Create booking
+                                                </div>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    -->
+    <aura:if isTrue="{!v.showPlots}">
+        <div class="app-container">
+            <div class="app-content">
+                
+                <div class="project-section">
+                    <div class="project-section-header">
+                          <p><nav role="navigation" aria-label="Breadcrumbs">
+                            <ol class="slds-breadcrumb slds-list_horizontal">
+                                <li class="slds-breadcrumb__item">
+                                    <a href="#">Projects</a>
+                                </li>
+                                <li class="slds-breadcrumb__item slds-p-left_medium">
+                                    {!v.projectName}
+                                </li>
+                            </ol>
+                            </nav></p>
+                       <div class="filter-section">
+                           <div class="slds-col slds-size_1-of-8">
+                            <lightning:select aura:id="blockSelect" name="filterBlock" label="Block" 
+                                                  value="{!v.filterBlock}" onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.blockNames}" var="block">
+                                        <option value="{!block}">{!block}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                               
+                           </div>
+                           <!--
+                        <div class="slds-col slds-size_1-of-8">
+                            <lightning:select name="filterWing" label="Wing/Tower" value="{!v.filterWing}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.wingNames}" var="type">
+                                        <option value="{!type.value}">{!type.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                               
+                           </div>-->
+                        <div class="slds-col slds-size_1-of-8">
+                            <lightning:select name="bhkTypeFilter" label="BHK Type" value="{!v.filterBHKType}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.bhkTypeOptions}" var="type">
+                                        <option value="{!type.value}">{!type.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            
+                           </div>
+                        <div class="slds-col slds-size_1-of-8">
+                             <lightning:select name="statusFilter" label="Status" value="{!v.filterStatus}" 
+                                                  onchange="{!c.handleFilterChange}">
+                                    <option >All</option>
+                                    <aura:iteration items="{!v.statusOptions}" var="status">
+                                        <option value="{!status.value}">{!status.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                           </div>
+                           <div class="slds-col slds-size_1-of-8">
+            <lightning:input type="search" 
+                           label="Search Units" 
+                           value="{!v.searchText}"
+                           placeholder="Enter unit number..."
+                           onchange="{!c.handleFilterChange}"/>
+        </div>
+                        
+                        </div>
+                         <ul class="rwp-chart-legend rwp-chart-legend-Center" aria-hidden="true">
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon avaliable"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Available</div>
+                                </div>
+                            </li>      
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon booked"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Booked</div>
+                                </div>
+                            </li>  
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon blocked"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">On Hold</div>
+                                </div>
+                            </li> 
+                           <!-- <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon notreleased"></div>
+                                </div>
+                                  <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Not released</div>
+                                </div>
+                            </li>
+                                    
+                            <li class="rwp-chart-legend__card-Center">
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__icon sold"></div>
+                                </div>
+                                <div class="rwp-chart-legend__cell">
+                                    <div class="rwp-chart__description">Sold</div>
+                                </div>
+                            </li>-->
+                        </ul>
+                       
+            
+            </div>
+                    
+                     <!-- Scrollable content -->
+                   <div class="project-boxes jsGridView compact">
+                    <aura:iteration items="{!v.filteredPlots}" var="plot">
+                         <div class="project-box-wrapper-plot compact">
+                        	 <div class="{!plot.Status__c =='Available'?'project-box-plot avaliable':plot.Status__c =='Booked'?'project-box-plot booked':plot.Status__c =='NFS'?'project-box-plot notreleased':plot.Status__c =='Sold'?'project-box-plot sold':plot.Status__c =='On Hold'?'project-box-plot blocked':'project-box-plot'}">
+                             <div class="project-box-header-plot">
+                                            <span>{!plot.Status__c}</span>
+                                        </div>
+                                        <div class="project-box-content-header-plot">
+                                            <p class="box-content-header-plot">{!plot.Name}</p>
+                                            <p class="box-content-subheader">Rate per sft.: र{!plot.Rate_per_sqft__c	}</p>
+                                            <p class="box-content-subheader">Built up area: {!plot.Super_Built_up_Area__c}</p>
+                                        <!--    <p class="box-content-subheader">Block Name: {!plot.Block_Name__c}</p>
+                                            <p class="box-content-subheader">Wing: {!plot.Wing__c}</p>
+                                            <p class="box-content-subheader">BHK Type: {!plot.BHK_Type__c}</p>-->
+                                        </div>
+                                        <div class="project-box-footer-plot">
+                                            <div class="days-left-plot" style="color: #096c86;" onclick="{!c.navigatePlots}" data-id="{!plot.Id}">
+                                                Go to Unit
+                                            </div>
+                                        
+                             </div></div>
+                                   
+                        </div>
+                       </aura:iteration>
+                    </div>
+            </div>
+            </div>
+        
+        </div>
+    
+    </aura:if>
+    
+    
+    <!--
+    <aura:if isTrue="{!v.showCreateBooking}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__content" id="modal-content-id-1">
+                   <c:CreateBooking_1 recordId="{!v.unitId}"></c:CreateBooking_1>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>-->
+    
+</aura:component>

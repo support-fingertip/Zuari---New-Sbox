@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+   <!-- Hosts the LWC so it can be used via Lightning Out on a Visualforce Site page -->
+    <c:eoiForm />
+</aura:component>

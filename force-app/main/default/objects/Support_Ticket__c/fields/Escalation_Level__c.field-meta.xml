@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Level__c</fullName>
+    <label>Escalation Level</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>RM</fullName>
+                <default>false</default>
+                <label>RM</label>
+            </value>
+            <value>
+                <fullName>Sourcing Head</fullName>
+                <default>false</default>
+                <label>Sourcing Head</label>
+            </value>
+            <value>
+                <fullName>HOSM</fullName>
+                <default>false</default>
+                <label>HOSM</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

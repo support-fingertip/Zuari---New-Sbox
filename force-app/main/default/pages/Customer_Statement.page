@@ -1,0 +1,197 @@
+<apex:page renderAs="pdf" standardController="Booking__c" extensions="ConsolidatedReceiptController" showHeader="false" sidebar="false" applyBodyTag="false">
+
+<head>
+    <style type="text/css">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+        }
+        .header-table {
+            width: 100%;
+            border-bottom: 2px solid #000;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.data-table th,
+        table.data-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+        table.data-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .right {
+            text-align: right;
+        }
+        .left {
+            text-align: left;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        thead {
+            display: table-header-group;
+        }
+        tfoot {
+            display: table-footer-group;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .note {
+            font-size: 9px;
+            margin-top: 6px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<table class="header-table">
+    <tr>
+        <td>
+            <span class="title">CUSTOMER STATEMENT</span><br/>
+            <span>Date : {!TEXT(TODAY())}</span>
+        </td>
+        <td align="right">
+            <!-- Static Resource Logo -->
+            <img src="{!URLFOR($Resource.Adventz_Logo)}" width="120"/>
+        </td>
+    </tr>
+</table>
+
+<!-- ================= DATA TABLE ================= -->
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Unit No</th>
+            <th>Customer Name</th>
+            <th>Sl No</th>
+            <th>Milestone</th>
+            <th>%</th>
+            <th>Invoice Date</th>
+            <th>Amount in Rs.</th>
+            <th>CGST</th>
+            <th>SGST</th>
+            <th>IGST</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <apex:variable var="rowNo" value="{!0}"/>
+        <apex:repeat value="{!Booking__c.Payment_Schedules__r}" var="pay">
+        <tr>
+            <td>{!pay.Project__c}</td>
+            <td>{!pay.Booking__r.Unit_No__c}</td>
+            <td>{!pay.Booking__r.First_Applicant_Name__c}</td>
+            <td><apex:variable var="rowNo" value="{!rowNo+1}"/> {!rowNo}</td>
+            <td class="left">{!pay.Name}</td>
+            <td>{!pay.Payment_percent__c}</td>
+            <td><apex:outputText value="{0,date,dd'-'MM'-'yyyy}"> <apex:param value="{!pay.Demanded_Date__c}" /> </apex:outputText></td>
+            <td class="right"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!pay.AmountB__c}"/></apex:outputText></td>
+            <td class="right">0.00</td>
+            <td class="right">0.00</td>
+            <td class="right">0.00</td>
+            <td class="right"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!pay.AmountB__c}"/></apex:outputText></td>
+        </tr>
+        </apex:repeat>
+    </tbody>
+
+    <tfoot>
+        <tr class="total-row">
+            <td colspan="7" class="right">Total</td>
+            <td class="right"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!Booking__c.GRAND_TOTAL__c}"/></apex:outputText></td>
+            <td class="right">0.00</td>
+            <td class="right">0.00</td>
+            <td class="right">0.00</td>
+            <td class="right"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!Booking__c.GRAND_TOTAL__c}"/></apex:outputText></td>
+        </tr>
+    </tfoot>
+</table>
+    
+    
+    <!-- ================= PAGE BREAK ================= -->
+    <div class="page-break"></div>
+
+    <!-- ================= PAYMENT RECEIVED DETAILS ================= -->
+    <span class="section-title">Payment Received Details</span>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Unit No</th>
+                <th>Customer Name</th>
+                <th>Sl No</th>
+                <th>Dated</th>
+                <th>Cheque Detail</th>
+                <th>Cheque No</th>
+                <th>Cheque Dated</th>
+                <th>Drawn On</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <apex:variable var="rowNo1" value="{!0}"/>
+             <apex:repeat value="{!repList}" var="wrapper">
+            <tr>
+                <td>{!Booking__c.Project__c}</td>
+                <td>{!Booking__c.Unit_No__c}</td>
+                <td>{!Booking__c.First_Applicant_Name__c}</td>
+                <td><apex:variable var="rowNo1" value="{!rowNo1+1}"/> {!rowNo1}</td>
+                <td><apex:outputText value="{0,date,dd'-'MM'-'yyyy}"> <apex:param value="{!wrapper.receiptDate}" /> </apex:outputText></td>
+                <td>{!wrapper.modeOfPayment}</td>
+                <td class="left">{!wrapper.instruMentNo}</td>
+                <td><apex:outputText value="{0,date,dd'-'MM'-'yyyy}"> <apex:param value="{!wrapper.chequeDate}" /> </apex:outputText></td>
+                <td class="left">ZUARI INFRAWORLD INDIA LTD - ZGC PLOTS COLLECTION</td>
+                <td class="right">{!wrapper.receiptAmount}</td>
+            </tr>
+            </apex:repeat>
+            
+        </tbody>
+    </table>
+
+    <br/>
+
+    <!-- ================= SUMMARY ================= -->
+    <table class="data-table">
+        <tr class="total-row">
+            <td class="left">Total Payment as on Date</td>
+            <td colspan="9"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!Booking__c.Total_received_Amount__c}"/></apex:outputText></td>
+        </tr>
+
+        <tr class="total-row">
+            <td class="left">Balance Payable (including other charges)</td>
+            <td colspan="8"></td>
+            <td class="right"><apex:outputText value="{0, number, ###,###,###,##0}"><apex:param value="{!Booking__c.Pending_Amount__c}"/></apex:outputText></td>
+        </tr>
+    </table>
+
+    <!-- ================= NOTES ================= -->
+    <div class="note">
+        <b>Please Note:</b><br/>
+        • Legal Fees should be paid on actuals if any.<br/>
+        • Registration Charges payable at the time of registration of the unit.
+    </div>
+
+</body>
+</apex:page>

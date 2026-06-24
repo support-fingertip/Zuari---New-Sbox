@@ -1,0 +1,156 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader"
+                controller="MakeCallController" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isdisabled" type = "boolean" />
+    <aura:attribute name="phoneList" type="List"/>
+    <aura:attribute name="selectedPhone" type="String"/>
+    <aura:attribute name="taskId" type="String"/>
+    <aura:attribute name="callcomplete" type="boolean" default="false"/>
+    <aura:attribute name="showComments" type="boolean" default="false"/>
+    <aura:attribute name="displayCall" type="boolean" default="false"/>
+    <aura:attribute name="fromHome" type="boolean" default="false"/>
+    <aura:attribute name="fromQucickAction" type="boolean" default="false"/>
+    <aura:attribute name="parent" type="Aura.Component"/>
+    <aura:attribute name="recordOwner" type="string" />
+    <aura:attribute name="accounts" type="String[]" default="[]"/>
+    <aura:attribute name="searchText" type="string" default=""/>
+    <aura:attribute name="storeName" type="string" default=""/>
+    <aura:attribute name="leadStatus" type="string" default=""/>
+    <aura:attribute name="addNotes" type="string" default=""/>
+    <aura:attribute name="status" type="string" default=""/>
+    <aura:attribute name="value" type="string" default=""/>
+    <aura:attribute name="matchaccounts" type="String[]" default="[]"/>
+    <aura:handler name="change" value="{!v.searchText}" action="{!c.searchText}"></aura:handler> 
+    <aura:attribute name="LeadRecord" type="Object"/>
+    <aura:attribute name="SubStatus" type="String"/>
+    <aura:attribute name="reason" type="String"/>
+    <aura:attribute name="isPopup" type="boolean" default="true"/>
+    <aura:attribute name="showFields2" type="boolean" default="true"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="showMessages" type="boolean" default="false"/>
+    <aura:attribute name="disabled" type="boolean" default="false"/>
+    <aura:attribute name="showFields" type="boolean" default="false"/>
+    <aura:attribute name="showFields1" type="boolean" default="false"/>
+    <aura:attribute name="isPrimary" type="boolean" default="false"/>
+    <aura:attribute name="isSecondary" type="boolean" default="false"/>
+    <aura:attribute name="showSave" type="boolean" default="true"/>
+    <aura:attribute name="isError" type="boolean" default="false"/>
+    <aura:attribute name="followUpDate" type="datetime"/>
+    <aura:attribute name="siteVisitScheduled" type="datetime"/>
+    <aura:attribute name="followUpSubject" type="String"/>
+    <aura:attribute name="isClosedOrUnqualified" type="boolean" default="false"/>
+    <aura:attribute name="isFollowUpRequired" type="Boolean" default="true"/>
+    <aura:attribute name="showLeadQuality" type="Boolean" default="false"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Name,OwnerId,Lead_OwnerSecondary__c,isCurrentUser__c,isCurrentUserSec__c,Lead_quality__c"
+                      targetFields="{!v.LeadRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+    <lightning:empApi aura:id="empApi" /> 
+    <lightning:overlayLibrary aura:id="overlayLib"/>    
+    <aura:handler event="force:refreshView" action="{!c.refresh}"/>    
+    <aura:html tag="style">
+        .slds-modal__container{ 
+        max-width: 50rem !important;
+        width:50% !important;
+        } 
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .closeIcon{
+        display:none;
+        }
+        .slds-col{
+        margin-left:5px;
+        }
+        
+    </aura:html>
+    <aura:if isTrue="{!v.showComments == false}">
+        <div class="slds-box slds-m-around-medium">
+            <lightning:select aura:id="selectedPhone" name="select1" label="Select Number" required="true" value="{!v.selectedPhone}">
+                <aura:iteration items="{!v.phoneList}" var="record">
+                    <!--Added by basavaraj on 5/12/2025 -->
+                    <!--<option value="{!record}" selected="{!record.value == v.selectedPhone}"> {!record}</option> -->
+                    <option value="{!record.actual}"
+                            selected="{!record.actual == v.selectedPhone}">
+                        {!record.masked}
+                    </option>
+                </aura:iteration>
+            </lightning:select>
+        </div>  
+        
+        <div class="slds-clearfix">
+            <div class="slds-float_left">
+                <lightning:button class="slds-m-around_small" 
+                                  label="Clear"  
+                                  variant="neutral" 
+                                  onclick="{!c.handleClear}"/>
+            </div>
+            
+            <div class="slds-float_right">
+                <lightning:button class="slds-m-around_small" 
+                                  label="Call" 
+                                  disabled = "{!v.isdisabled}"
+                                  variant="brand" 
+                                  onclick="{!c.handleCall}"/>
+            </div>
+            <div class="slds-float_right">
+                <lightning:button class="slds-m-around_small" 
+                                  label="Cancel" 
+                                  disabled = "{!v.isdisabled}"
+                                  variant="brand" 
+                                  onclick="{!c.close}"/>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showComments}">
+        <div class="slds-p-around_medium">
+            <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Related_Source__c" onload="{!c.handleLoad}"  onsuccess="{!c.handleSuccess}" onsubmit="{!c.handleOnSubmit}" onerror="{!c.handleError}"> 
+                <!--<aura:if isTrue="{!v.isPrimary == true}">
+                    <label>Lead Status</label><br/>
+                    <lightning:inputField variant='label-hidden' aura:id="leadStatus" fieldName="Lead_Status__c" onchange="{!c.onLeadChange}" required='true'/>
+                </aura:if>
+                <aura:if isTrue="{!v.isSecondary == true}"> -->
+                <label>Lead Status</label><br/>
+                <lightning:inputField variant='label-hidden' aura:id="leadStatus" fieldName="Lead_status1__c" onchange="{!c.onLeadChange}" required='true'/>
+                <!--  </aura:if> -->
+                
+                <lightning:input type="datetime" name="input3" label="Follow Up Schedule Date" value="{!v.followUpDate}" onchange="{!c.handleOnSubmit}" required="{!v.isFollowUpRequired}"/>
+                
+                <aura:if isTrue="{!v.leadStatus == 'Site Visit Schedule'}">
+                    <lightning:input type="datetime" name="input3" label="Site Vis Schedule Date" value="{!v.siteVisitScheduled}" required='true'/>
+                </aura:if>
+                <aura:if isTrue="{!not(v.showLeadQuality)}">
+                    <label>Lead Quality</label><br/>
+                    <lightning:inputField variant='label-hidden' aura:id="leadSquality" fieldName="Lead_quality__c" onchange="{!c.onLeadChange}" required='false'/>
+                </aura:if>
+                <aura:if isTrue="{!v.isClosedOrUnqualified == true}"> 
+                    <aura:if isTrue="{!v.isPrimary == true}">
+                        <label>Lost/Unqualified</label><br/>
+                        <lightning:inputField  variant='label-hidden' fieldName="Closed_Lost_Reason__c" required='true'/> 
+                    </aura:if>
+                    <aura:if isTrue="{!v.isSecondary == true}">
+                        <label>Lost/Unqualified</label><br/>
+                        <lightning:inputField variant='label-hidden' fieldName="Unqualified_Reason__c" required='true'/> 
+                    </aura:if>
+                </aura:if>
+                <lightning:input label ="Last Note" type="textarea" value="{!v.addNotes}" required='true'/>
+                <footer class="slds-modal__footer slds-m-top_medium">
+                    <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Update" onclick="{!c.addNote}"/>
+                </footer>
+            </lightning:recordEditForm>
+        </div>
+        
+    </aura:if>
+</aura:component>

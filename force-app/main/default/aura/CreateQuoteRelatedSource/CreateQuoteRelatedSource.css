@@ -1,0 +1,26 @@
+.THIS .completed-row {
+    background-color: #ffcccc;
+}
+.THIS .red-dot {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: #ff0000; 
+    border-radius: 50%; 
+    margin-left: 5px; 
+}
+.THIS .to-be-merged-text {
+    margin-left: 5px; 
+   
+}
+.THIS.slds-input[disabled] {
+    color: black;
+}
+.THIS .custom-disabled input[disabled] {
+    color: #000; /* or any darker shade you prefer */
+    font-weight: 600;
+    opacity: 1; /* prevent SLDS from making it too faint */
+}
+.THIS .custom-disabled-input label.slds-form-element__label {
+    font-weight: 600;      /* Bolder label */
+}

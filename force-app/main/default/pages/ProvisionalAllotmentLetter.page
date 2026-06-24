@@ -1,0 +1,321 @@
+<apex:page standardController="Booking__c" renderAs="pdf" extensions="AllotmentLetterController" showHeader="false" cache="true" readOnly="true" applyHtmlTag="false" applyBodyTag="false">
+    <html>
+        <head>
+            <style type="text/css">
+                @page {
+                margin: 20mm 15mm 20mm 15mm;
+                }
+                
+                body {
+                font-family: Times New Roman;
+                font-size: 15px;
+                color: #000;
+                }
+                
+                table {
+                border-collapse: collapse;
+                width: 100%;
+                }
+                
+                .no-border, .no-border td {
+                border: none !important;
+                }
+                
+                .title {
+                text-align: center;
+                font-weight: bold;
+                font-size: 20px;
+                margin: 10px 0 15px 0;
+                }
+                
+                .title span {
+                border-bottom: 1px solid #000;
+                padding-bottom: 3px;
+                }
+                
+                .date-row {
+                text-align: right;
+                margin: 10px 100px 15px 0;
+                font-size: 14px;
+                }
+                
+                .to-block {
+                margin-top: 10px;
+                line-height: 18px;
+                font-size: 14px;
+                }
+                .page-break { page-break-before: always; } 
+            </style>
+        </head>
+        
+        <body>
+            <!-- Header Logos -->
+            <table class="no-border">
+                <tr>
+                    <td style="text-align:left;">
+                        <img src="{!URLFOR($Resource.Zuari)}" width="150" height="60" />
+                    </td>
+                    <td style="text-align:right;">
+                        <apex:image url="{!projectLogoUrl}" width="140" height="80" rendered="{!NOT(ISBLANK(projectLogoUrl))}" />
+                    </td>
+                </tr>
+            </table>
+            
+            <!-- Title -->
+            <div class="title">
+                <span>Provisional Allotment Letter</span>
+            </div>
+            <br/>
+            <!-- Date -->
+            <div class="date-row">
+                Date : &nbsp;<apex:outputText value="{0,date,dd-MM-yyyy}"><apex:param value="{!TODAY()}" /></apex:outputText>
+
+            </div>
+            
+            <!-- To Address -->
+            <div class="to-block">
+                To,<br/>
+                <div>
+                            <div>Applicant's Name :&nbsp;&nbsp;&nbsp;&nbsp;{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c} </div>
+                        
+                        <div>
+                         <apex:outputPanel rendered="{!NOT(ISBLANK(firstCoApplicant.Name))}">Co Applicant's Name :{!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}</apex:outputPanel>
+                         <div>Applicant's Address :&nbsp;{!PermanentFullAddress}</div>
+                        </div>
+                        
+                    </div>
+            </div>
+            <p>
+                <b>Sub :</b> Allotment of {!unitLabel} No {!booking__c.Unit_No__c} at <b>{!projectName},</b>
+            </p> 
+            Dear &nbsp;{!booking__c.S__c}&nbsp;{!booking__c.First_Applicant_Name__c},<br/>
+            
+            <p style="text-align: justify; line-height: 1.5;">
+                With reference to your booking application for {!projectName},  Zuari Infraworld India Ltd is
+                pleased to allot <b>(“Allotment”)</b> a {!LOWER(unitLabel)} bearing No. {!booking__c.Unit_No__c} <b>(“{!unitLabel}”)</b> measuring {!ROUND(Booking__c.Quote__r.Super_Built_UpArea__c * 0.092903, 2)} square meters,
+                {!Booking__c.Quote__r.Super_Built_UpArea__c} square feets
+                in our project, {!projectName}.
+            </p>
+            <table style="width:100%; font-size:14px; font-family: 'Times New Roman', Times, serif;">
+                <tr>
+                    <td style="text-align: justify; line-height: 1.5; padding-top:8px;">
+                        <table style="width:100%; border-spacing: 0 3px;">
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>1.</b></td>
+                                <td style="line-height: 1.5;">Zuari Infraworld India Ltd acknowledges that it has received a sum of Rs. {!Booking__c.Booking_Amount__c} from you towards your booking.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>2.</b></td>
+                                <td style="line-height: 1.5;">This Allotment is subject to the fulfillment of the terms and conditions set out here in and in the booking form.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>3.</b></td>
+                                <td style="line-height: 1.5;">The total sale consideration ("Consideration") for the purchase of the {!LOWER(unitLabel)} is fixed as under.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Total Consideration of {!LOWER(unitLabel)} is {!Booking__c.Quote__r.GRAND_TOTAL__c}/- ( {!grandTotalInWords} )</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px;"></td>
+                                <td style="line-height: 1.5; padding-top: 10px;"><i>*Above Consideration is excluding of Registration fees and Stamp Duty charges which shall be borne and discharged by Allottee. The Legal expenses, taxes and charges as applicable on the date of registration of the sale deed shall be extra.</i></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            
+            <div>
+                <b style="text-decoration: underline;">{!unitLabel} Details</b><br/><br/>
+                <table style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:14px; border: 1px solid black; border-collapse: collapse;">
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px; width: 40%;">Project</td>
+                        <td style="border: 1px solid black; padding: 8px; width: 60%;">{!projectName}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;">Phase</td>
+                        <td style="border: 1px solid black; padding: 8px;">{!booking__c.Quote__r.Unit__r.Phase_Detail__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;">Tower</td>
+                        <td style="border: 1px solid black; padding: 8px;">{!booking__c.Quote__r.Unit__r.Tower__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;">{!unitLabel} No</td>
+                        <td style="border: 1px solid black; padding: 8px;">{!booking__c.Unit_No__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;">Flat Type</td>
+                        <td style="border: 1px solid black; padding: 8px;">{!booking__c.Quote__r.Unit__r.BHK_Type__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;">Area (In Sq. mts) <br/>(In Sq. ft)</td>
+                        <td style="border: 1px solid black; padding: 8px;">{!ROUND(Booking__c.Quote__r.Super_Built_UpArea__c * 0.092903, 2)} square meters, 
+                {!Booking__c.Quote__r.Super_Built_UpArea__c} square feets</td>
+                    </tr>
+                </table>
+                
+            </div>
+            <div class="page-break"></div>
+            <p>
+                PROPOSED PAYMENT SCHEDULE – {!projectName},
+            </p>
+            <div>
+                This payment plan for the balance payment is: <br/><br/>
+                   
+                <apex:variable value="{!0}" var="counter" />
+                <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', Times, serif; font-size:14px;">
+                    <tr>
+                        <th style="border:1px solid #000; padding:6px; text-align:center;">Sl. No.</th>
+                        <th style="border:1px solid #000; padding:6px; text-align:center;">Milestones Schedule</th>
+                        <th style="border:1px solid #000; padding:6px; text-align:center;">Percentage</th>
+                    </tr>
+                    
+                    <!-- Row 1 - STATIC Booking -->
+                    <tr>
+                        <td style="border:1px solid #000; padding:6px; text-align:center;">1.</td>
+                        <td style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Booking</td>
+                        <td style="border:1px solid #000; padding:6px; text-align:center;">Rs. {!Booking__c.Booking_Amount__c}/-</td>
+                    </tr>
+                    
+                    <!-- Dynamic Payment Schedules (start from 2) -->
+                    <apex:repeat value="{!paymentSchedules}" var="ps">
+                        <apex:variable var="counter" value="{!counter + 1}" />
+                        <tr>
+                            <td style="border:1px solid #000; padding:6px; text-align:center;">
+                                {!counter + 1}.
+                            </td>
+                            <td style="border:1px solid #000; padding:6px; text-align:left;">
+                                <span style="font-weight:bold;">
+                                    {!ps.Name} – Payment Due
+                                </span>
+                               
+                            </td>
+                            <td style="border:1px solid #000; padding:6px; text-align:center;">
+                                {!ps.Payment_percent__c}%
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+
+                
+                
+                
+                
+                
+                
+                <br/> <br/>
+                
+                <div>
+                    Amount Paid till date is Rs. {!Booking__c.Total_received_Amount__c}/- ( {!totalReceivedInWords} ) <br/> <br/>
+                    Balance payable is Rs. {!Booking__c.Pending_Amount__c}/- ( {!pendingAmountInWords} ).
+                </div>
+                <br/> <br/>
+                <div>
+                    The Allotment of the {!LOWER(unitLabel)} is only provisional and shall be subject to fulfillment of the following terms and
+                    conditions: 
+                    <br/><br/>
+                    <table style="width:100%; font-family:'Times New Roman', Times, serif; font-size:14px; border-collapse:collapse;">
+                        <tr>
+                            <td style="width:25px; vertical-align:top;"><b>i.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                All Allotments are subject to amendment of the sanction plan by the competent authority, if any.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>ii.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                The dimensions, area and specifications of the {!LOWER(unitLabel)} are based on the sanctioned plan approved by the competent authority.
+                                There may be certain alterations to the same based on further amendments to the sanction plan.
+                                You shall agree to give effect to such alterations and amendments and shall have no objections
+                                for such alterations and amendments whatsoever.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>iii.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                Payments to Zuari Infraworld India Limited are to be either made by way of demand draft or
+                                account payee cheques favouring {!Booking__c.Project1__r.Cheque_Favoring_Name__c}, {!Booking__c.Project1__r.Bank_Name__c} Bank , A/c No. {!Booking__c.Project1__r.Account_Number__c},
+                                payable at {!Booking__c.Project1__r.Branch__c}, or by way of electronic fund transfer, RTGS/NEFT/IFSC: IFS Code. {!Booking__c.Project1__r.IFSC_code__c},
+                                such electronic fund transfer being done after prior intimation in writing.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>iv.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                Please be informed that cheques are subject to realization, if the cheque issued by the applicant
+                                bounces then in such a case this allotment letter shall stand terminated and Cancelled.
+                                The applicant shall not have any claim towards the said allotment.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>v.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                This Allotment letter does not create any right, title or interest over the {!LOWER(unitLabel)}, until and unless
+                                a registered sale deed has been executed by Zuari Infraworld India Limited in your favour.
+                            </td>
+                        </tr>
+                        <div class="page-break"></div>
+                        <tr>
+                            <td style="vertical-align:top;"><b>vi.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                In the event the Agreement for Sale are not executed within 30 (thirty) days of such request by the
+                                Promoter, this Allotment shall stand cancelled automatically and an administrative fee of
+                                Rs. 1,00,000/- shall be deducted along with tax and cess as applicable.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>vii.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                You shall bear the stamp duty and registration fees for the execution of the sale deed in addition
+                                to the amounts payable to Zuari Infraworld India Limited and Zuari Infraworld India Limited shall
+                                not be liable to bear any such costs, whether direct or ancillary, to the execution and registration
+                                of the above documents.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>viii.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                If the {!LOWER(unitLabel)} is being booked on behalf of a person other than you, you shall be required to provide
+                                a duly executed power of attorney or other authorization in your favour to Zuari Infraworld India
+                                Limited at the time of the execution of the agreement to sell.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>ix.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                If the {!LOWER(unitLabel)} is being purchased by any person, other than a natural person, necessary legal documents
+                                relating to its existence, letter of authority and other documents etc., as may be requested by
+                                Zuari Infraworld India Limited shall be provided at the time of the execution of the agreement to sell.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;"><b>x.</b></td>
+                            <td style="line-height:1.5; text-align:justify;">
+                                Without the prior written consent of Zuari Infraworld India Limited, you shall not be entitled to
+                                assign/transfer any right, title and interest under this Allotment to a third party. Any dispute
+                                arising out of this Allotment, including interpretation of this Allotment letter shall be resolved
+                                by binding arbitration in accordance with the procedure provided under the Arbitration and Conciliation
+                                Act, 1996. The arbitral tribunal shall consist of a sole arbitrator, to be appointed by Zuari
+                                Infraworld India Limited and the seat of arbitration shall be at Bangalore, Karnataka. The costs
+                                of such arbitration shall be borne by both the parties. The applicant has gone through all the terms
+                                and conditions mentioned herein and the booking form and has accepted all the terms and conditions
+                                mentioned therein and herein.
+                            </td>
+                        </tr>
+                    </table><br/><br/>
+                    Should you accept the terms and conditions set forth in this Allotment letter and booking form, kindly sign 
+                    and return a copy of this to us in token of your acceptance.
+                </div><br/><br/><br/><br/>
+                <table style="width:100%; font-family:'Times New Roman', Times, serif; font-size:14px;">
+                    <tr>
+                        <td style="text-align:left; line-height:1.5;">
+                            <b>Yours faithfully,</b><br/>
+                            Authorized Signatory<br/><br/>
+                            (For <b>Zuari Infraworld India Limited</b>)
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </body>
+    </html>
+    
+</apex:page>

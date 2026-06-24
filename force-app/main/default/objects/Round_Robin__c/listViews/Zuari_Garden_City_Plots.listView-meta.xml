@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zuari_Garden_City_Plots</fullName>
+    <columns>NAME</columns>
+    <columns>Lead_Source_Type__c</columns>
+    <columns>Active__c</columns>
+    <columns>Project_Assigned__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Project_Assigned__c</field>
+        <operation>equals</operation>
+        <value>Zuari Garden City</value>
+    </filters>
+    <label>Zuari Garden City - Plots</label>
+</ListView>

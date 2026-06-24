@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Name__c</fullName>
+    <label>Project Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Zuari Garden City - Plots</fullName>
+                <default>false</default>
+                <label>Zuari Garden City - Plots</label>
+            </value>
+            <value>
+                <fullName>Zuari Gangothri Tribhuja</fullName>
+                <default>false</default>
+                <label>Zuari Gangothri Tribhuja</label>
+            </value>
+            <value>
+                <fullName>Zuari Upcoming Bengaluru</fullName>
+                <default>false</default>
+                <label>Zuari Upcoming Bengaluru</label>
+            </value>
+            <value>
+                <fullName>Zuari Rain Forest</fullName>
+                <default>false</default>
+                <label>Zuari Rain Forest</label>
+            </value>
+            <value>
+                <fullName>Zuari Park View</fullName>
+                <default>false</default>
+                <label>Zuari Park View</label>
+            </value>
+            <value>
+                <fullName>Zuari Envien Bioenergy</fullName>
+                <default>false</default>
+                <label>Zuari Envien Bioenergy</label>
+            </value>
+            <value>
+                <fullName>Codename X</fullName>
+                <default>false</default>
+                <label>Codename X</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

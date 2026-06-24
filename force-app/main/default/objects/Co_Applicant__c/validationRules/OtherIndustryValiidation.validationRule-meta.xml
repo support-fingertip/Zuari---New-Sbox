@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OtherIndustryValiidation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(Industry__c,&apos;Other&apos;),
+ISBLANK( Other_Industry__c )
+)</errorConditionFormula>
+    <errorDisplayField>Other_Industry__c</errorDisplayField>
+    <errorMessage>Fill Other fields when &apos;Other&apos; selected</errorMessage>
+</ValidationRule>

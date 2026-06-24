@@ -1,0 +1,205 @@
+<aura:component controller="InspectionController" implements="force:lightningQuickAction,force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="inspectionDate" type="Date" />
+    <aura:attribute name="inspectionDescription" type="String" />
+    <aura:attribute name="snagRows" type="List" default="[]"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-modal slds-fade-in-open" role="dialog">
+        <div class="slds-modal__container custom-modal-container">
+            <header class="slds-modal__header custom-header">
+                <button class="slds-button slds-button_icon slds-modal__close custom-close-btn" title="Close" onclick="{!c.closeModal}">
+                    <lightning:icon iconName="utility:close" size="small" alternativeText="Close" variant="inverse"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <div class="header-content">
+                    <div class="header-icon-wrapper">
+                        <lightning:icon iconName="standard:service_report" size="medium" alternativeText="Inspection" variant="inverse"/>
+                    </div>
+                    <div class="header-text">
+                        <h2 class="slds-text-heading_medium inspection-title">New Property Inspection</h2>
+                        <p class="inspection-subtitle">Document inspection details and record property issues</p>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="slds-modal__content custom-modal-content" id="modal-content">
+                <aura:if isTrue="{!v.isLoading}">
+                    <div class="loading-overlay">
+                        <div class="loading-container">
+                            <lightning:spinner alternativeText="Saving..." size="medium" variant="brand"/>
+                            <p class="loading-text">Saving inspection data...</p>
+                        </div>
+                    </div>
+                </aura:if>
+                
+                <div class="section-container">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <lightning:icon iconName="utility:event" size="small" alternativeText="Details"/>
+                        </div>
+                        <div>
+                            <h3 class="section-title">Inspection Information</h3>
+                            <p class="section-description">Enter the basic inspection details</p>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="slds-form" role="list">
+                            <div class="slds-form__row">
+                                <div class="slds-form__item" role="listitem">
+                                    <lightning:input label="Inspection Date" type="date" value="{!v.inspectionDate}" required="true" variant="label-stacked" class="custom-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-form__row">
+                                <div class="slds-form__item full-width" role="listitem">
+                                    <lightning:textarea label="Overall Description" value="{!v.inspectionDescription}" required="true" maxlength="1000" rows="4" placeholder="Provide a comprehensive overview of the inspection findings, property condition, and key observations..." variant="label-stacked" class="custom-textarea"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-container snag-section">
+                    <div class="section-header">
+                        <div class="section-icon snag-icon">
+                            <lightning:icon iconName="utility:warning" size="small" alternativeText="Snags"/>
+                        </div>
+                        <div>
+                            <h3 class="section-title">Property Snag List</h3>
+                            <p class="section-description">Document all issues and defects found during inspection</p>
+                        </div>
+                    </div>
+                    <div class="section-body snag-body">
+                        <aura:if isTrue="{!v.snagRows.length == 0}">
+                            <div class="empty-state">
+                                <div class="empty-state-visual">
+                                    <lightning:icon iconName="utility:checkin" size="large" alternativeText="No snags"/>
+                                </div>
+                                <h4 class="empty-state-title">No Snags Added Yet</h4>
+                                <p class="empty-state-description">Click the "Add Snag" button above to document property issues and defects</p>
+                            </div>
+                        </aura:if>
+                        <div class="snag-list">
+                            <aura:iteration items="{!v.snagRows}" var="snag" indexVar="index">
+                                <div class="snag-card">
+                                    <div class="snag-card-header">
+                                        <div class="snag-badge">
+                                            <lightning:icon iconName="utility:record" size="xx-small"/>
+                                            <span class="snag-label">Snag #{!index + 1}</span>
+                                        </div>
+                                        <lightning:buttonIcon iconName="utility:delete" variant="bare" alternativeText="Delete" title="Remove this snag" onclick="{!c.deleteSnagRow}" value="{!index}" class="delete-button"/>
+                                    </div>
+                                    <div class="snag-card-body">
+                                        <div class="slds-form" role="list">
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item full-width" role="listitem">
+                                                    <lightning:textarea label="Issue Description" value="{!snag.Description__c}" name="description" data-index="{!index}" onchange="{!c.handleSnagChange}" required="true" rows="3" placeholder="Describe the issue, location, and severity in detail..." variant="label-stacked" class="custom-textarea"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-form__row">
+                                                <div class="dropdown-container">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <lightning:select label="Inspection Type" 
+                                                                          value="{!snag.Inspection_Type__c}" 
+                                                                          name="inspec" 
+                                                                          onchange="{!c.handleSnagChange}" 
+                                                                          variant="label-stacked" 
+                                                                          class="custom-select">
+                                                            <option value="">Please select</option>
+                                                            <option value="Kitchen">Kitchen</option>
+                                                            <option value="Living Room">Living Room</option>
+                                                            <option value="Dining Room">Dining Room</option>
+                                                            <option value="Bathroom">Bathroom</option>
+                                                            <option value="Bedroom">Bedroom</option>
+                                                            <option value="Hall">Hall</option>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-container">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <lightning:select label="Status" 
+                                                                          value="{!snag.Status__c}" 
+                                                                          name="status" 
+                                                                          onchange="{!c.handleSnagChange}" 
+                                                                          required="true" 
+                                                                          variant="label-stacked" 
+                                                                          class="custom-select">
+                                                            <option value="">Please select</option>
+                                                            <option value="Open">Open</option>
+                                                            <option value="In Progress">In Progress</option>
+                                                            <option value="Resolved">Resolved</option>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-container">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <lightning:select label="Priority" 
+                                                                          value="{!snag.Priority__c}" 
+                                                                          name="priority" 
+                                                                          onchange="{!c.handleSnagChange}" 
+                                                                          variant="label-stacked" 
+                                                                          class="custom-select">
+                                                            <option value="">Please select</option>
+                                                            <option value="Low">Low</option>
+                                                            <option value="Medium">Medium</option>
+                                                            <option value="High">High</option>
+                                                            <option value="Critical">Critical</option>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-form__row">
+                                                <div class="slds-form__item full-width" role="listitem">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-form-element__label">Upload Photos/Documents</label>
+                                                        <div class="slds-form-element__control">
+                                                            <input type="file" 
+                                                                   id="{!'fileInput_' + index}"
+                                                                   data-index="{!index}"
+                                                                   accept="image/png,image/jpg,image/jpeg,.pdf,.doc,.docx"
+                                                                   multiple="true"
+                                                                   onchange="{!c.handleFileChange}"
+                                                                   class="file-input"/>
+                                                        </div>
+                                                    </div>
+                                                    <aura:if isTrue="{!snag.selectedFiles.length > 0}">
+                                                        <div class="file-list">
+                                                            <aura:iteration items="{!snag.selectedFiles}" var="file" indexVar="fileIndex">
+                                                                <div class="file-item">
+                                                                    <lightning:icon iconName="doctype:attachment" size="x-small"/>
+                                                                    <span class="file-name">{!file.name}</span>
+                                                                    <lightning:buttonIcon 
+                                                                        iconName="utility:close" 
+                                                                        variant="bare" 
+                                                                        size="x-small"
+                                                                        alternativeText="Remove"
+                                                                        onclick="{!c.removeFile}"
+                                                                        value="{!index + '-' + fileIndex}"
+                                                                        class="remove-file-btn"/>
+                                                                </div>
+                                                            </aura:iteration>
+                                                        </div>
+                                                    </aura:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="snag-card-footer">
+                                        <lightning:button label="Add Another Snag" iconName="utility:add" onclick="{!c.addSnagRow}" variant="brand" class="add-snag-button-card"/>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="slds-modal__footer custom-footer">
+                <lightning:button label="Cancel" onclick="{!c.closeModal}" variant="neutral" class="footer-button"/>
+                <lightning:button label="Save Inspection" iconName="utility:check" iconPosition="left" variant="brand" onclick="{!c.saveInspection}" disabled="{!v.isLoading}" class="footer-button save-button"/>
+            </footer>
+        </div>
+    </div>
+</aura:component>

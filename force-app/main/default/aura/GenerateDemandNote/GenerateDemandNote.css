@@ -1,0 +1,21 @@
+.THIS .completed-row {
+    background-color: #ffcccc;
+}
+.THIS .red-dot {
+    display: inline-block;
+    width: 10px; 
+    height: 10px;
+    background-color: #ff0000; 
+    border-radius: 50%; 
+    margin-left: 5px; 
+}
+.THIS .to-be-merged-text {
+    margin-left: 5px; 
+   
+}
+.THIS.cust-ht{
+    max-height: 450px;
+    overflow: hidden auto;
+    background-color: var(--slds-c-modal-content-color-background, var(--sds-c-modal-content-color-background, var(--slds-c-modal-color-background, var(--sds-c-modal-color-background, var(--slds-g-color-neutral-base-100, #fff)))));
+    color: var(--slds-c-modal-content-text-color, var(--sds-c-modal-content-text-color, var(--slds-c-modal-text-color, var(--sds-c-modal-text-color))));
+}

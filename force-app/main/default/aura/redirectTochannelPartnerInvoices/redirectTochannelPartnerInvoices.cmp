@@ -1,0 +1,8 @@
+<aura:component
+                implements="lightning:actionOverride,force:hasRecordId"
+                access="global">
+    <!-- THIS IS REQUIRED -->
+    <aura:attribute name="recordId" type="Id"/>
+    <c:makePayments record-id="{!v.recordId}" />
+    
+</aura:component>

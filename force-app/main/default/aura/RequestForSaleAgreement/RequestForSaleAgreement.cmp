@@ -1,0 +1,11 @@
+<aura:component controller = "BookingWelcomeMail" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="LeadRecord" type="Object"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Name,OwnerId,Bank_Name__c,Customer_Approved_Sale_Agreement__c"
+                      recordUpdated="{!c.doInit}"
+                      targetFields="{!v.LeadRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+</aura:component>

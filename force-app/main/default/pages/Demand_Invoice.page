@@ -1,0 +1,202 @@
+<apex:page standardController="Booking__c" extensions="DemandInvioceController" renderAs="pdf" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false">
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        strong { font-weight: bold; }
+        td { padding-left: 0; }
+        * { box-sizing: border-box; }
+    </style>
+    <div style="border:1px solid black; padding:6px; margin:0;">
+        <table style="width: 100%; border-collapse: collapse; font-size:10px; table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td style="width: 20%; text-align: left; padding: 0;">
+                        <img src="{!$Resource.Zuari}" width="85px" height="38"/>
+                    </td>
+                    <td style="width: 35%; text-align: left; padding: 0;">
+                        <B style="font-size: 13px;">TAX INVOICE</B>
+                    </td>
+                    <td style="width: 25%; padding: 0;"></td>
+                    <td style="width: 20%; text-align: right; padding: 0;">
+                              <!--Update on 09-02-2026 by Praveen-->
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City - Plots'}"><img src="{!$Resource.ZuariGardenCity}" width="85px" height="38" /></apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Gangothri Tribhuja'}"><img src="{!$Resource.GangotriLogo}" width="85px" height="38" /></apex:outputText>
+                
+                       <!-- <img src="{!$Resource.ZuariPlotlogo}" width="85px" height="38"/>-->
+                    </td>
+                </tr>
+                <tr><td colspan="4" style="padding: 2px 0;"><b>Details Of The Company</b></td></tr>
+                <tr>
+                    <td colspan="2" style="padding: 1px 0;">Name: {!booking__c.Project1__r.Company_Name__c}</td>
+                    <td colspan="2" style="padding: 1px 0;">Invoice No:&nbsp;ZIIL/KA/2024-25</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 1px 0;">Address: {!booking__c.Project1__r.Project_Address__c}</td>
+                    <td colspan="2" style="padding: 1px 0;">Date of Invoice: <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 1px 0;">GSTIN: {!booking__c.Project1__r.GSTIN__c}</td>
+                    <td colspan="2" style="padding: 1px 0;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 1px 0;">PAN: {!booking__c.Project1__r.PAN__c}</td>
+                    <td colspan="2" style="padding: 1px 0;">Place of Supply: Karnataka</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 1px 0;">CIN: {!booking__c.Project1__r.CIN__c}</td>
+                    <td colspan="2" style="padding: 1px 0;">State Code : {!booking__c.Project1__r.State_Code__c}</td>
+                </tr>
+                <tr><td colspan="4" style="padding: 2px 0;"><b>Details of Recipient/Receiver</b></td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Name: &nbsp;{!booking__c.S__c}&nbsp;{!booking__c.First_Applicant_Name__c}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Address: &nbsp;{!PermanentFullAddress}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">GSTIN :&nbsp;{!booking__c.Customer_GSTIN__c}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Unit No:&nbsp;{!booking__c.Unit_No__c}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Project :&nbsp;{!booking__c.Project1__r.Name}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Address Of Delivery :&nbsp;{!booking__c.Project1__r.Project_Address__c}</td></tr>
+                <tr><td colspan="4" style="padding: 1px 0;">Country : INDIA</td></tr>
+            </tbody>
+        </table>
+        
+        <table style="width:100%; border-collapse:collapse; font-size:9px; margin-top:3px; table-layout: fixed;">
+            <tr>
+                <td style="width:28%; border:none; vertical-align:middle; padding:0;"><b>Account Summary - {!currentCompletedStage}</b></td>
+                <td style="width:72%; border:none; vertical-align:middle; padding: 0;">
+                    <table style="width:100%; border-collapse:collapse; text-align:center;">
+                        <tr>
+                            <td style="border:1px solid #000;padding:2px;">Previous Balances<br/><b>{!balanceDueTillPrevMilestone}</b></td>
+                            <td style="border:1px solid #000;padding:2px;">Current Invoice<br/>{!presentDue}</td>
+                            <td style="border:1px solid #000;padding:2px;">Total due<br/><b>{!totalAmountPayable}</b></td>
+                            <td style="border:1px solid #000;padding:2px;">Total Received Amount Till Now<br/><b>{!booking__c.Total_received_Amount__c}</b></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        
+        <table style="width:100%; border-collapse:collapse; font-size:9px; margin-top:3px; table-layout: fixed;">
+            <tr>
+                <td style="width:28%; border:none; vertical-align:middle; padding:0;"><b>Interest Summary</b></td>
+                <td style="width:72%; border:none; vertical-align:middle; padding: 0;">
+                    <table style="width:100%; border-collapse:collapse; text-align:center;">
+                        <tr>
+                            <td style="border:1px solid #000;padding:2px;">Total Interest<br/><b>{!interestDelayTillPrevious}</b></td>
+                            <td style="border:1px solid #000;padding:2px;">Interest Paid<br/>{!interestPaidTillPrevious}</td>
+                            <td style="border:1px solid #000;padding:2px;">Pending Interest<br/><b>{!balanceInterest}</b></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        
+        <table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center; margin-top:3px; table-layout: fixed;">
+            <tr>
+                <th rowspan="2" style="border:1px solid #000;padding:1px; width: 4%;">Sr.<br/>No.</th>
+                <th rowspan="2" style="border:1px solid #000;padding:1px; width: 22%;">Description of Services</th>
+                <th rowspan="2" style="border:1px solid #000;padding:1px; width: 8%;">SAC/HSN<br/>code</th>
+                <th rowspan="2" style="border:1px solid #000;padding:1px; width: 12%;">Milestone<br/>Value</th>
+                <th colspan="2" style="border:1px solid #000;padding:1px;">CGST</th>
+                <th colspan="2" style="border:1px solid #000;padding:1px;">SGST</th>
+                <th style="border:1px solid #000;padding:1px; width: 12%;">TOTAL</th>
+            </tr>
+            <tr>
+                <th style="border:1px solid #000;padding:1px; width: 7%;">Rate</th>
+                <th style="border:1px solid #000;padding:1px; width: 10%;">Amount</th>
+                <th style="border:1px solid #000;padding:1px; width: 7%;">Rate</th>
+                <th style="border:1px solid #000;padding:1px; width: 10%;">Amount</th>
+                <th style="border:1px solid #000;padding:1px;">Amount</th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;padding:1px;">1</td>
+                <td style="border:1px solid #000;padding:1px;">Unit No&nbsp;{!booking__c.Unit_No__c}&nbsp;{!paymentscheudlename}</td>
+                <td style="border:1px solid #000;padding:1px;">{!SANHSNCode}</td>
+                <apex:outputText rendered="{!showGSTBreakdown == true}">
+                    <td style="border:1px solid #000;padding:1px;"><apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!taxableValue}" /></apex:outputText></td>
+                    <td style="border:1px solid #000;padding:1px;">{!appliedGstRate/2}</td>
+                    <td style="border:1px solid #000;padding:1px;">{!cgst}</td>
+                    <td style="border:1px solid #000;padding:1px;">{!appliedGstRate/2}</td>
+                    <td style="border:1px solid #000;padding:1px;">{!sgst}</td>
+                    <td style="border:1px solid #000;padding:1px;">{!presentDue}</td>
+                </apex:outputText>
+                <apex:outputText rendered="{!showGSTBreakdown == false}">
+                    <td style="border:1px solid #000;padding:1px;"><apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!presentDue}" /></apex:outputText></td>
+                    <td style="border:1px solid #000;padding:1px;">-</td>
+                    <td style="border:1px solid #000;padding:1px;">-</td>
+                    <td style="border:1px solid #000;padding:1px;">-</td>
+                    <td style="border:1px solid #000;padding:1px;">-</td>
+                    <td style="border:1px solid #000;padding:1px;">{!presentDue}</td>
+                </apex:outputText>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;padding:1px;">2</td>
+                <td style="border:1px solid #000;padding:1px;">TDS</td>
+                <td style="border:1px solid #000;padding:1px;">{!Booking__c.Project1__r.SAN_HSN_CODE__c}</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">{!TDSonePercentage}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;padding:1px;">3</td>
+                <td style="border:1px solid #000;padding:1px;">Previous Demand</td>
+                <td style="border:1px solid #000;padding:1px;">{!Booking__c.Project1__r.SAN_HSN_CODE__c}</td>
+                <td style="border:1px solid #000;padding:1px;"><apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!balanceDueTillPrevMilestone}" /></apex:outputText></td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">{!balanceDueTillPrevMilestone}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;padding:1px;">4</td>
+                <td style="border:1px solid #000;padding:1px;">Interest on Delay Payment</td>
+                <td style="border:1px solid #000;padding:1px;">{!Booking__c.Project1__r.SAN_HSN_CODE__c}</td>
+                <td style="border:1px solid #000;padding:1px;"><apex:outputText value="{0, number, ###,###,###}"><apex:param value="{!balanceInterest}" /></apex:outputText></td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">{!balanceInterest}</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align:left; font-weight:bold; border:1px solid #000;padding:1px;">Total</td>
+                <td style="border:1px solid #000;padding:1px;"></td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;"></td>
+                <td style="border:1px solid #000;padding:1px;">-</td>
+                <td style="border:1px solid #000;padding:1px;">{!totalAmountWithoutInterest}</td>
+            </tr>
+        </table>
+        
+        <div style="font-size:8px; margin-top:2px; line-height:1.2;">
+            <b>Invoice Value in words :-{!totalAmountPayableInWords}</b>
+        </div>
+        
+        <div style="font-size:8px; margin-top:2px; line-height:1.2;">
+            You are requested to make the payment to us either by way of demand draft or account payee cheque favouring <b>"{!booking__c.Project1__r.Name}"</b> or by way of electronic fund (Such electronic fund transfer being done after prior intimation to us in writing within 15 days from the date of this demand letter. The detail of RTGS/NEFT IFSC are mentioned below.) In the event of your failing to make payment to us within the aforesaid 15 (Fifteen) days, we reserve the right to charge interest, as per the terms of RERA. For any further clarification please feel free to contact at {!booking__c.Owner_Phone__c}
+        </div>
+        
+        <div style="font-size:8px; margin-top:2px; line-height:1.2;">
+            <b>Bank Account details of the company</b> - Bank: {!booking__c.Bank_Name__c} | Account No: 000205037142 | RTGS/IFSC: ICIC0000002 | Address: Bangalore
+        </div>
+        
+        <table style="width:100%; margin-top:4px; font-size:8px;">
+            <tr>
+                <td style="width:50%; vertical-align:bottom;">Note: This is a system-generated Statement and doesn't require a signature.</td>
+                <td style="width:50%; text-align:center; vertical-align:bottom;">
+                    <b>For: Zuari Infraworld India Limited</b><br/>
+                    <div style="border-top: 1px solid #000; width: 140px; margin:15px auto 2px auto;"></div>
+                    <b>Authorised Signatories</b>
+                </td>
+            </tr>
+        </table>
+    </div>
+</apex:page>

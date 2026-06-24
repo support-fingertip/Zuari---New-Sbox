@@ -1,0 +1,1139 @@
+<apex:page standardController="Booking__c" renderAs="pdf" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" extensions="BookingPDFController">
+    
+    <head>
+        <style type="text/css" media="print">
+            @page {
+            size: A4;
+            
+            @top-center {
+            content: element(header);
+            }
+            @bottom-left {
+            content: element(footer);
+            }
+            }
+            div.header {
+            padding-top: 50px;
+            position: running(header);
+            }
+            div.footer {
+            display: block;
+            padding: 5px;
+            position: running(footer);
+            }
+            .pagenumber:before {
+            content: counter(page);
+            }
+            .pagecount:before {
+            content: counter(pages);
+            }
+            .checkbox-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            }
+            
+            .checkbox {
+            width: 12px;
+            height: 12px;
+            border: 1px solid #000;
+            display: inline-block;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 12px;
+            font-size: 12px;
+            vertical-align: middle;
+            }
+            
+            .checkbox.checked {
+            content: '✓';
+            background-color: #0070d2;
+            color: #fff;
+            font-weight: bold;
+            font-size: 7px !important;
+            }
+            .pageNumber:before {
+            content: counter(page);
+            }
+            
+        </style>
+    </head><body>
+    
+    <div class="header" >   
+        <table width="100%">
+            <tr>
+                <td width='33%'><apex:image url="{!URLFOR($Resource.Zuari)}" width="150" height="60"/> </td>
+                <td width='33%' style="line-height: 1.2;font-weight: bold font-size:20px;text-align: center;padding-top: 15px;"><strong>APPLICATION FORM<br/>
+                    &nbsp;&nbsp; {!Booking__c.Project1__r.Name} </strong></td>
+                <td width='33%' Style="text-align: right">
+                     <!--Update on 09-02-2026 by Praveen-->
+                   
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City - Plots'}"><img src="{!$Resource.ZuariGardenCity}" width="150" height="60" /></apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Gangothri Tribhuja'}"><img src="{!$Resource.GangotriLogo}" width="150" height="60" /></apex:outputText>
+                        
+                    <!--
+                    <apex:image url="{!URLFOR($Resource.ZuariGardenCity)}" width="150" height="60"/>-->
+                
+                </td>
+            </tr>
+        </table>
+        
+    </div>    
+    
+    </body>
+    
+    <div style="position: fixed; bottom: 14px; left: 0; width: 100%; font-size: 10px; text-align: center;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 45%; text-align: center;">
+                    -------------------------------------------------------<br/>
+                    (Signature of Sole/First Applicant)
+                </td>
+                <td style="width: 10%;">&nbsp;</td> <!-- Spacer -->
+                <td style="width: 45%; text-align: center;">
+                    -------------------------------------------------------<br/>
+                    (Signature of Second Applicant)
+                </td>
+            </tr>
+        </table>
+        <div class="footer-page-number" style="padding-bottom:10px">
+            <span class="pageNumber"></span>
+        </div>
+        
+        <p style="text-align: center; margin-top: 5px; ">
+            <strong> <apex:outputText value="{!Booking__c.Project1__r.RERA_NO__c}"></apex:outputText></strong>
+            
+        </p>
+    </div>
+    <div style="page-break-after:always;">
+        <table width="100%" height="100%" style="padding-top:60px; padding-left:-20px;text-align: center;">
+            <tr><td ><b>  Developed by ZUARI INFRAWORLD INDIA LIMITED</b>         
+                </td></tr>
+            <tr><td><br/></td></tr>
+            <tr><td>
+                <apex:image url="{!URLFOR($Resource.BoookingImage)}" width="700px" height="450px"/>
+                
+                </td></tr>
+            <tr><td><br/></td></tr>
+            <tr><td>  <strong> 
+                <apex:outputText rendered="{!Booking__c.Project1__r.Name == 'Zuari Garden City'}"> 
+                    <apex:outputText value="{!Booking__c.Project1__r.Name}"></apex:outputText> – Plots
+                </apex:outputText>
+                <apex:outputText rendered="{!Booking__c.Project1__r.Name != 'Zuari Garden City'}"> 
+                    <apex:outputText value="{!Booking__c.Project1__r.Name}"></apex:outputText>
+                </apex:outputText>
+                
+                </strong>
+                <br/> </td></tr>
+            <tr><td>   <strong> <apex:outputText value="{!Booking__c.Project1__r.Name}"></apex:outputText>, <apex:outputText value="{!Booking__c.Project1__r.Project_Address__c}"></apex:outputText> </strong>
+                <br/></td></tr>
+           <tr>
+    <td><br/>
+        <strong>Website:</strong>
+        <a href="https://www.zuariinfra.com" target="_blank" 
+           style="color: blue; text-decoration: underline;">www.zuariinfra.com</a>
+    </td>
+</tr>
+
+            <tr>
+    <td><br/>
+        <b>RERA NO. </b> 
+        <apex:outputText value="{!Booking__c.Project1__r.RERA_NO__c}" />
+        <br/>
+        <a href="https://rera.karnataka.gov.in/" target="_blank"
+           style="color: blue; text-decoration: underline;">https://rera.karnataka.gov.in/</a>
+    </td>
+</tr>
+            <tr><td style=" text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <b>APPLICANT NO:<span style="display:inline-block; border-bottom:1px dashed #000; width:140px; margin-left:5px; text-align:center">
+                    <apex:outputText value="{!Booking__c.Name}"/> 
+                    </span>
+                </b>
+                </td></tr>
+            <tr><td style=" text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                <b>APPLICANT PLOT NO: <span style="display:inline-block; border-bottom:1px dashed #000; width:100px; margin-left:5px; text-align:center">
+                    <apex:outputText value="{!Booking__c.Plot__r.Name}"/> 
+                    </span></b></td></tr>
+        </table>
+        
+        
+    </div>
+    
+    
+    
+    
+    <!---------------- Applicant details------------->
+    <div style="page-break-after:always;">
+        
+        <table width="100%" height="100%" style="padding-top:60px; padding-left:-20px;" cellpadding="0" cellspacing="0">
+            <tr><td  colspan="2" width="100%"><br/></td></tr>
+            
+            <tr><td  colspan="2" width="100%"><b>Applicant Details</b></td></tr>
+            <tr><td  width="100%"><table  width="100%" height="100%" >
+                <tr><td  >
+                    <table   width="100%" >
+                        <tr><td>Name:  <span style="display:inline-block; border-bottom:1px dashed #000; width:89%; margin-left:5px; text-align:center;text-align: justify">{!Booking__c.S__c} {!Booking__c.First_Applicant_Name__c}</span>
+                            </td></tr>
+                        <tr><td> S/O,D/O  <span style="display:inline-block; border-bottom:1px dashed #000;width:86%;  margin-left:5px; text-align:center;text-align: justify"> {!Booking__c.Son_Daughter_Wife_of1__c}</span>
+                            </td></tr>
+                        <tr><td Style="text-align: justify">Date of Birth:  <span style="border:0.5px solid #000; width:75px; height:19px; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                            {!dobFormattedWithBars}</span>&nbsp;&nbsp;&nbsp;&nbsp; Country of Residence:<span style="display:inline-block; border-bottom:1px dashed #000;width:31%; text-align: justify;  margin-left:5px; text-align:center">{!Booking__c.SLead__r.Country__c}</span>
+                            </td>
+                        </tr>
+                        <tr><td>Pan No. <span style="display:inline-block; border-bottom:1px dashed #000;  margin-left:5px;width:35%;  text-align:center;text-align: justify">{!Booking__c.PAN_Number__c}</span>Aadhar No.  <span style="display:inline-block; border-bottom:1px dashed #000; width:35%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!Booking__c.Aadhar_No__c}">   
+                            </apex:outputText>
+                            </span>
+                            
+                            </td></tr>
+                        <tr><td>Passport No. <span style="display:inline-block; border-bottom:1px dashed #000; width:35%; margin-left:5px;text-align: justify; text-align:center">
+                            <apex:outputText value="{!Booking__c.Passport_PI_no__c}">   
+                            </apex:outputText>
+                            </span>
+                            Email:&nbsp;  <span style="display:inline-block; border-bottom:1px dashed #000;width:35%;text-align: justify;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!Booking__c.Email__c}">   
+                            </apex:outputText>
+                            </span>
+                            </td></tr>
+                        <tr><td>Primary Contact No: <span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!Booking__c.Mobile__c}">   
+                            </apex:outputText>
+                            </span>
+                            Alternate Contact No:  <span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!Booking__c.Alternate_Contact_No__c}">   
+                            </apex:outputText>
+                            </span>
+                            </td></tr>
+                        <tr>
+                            
+                            <td style="padding-right: 10px;">Marital Status:&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <span style="margin-right: 5px;">Married</span>
+                                <div style="display: inline-block; vertical-align: middle;"
+                                     class="{!IF(Booking__c.Marital_Status__c == 'Married', 'checkbox checked', 'checkbox')}">
+                                    {!IF(Booking__c.Marital_Status__c == 'Married', 'Yes', '')}
+                                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="margin-right: 5px;">Single</span>
+                                <div style="display: inline-block; vertical-align: middle;"
+                                     class="{!IF(Booking__c.Marital_Status__c == 'UnMarried', 'checkbox checked', 'checkbox')}">
+                                    {!IF(Booking__c.Marital_Status__c == 'UnMarried', 'Yes', '')}
+                                </div>
+                                
+                            </td>
+                            
+                            
+                            
+                            
+                        </tr>
+                        <tr><td>Spouse Name: <span style="display:inline-block; border-bottom:1px dashed #000; width:78%; margin-left:5px;text-align: justify; text-align:center">{!Booking__c.Spouse_Name__c} </span>
+                            </td></tr>
+                        
+                    </table></td>
+                    <td width="20%" rowspan="8"><table  width="100%" height="100%" >
+                        <tr><td style=" text-align:right">  <apex:image url="{!imageUrl}" width="145px" height="155px"/>
+                            </td></tr>
+                        </table></td>
+                </tr>
+                </table></td></tr>
+            <tr><td>&nbsp; Spouse Date of Birth :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <span style="border:0.5px solid #000; width:75px; height:19px;text-align: justify; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                {!spouseDobFormattedWithBars}  </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Anniversary Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="border:0.5px solid #000; width:85px; height:19px; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                {!anniversaryFormattedWithBars}</span></td></tr>
+            <tr><td>&nbsp;&nbsp;Permanent Address:  <span style="display:inline-block;text-align:justify; border-bottom:1px dashed #000;width:76%;  margin-left:5px; text-align:left">
+               {!PermanentFullAddress}
+
+                              
+                </span> </td></tr>
+            <tr><td>&nbsp;&nbsp;Pincode:<span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.Permanent_Address2__PostalCode__s}">   
+                </apex:outputText>
+                </span></td></tr>
+            <tr><td>&nbsp;&nbsp;Communication Address: <span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:71%;  margin-left:5px; text-align:left">
+              {!CorrespondenceFullAddress}
+            
+                </span> </td></tr>
+            <tr><td>&nbsp;&nbsp;Pincode:<span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.Correspondence_Address__PostalCode__s}">   
+                </apex:outputText>
+                </span></td></tr>
+            
+            <tr><td colspan="2" width="100%"><br/><b>Professional Details</b></td></tr>
+            <tr><td colspan="2" width="100%">Industry/Sector</td></tr>
+            <tr>
+                <td style="line-height:1.6; font-size:12px;" colspan="2" width="100%">
+                    
+                    <table width="100%">
+                        <tr>
+                            <td width="33%"> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                                {!IF(Booking__c.Industry__c == 'Finance', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Financial Services / Banking
+                                </span>
+                            </td>
+                            <td width="33%"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Agriculture', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                Agri Based
+                                </span>
+                            </td>
+                            <td width="33%"><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Auto and Ancillary', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                Auto &amp; Ancillary
+                                </span>
+                            </td>
+                            
+                        </tr>
+                        <tr><td>
+                            <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                                {!IF(Booking__c.Industry__c == 'Construction', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp;Construction Industry
+                            </span> 
+                            </td>
+                            <td><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'FMCG', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;FMCG
+                                
+                                </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'IT/ITES', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;IT/ITES
+                                
+                                </span>
+                            </td>
+                        </tr>
+                        <tr><td>  <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(Booking__c.Industry__c == 'Consumer Durables', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Consumer Durables
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Defence Service', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Defence Service
+                                </span>
+                            </td>
+                            <td><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Education', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Education
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(Booking__c.Industry__c == 'Government', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Govt. Organization
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Telecommunications', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Telecommunications
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Travel', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Travel
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(Booking__c.Industry__c == 'Media', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Media Entertainment
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Metal &amp; Mining', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Metal &amp; Mining
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Oil, Gas and Power', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Oil, Gas and Power
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(Booking__c.Industry__c == 'Healthcare', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Healthcare/Pharma
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Textiles', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Textiles
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Service Sector', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Service Sector
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(Booking__c.Industry__c == 'Retail', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Retail &amp; E-Commerce
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(Booking__c.Industry__c == 'Other', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Other
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                <span style="display:inline-block; border-bottom:1px dashed #000; width:20%; margin-left:5px; text-align:center">{!Booking__c.Other_Profession__c} </span>
+                                </span>
+                            </td></tr>
+                        
+                    </table>
+                    
+                    
+                </td>
+                
+                
+            </tr>
+            
+            <tr><td>&nbsp;&nbsp;Company/Firm Name:  <span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:72%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.Employeed_at__c}">   
+                </apex:outputText>
+                </span> </td></tr>
+            
+            <tr><td>&nbsp;&nbsp;Office Address: <span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:45%;  margin-left:5px; text-align:left">
+                {!OfficeFullAddress}
+
+             
+                </span> Pincode<span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:24%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.Office_Address1__PostalCode__s}">   
+                </apex:outputText>
+                </span> </td></tr>
+            
+            <tr><td>&nbsp;&nbsp;Designation:  <span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:82%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.Designation__c}">   
+                </apex:outputText>
+                </span> </td></tr>
+            <tr><td><table>
+                <tr><td width="20%">&nbsp;&nbsp;Qualification</td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Qualification__c == 'Graduate', '☑', '☐')}&nbsp;Graduate
+                        
+                        
+                        </span></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Qualification__c == 'Post Graduate', '☑', '☐')}&nbsp;Post Graduate
+                        
+                        
+                        </span></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Qualification__c == 'Professional', '☑', '☐')}&nbsp;Professional
+                        
+                        
+                        </span></td>
+                    <td width="35%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Qualification__c == 'Others', '☑', '☐')}&nbsp;&nbsp;Others <span style="display:inline-block; border-bottom:.5px dashed #000; width: 30px; margin-left:5px;">&nbsp;
+                        <apex:outputText value="{!Booking__c.Other_Qualification__c}"> </apex:outputText>  
+                        </span>
+                        </span></td>
+                    
+                </tr>
+                </table></td></tr>
+            <tr><td  colspan="2" width="100%"><b>Second Applicant Details</b></td></tr>
+            <tr><td  width="100%"><br/><table  width="100%" height="100%" >
+                <tr><td  >
+                    <table   width="100%" >
+                        <tr><td>Name:  <span style="display:inline-block; border-bottom:1px dashed #000; width:89%; margin-left:5px; text-align:center">{!firstCoApplicant.Name}</span>
+                            </td></tr>
+                        <tr><td> S/O,D/O  <span style="display:inline-block; border-bottom:1px dashed #000;width:86%;  margin-left:5px; text-align:center"> {!firstCoApplicant.Son_Daughter_Wife_of__c}</span>
+                            </td></tr>
+                        <tr><td>Date of Birth:  <span style="border:0.5px solid #000; width:75px; height:19px; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                            {!codobFormattedWithBars}</span>&nbsp;&nbsp;&nbsp;&nbsp; Country of Residence:<span style="display:inline-block; border-bottom:1px dashed #000;width:31%;   margin-left:5px; text-align:center">{!firstCoApplicant.Country_of_Residence__c}</span>
+                            </td>
+                        </tr>
+                        <tr><td>Pan No. <span style="display:inline-block; border-bottom:1px dashed #000;  margin-left:5px;width:35%;  text-align:center">{!firstCoApplicant.PAN_Number__c}</span>Aadhar No.  <span style="display:inline-block; border-bottom:1px dashed #000; width:35%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!firstCoApplicant.Aadhar_Number__c}">   
+                            </apex:outputText>
+                            </span>
+                            
+                            </td></tr>
+                        <tr><td>Passport No. <span style="display:inline-block; border-bottom:1px dashed #000; width:35%; margin-left:5px; text-align:center">
+                            <apex:outputText value="{!firstCoApplicant.Passport_Number__c}">   
+                            </apex:outputText>
+                            </span>
+                            Email :  <span style="display:inline-block; border-bottom:1px dashed #000;width:35%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!firstCoApplicant.Email__c}">   
+                            </apex:outputText>
+                            </span>
+                            </td></tr>
+                        <tr><td>Primary Contact No: <span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!firstCoApplicant.Primary_Phone__c}">   
+                            </apex:outputText>
+                            </span>
+                            Alternate Contact No:  <span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                            <apex:outputText value="{!firstCoApplicant.Alternate_Contact_No__c}">   
+                            </apex:outputText>
+                            </span>
+                            </td></tr>
+                        <tr><td>Spouse Name: <span style="display:inline-block; border-bottom:1px dashed #000; width:78%; margin-left:5px; text-align:center">{!firstCoApplicant.Spouse_Name__c} </span>
+                            </td></tr>
+                        
+                    </table></td>
+                    <td width="20%" rowspan="8"><table  width="100%" height="100%" >
+                        <tr><td style=" text-align:right; border: 1px solid #000;" >
+                            <apex:outputPanel rendered="{!NOT(ISBLANK(imageUrl2))}">
+                            <apex:image url="{!imageUrl2}" width="145px" height="155px"/></apex:outputPanel>
+                              <apex:outputPanel rendered="{!ISBLANK(imageUrl2)}">
+                    <!-- Option 1: show a placeholder image -->
+                                  <br/><br/><br/><br/><br/><br/><br/>
+                    <!-- Option 2 (alternative): show message -->
+                    <!-- <div style=\"font-size:12px; color:#888;\">No Image Available</div> -->
+                </apex:outputPanel>
+                            </td></tr>
+                        </table></td>
+                </tr>
+                </table></td></tr>
+            <tr><td>&nbsp; Spouse Date of Birth :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <span style="border:0.5px solid #000; width:75px; height:19px; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                {!cospouseDobFormattedWithBars}  </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Anniversary Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="border:0.5px solid #000; width:85px; height:19px; display:inline-block; text-align:center; line-height:19px; font-size:14px;">
+                {!coanniversaryFormattedWithBars}</span></td></tr>
+            
+            
+        </table>
+        
+        
+    </div>
+    <div style="page-break-after:always;">
+        <table   width="100%" height="100%" style="padding-top:60px; padding-left:-20px;" cellpadding="0" cellspacing="0" >
+            <tr><td><br/></td></tr>
+            <tr><td>&nbsp;&nbsp;Permanent Address:  <span style="display:inline-block; border-bottom:1px dashed #000;width:76%;  margin-left:5px; text-align:left">
+                {!FirstCoApplicantPermanentFullAddress}
+
+             
+                </span> </td></tr>
+            <tr><td>&nbsp;&nbsp;Pincode:<span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!firstCoApplicant.Permanent_Address1__PostalCode__s}"/> 
+                </span></td></tr>
+            <tr><td>&nbsp;&nbsp;Communication Address: <span style="display:inline-block; border-bottom:1px dashed #000;width:71%;  margin-left:5px; text-align:left">
+               {!FirstCoApplicantCommunicationFullAddress}
+
+             
+                </span> </td></tr>
+            <tr><td>&nbsp;&nbsp;Pincode:<span style="display:inline-block; border-bottom:1px dashed #000;width:20%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!firstCoApplicant.Communication_Address1__PostalCode__s}"/>  <apex:outputText /> </span></td></tr>
+            
+            <tr><td colspan="2" width="100%"><br/><b>Professional Details</b></td></tr>
+            <tr><td colspan="2" width="100%">Industry/Sector</td></tr>
+            <tr>
+                <td style="line-height:1.6; font-size:12px;" colspan="2" width="100%">
+                    
+                    <table width="100%">
+                        <tr>
+                            <td width="33%"> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                                {!IF(firstCoApplicant.Industry__c == 'Finance', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Financial Services / Banking
+                                </span>
+                            </td>
+                            <td width="33%"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Agriculture', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                Agri Based
+                                </span>
+                            </td>
+                            <td width="33%"><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Agriculture', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                Agri Based
+                                </span>
+                            </td>
+                            
+                        </tr>
+                        <tr><td>
+                            <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                                {!IF(firstCoApplicant.Industry__c == 'Construction', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp;Construction Industry
+                            </span> 
+                            </td>
+                            <td><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'FMCG', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;FMCG
+                                
+                                </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'IT/ITES', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;IT/ITES
+                                
+                                </span>
+                            </td>
+                        </tr>
+                        <tr><td>  <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(firstCoApplicant.Industry__c == 'Consumer Durables', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Consumer Durables
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Defence Service', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Defence Service
+                                </span>
+                            </td>
+                            <td><span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Education', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Education
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(firstCoApplicant.Industry__c == 'Government', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Govt. Organization
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Telecommunications', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Telecommunications
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Travel', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Travel
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(firstCoApplicant.Industry__c == 'Media', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Media Entertainment
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Metal &amp; Mining', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Metal &amp; Mining
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Oil, Gas and Power', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Oil, Gas and Power
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(firstCoApplicant.Industry__c == 'Healthcare', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Healthcare/Pharma
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Textiles', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Textiles
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Service Sector', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Service Sector
+                                </span>
+                            </td></tr>
+                        <tr><td> <span style="font-family: DejaVu Sans, Arial Unicode MS;"> 
+                            {!IF(firstCoApplicant.Industry__c == 'Retail', '☑', '☐')} &nbsp;&nbsp;&nbsp;&nbsp; Retail &amp; E-Commerce
+                            </span>
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                {!IF(firstCoApplicant.Industry__c == 'Others', '☑', '☐')}&nbsp;&nbsp;&nbsp;&nbsp;Other
+                                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                                <span style="display:inline-block; border-bottom:1px dashed #000; width:20%; margin-left:5px; text-align:center">{!firstCoApplicant.Other_Industry__c} </span>
+                                </span>
+                            </td></tr>
+                        
+                    </table>
+                    
+                    
+                </td>
+                
+                
+            </tr>
+            
+            <tr><td>&nbsp;&nbsp;Company/Firm Name:  <span style="display:inline-block; border-bottom:1px dashed #000;width:72%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!firstCoApplicant.Employeed_at__c}">   
+                </apex:outputText>
+                </span> </td></tr>
+            
+            <tr><td>&nbsp;&nbsp;Office Address: <span style="display:inline-block; border-bottom:1px dashed #000;width:45%;  margin-left:5px; text-align:center">
+                {!FirstCoApplicantOfficeFullAddress}
+
+             
+                </span> Pincode<span style="display:inline-block; border-bottom:1px dashed #000;width:24%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!firstCoApplicant.Office_Address1__PostalCode__s}">   
+                </apex:outputText>
+                </span> </td></tr>
+            
+            <tr><td>&nbsp;&nbsp;Designation:  <span style="display:inline-block; border-bottom:1px dashed #000;width:82%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!firstCoApplicant.Designation__c}">   
+                </apex:outputText>
+                </span> </td></tr>
+            <tr><td><table>
+                <tr><td width="20%">&nbsp;&nbsp;Qualification</td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(firstCoApplicant.Qualification__c == 'Graduate', '☑', '☐')}&nbsp;Graduate
+                        
+                        
+                        </span></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(firstCoApplicant.Qualification__c == 'Post Graduate', '☑', '☐')}&nbsp;Post Graduate
+                        
+                        
+                        </span></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(firstCoApplicant.Qualification__c == 'Professional', '☑', '☐')}&nbsp;Professional
+                        
+                        
+                        </span></td>
+                    <td width="35%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(firstCoApplicant.Qualification__c == 'Others', '☑', '☐')}&nbsp;&nbsp;Others <span style="display:inline-block; border-bottom:.5px dashed #000; width: 30px; margin-left:5px;">&nbsp;
+                        <apex:outputText value="{!firstCoApplicant.Other_Qualification__c}"> </apex:outputText>  
+                        </span>
+                        </span></td>
+                    
+                </tr>
+                </table></td></tr>
+            
+            <tr><td><br/></td></tr>
+            <tr><td><table>
+                <tr>
+                    
+                    <td>
+                        Annual Household Income:</td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Annual_House_Hold_Income__c == '5 - 10 Lakhs', '☑', '☐')}&nbsp;5 - 10 Lakhs	
+                        
+                        
+                        </span>
+                    </td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Annual_House_Hold_Income__c == '10 - 20 Lakhs', '☑', '☐')}&nbsp;10 - 20 Lakhs	
+                        
+                        
+                        </span>
+                    </td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Annual_House_Hold_Income__c == '20 - 30 Lakhs', '☑', '☐')}&nbsp;20 - 30 Lakhs	
+                        
+                        
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr><td></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Annual_House_Hold_Income__c == '30 - 50 Lakhs', '☑', '☐')}&nbsp;30 - 50 Lakhs		
+                        
+                        
+                        </span>
+                    </td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;">
+                        {!IF(Booking__c.Annual_House_Hold_Income__c == '50 Lakhs', '☑', '☐')}&nbsp;50 Lakhs		
+                        
+                        
+                        </span>
+                    </td>
+                    
+                </tr>
+                
+                </table></td></tr>
+            <tr><td><table>
+                <tr><td width="15%">Purpose of Purchase:</td>
+                    <td  style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.Purpose_of_Purchase__c == 'Investment Purpose', '☑', '☐')}&nbsp;Investment Purpose	
+                        
+                        </span>
+                    </td>
+                    <td style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.Purpose_of_Purchase__c == 'Purchasing for Self', '☑', '☐')}&nbsp;Purchasing for Self	
+                        
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr><td></td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.Purpose_of_Purchase__c == 'Moving to a better place', '☑', '☐')}&nbsp;Moving to a better place	
+                        
+                        </span>
+                    </td>
+                    <td width="20%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.Purpose_of_Purchase__c == 'Purchasing for Family', '☑', '☐')}&nbsp;Purchasing for Family		
+                        
+                        </span>
+                    </td>
+                    
+                </tr>
+                </table></td></tr>
+            <tr><td>How did you get to know about us?</td></tr>
+            <tr><td><table>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'Banking', '☑', '□')}&nbsp;Banking        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'BTL Activity', '☑', '□')}&nbsp;BTL Activity        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Corporate Activity', '☑', '□')}&nbsp;Corporate Activity        
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'Channel partner', '☑', '□')}&nbsp;Channel partner        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Digital Marketing', '☑', '□')}&nbsp;Digital Marketing        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Exhibition/Event', '☑', '□')}&nbsp;Exhibition/Event       
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'Hoarding', '☑', '□')}&nbsp;Hoarding        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Direct Walkin/Site Branding', '☑', '□')}&nbsp;Direct Walkin/Site Branding        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Print Media', '☑', '□')}&nbsp;Print Media       
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'Radio', '☑', '□')}&nbsp;Radio        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Group employee Referral', '☑', '□')}&nbsp;Group employee Referral        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Referral', '☑', '□')}&nbsp;Referral       
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'REAP', '☑', '□')}&nbsp;REAP        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Real Estate Portals', '☑', '□')}&nbsp;Real Estate Portals      
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Self Generated', '☑', '□')}&nbsp;Self Generated       
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td width="50%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {!IF(Booking__c.SLead__r.Source_Type__c == 'TV', '☑', '□')}&nbsp;TV        
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Website', '☑', '□')}&nbsp;Website      
+                        </span>
+                    </td>
+                    <td width="30%" style="line-height:1.6; font-size:12px;"> <span style="font-family: DejaVu Sans, Arial Unicode MS;text-align:left">
+                        {!IF(Booking__c.SLead__r.Source_Type__c == 'Word of Mouth', '☑', '□')}&nbsp;Word of Mouth       
+                        </span>
+                    </td>
+                    
+                </tr>
+                <tr> <td columnspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Others(Specify: <span style="display:inline-block; border-bottom:1px dashed #000; width:100px; margin-left:5px;font-size:12px;">
+                    <apex:outputText value="{!Booking__c.SLead__r.Other_sourceType__c}"/>
+                    ) </span></td>
+                </tr>
+                
+                </table></td></tr>
+            <tr><td><table>
+                <tr><td>If Referred by Friends/Relatives/Self</td>
+                    <td>Name: <span style="display:inline-block; border-bottom:1px dashed #000;text-align: justify; width:130px; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Customer_Name__c}"/>
+                        </span></td>
+                    <td>Project Name: <span style="display:inline-block; border-bottom:1px dashed #000;text-align: justify; width:100px; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Customer_Project_Name__c}"/>
+                        </span></td>
+                    
+                </tr>
+                <tr><td></td>
+                    <td>Contact No: <span style="display:inline-block; border-bottom:1px dashed #000; width:100px;text-align: justify; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Customer_Mobile_No__c}"/>
+                        </span></td>
+                    <td>Email : <span style="display:inline-block; border-bottom:1px dashed #000; width:130px;text-align: justify; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Customer_Email__c}"/>
+                        </span></td>
+                    
+                </tr>
+                </table></td></tr>
+            <tr><td><table Style="text-align: justify">
+                <tr><td>If Referred by Channel Partner/REAP</td>
+                    <td>Name: <span style="display:inline-block; border-bottom:1px dashed #000; width:130px;text-align: justify; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.ContactPerson__c}"/>
+                        </span></td>
+                    <td>Project Name: <span style="display:inline-block; border-bottom:1px dashed #000;text-align: justify; width:100px; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Project_Name__c}"/>
+                        </span></td>
+                    
+                </tr>
+                <tr><td></td>
+                    <td>Contact No: <span style="display:inline-block; border-bottom:1px dashed #000; width:100px;text-align: justify; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Mobile_Number__c}"/>
+                        </span></td>
+                    <td>Email Id: <span style="display:inline-block; border-bottom:1px dashed #000; width:130px;text-align: justify; margin-left:5px;font-size:12px;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Channel_Partner__r.Email__c}"/>
+                        </span></td>
+                    
+                </tr>
+                </table></td></tr>
+            <tr><td>If Corporate Activity:Company Name:<span style="display:inline-block;text-align: justify; border-bottom:1px dashed #000;width:57%;  margin-left:5px; text-align:center">
+                <apex:outputText value="{!Booking__c.SLead__r.Company_Name__c}">   
+                </apex:outputText>
+                </span> </td></tr>
+            
+        </table>
+        
+    </div>
+    
+    <div style="page-break-after:always;">
+        <table  width="100%" height="100%" style="padding-top:60px; padding-left:-20px;" cellpadding="0" cellspacing="0">
+            <tr><td><br/></td></tr>
+            <tr><td><b>Unit Details</b></td></tr>
+            <tr><td Style="font-size=10px;text-align: justify">  I/We, the Applicant(s), request you to allot the unit mentioned below based on this application and Application Money of ₹<span style="display:inline-block; border-bottom:1px dashed #000; width=70px"> 
+                <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Booking_Amount__c}" />
+                </apex:outputText>
+                </span>
+                (Rupees <span style="display:inline-block; border-bottom:1px dashed #000; width:190px;">
+                <apex:outputText value="{!bookingAmount}"></apex:outputText>
+                </span>) is being paid by me / us vide
+                </td></tr>
+            <tr><td  Style="font-size=10px;text-align: justify">Cheque / DD No./Transaction ID<span style="display:inline-block; border-bottom:1px dashed #000; width:200px;"><apex:outputText value="{!Booking__c.Transaction_ID__c}"></apex:outputText></span>
+                Dated <span style="display:inline-block; border-bottom:1px dashed #000; width:150px;">
+                <apex:outputText value="{0,date,dd/MM/yyyy}">
+                    <apex:param value="{!Booking__c.Booking_Date__c}"/>
+                </apex:outputText>
+                
+                </span> 
+                Drawn On (Bank) <span style="display:inline-block; border-bottom:1px dashed #000; width:200px;">
+                <apex:outputText value="{!Booking__c.Bank_Name__c}"></apex:outputText>
+                </span>as earnest money deposit.
+                </td></tr>
+            
+        </table>
+        <br/>
+        <table width="100%"    border="1" cellspacing="0" >
+            <tr><td width="30%">Plot No</td>
+                <td colspan="5"><apex:outputText value="{!Booking__c.Quote__r.Unit__r.Name}"> </apex:outputText>
+                </td></tr>
+            <tr><td>Plot Area (in sq. mts)</td>
+                <td width="10%"> <apex:outputText value="{!plotAreaInSqareMeters}"></apex:outputText>
+                </td>
+                <td rowspan="2" width="15%">Base Rate per(sq.ft)</td>
+                <td rowspan="2" > <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Quote__r.Rate_sq_Ft_Discount__c}" />
+                    </apex:outputText>
+                </td>
+                <td rowspan="2" width="25%">Other Infrastructure Charges per(Sq.ft)</td>
+                <td rowspan="2">  <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Quote__r.Infrastructure_Charges_per_sqft__c}" />
+                    </apex:outputText>
+                </td></tr>
+            
+            <tr><td> Plot Area (in sq.ft)*</td>
+                <td > {!Booking__c.Quote__r.Super_Built_UpArea__c}
+                </td></tr>
+            <tr><td>Clubhouse Membership Charges (One-time)</td>
+                <td colspan="5">   <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Quote__r.Clubhouse_Charges__c}" />
+                    </apex:outputText>
+                </td></tr>
+            <tr><td>Advance Maintenance Deposit</td>
+                <td colspan="5">2/Sqft + GST for 12 Months</td></tr>
+            <tr><td>Total Sales Consideration ***</td>
+                <td colspan="5">   <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Quote__r.GRAND_TOTAL__c}" />
+                    </apex:outputText> 
+                </td></tr>
+            <tr><td>Sizes in Feet:</td>
+                <td colspan="5"><apex:outputText value="{!Booking__c.Quote__r.Unit__r.Name} ({!Booking__c.Quote__r.Plot_Side_Feet__c} ft x {!Booking__c.Quote__r.Plot_Side_Feet__c} ft)" />
+</td></tr>
+            
+        </table>
+        <table width="100%">
+            <tr><td Style="text-align: justify;">Total Agreement Value <span style="display:inline-block; border-bottom:1px dashed #000; width:510px;">
+                
+                <apex:outputText value="{0, number, #,##0}">
+                    <apex:param value="{!Booking__c.Quote__r.Agreement_Value_Before_GST__c}" />
+                </apex:outputText> 
+                
+                </span></td></tr>
+            <tr><td> If the agreement value is > = 50 Iakhs
+                </td></tr>
+            <tr><td> [  ]1%TDS u/5 194-/A- to be paid by customer themselves.
+                </td></tr>
+            <tr><td style="font-size: 10px">*1 Sqm = 10.764 Sqft.</td></tr>
+            <tr><td style="font-size: 10px"> ** Applicable GST on Other Infrastructure Charges is to be borne by the Applicant(s). See attached cost sheet (annexure).
+                </td></tr>
+            <tr><td style="font-size: 10px">***Stamp duty, Deficit Stamp Duty, registration fee, legal expenses, taxes and charges are applicable at actuals on the dates of registration of sale agreement and sale deed &amp; shall be extra.
+                </td></tr>
+            <tr><td> [Please refer to cost sheet for details The above value does not include Statutory charges/Taxes/Deposits/Maintenance)
+                </td></tr>
+            <table style="width:100%; font-size:14px; margin-top:15px;">
+                <tr>
+                    <td><b>Terms and Conditions</b></td>
+                </tr>
+                <tr>
+                    <td style="padding-top:8px; text-align: justify">
+                        <table style="width:100%; border-spacing: 0 5px;">
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>1.</b></td>
+                                <td>The Application is the offer being made by the Applicant/s and is not a concluded contract, save and except in terms hereof.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>2.</b></td>
+                                <td>The Promoter reserves the right to reject the Application at any stage, with or without any reasons, until an Agreement for Sale is executed.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>3.</b></td>
+                                <td>The Applicant/s has/have been informed and is fully aware and undertake that the Agreement for Sale shall be executed after payment of 10% (ten percent) of the total sale consideration (inclusive of the Application Money), as Booking Amount within 15 (fifteen) days hereof, and the balance amounts shall be paid in terms of such Agreement for Sale.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>4.</b></td>
+                                <td>This application is not an assurance or allotment having been given by the Promoter for the sale of the plot unless an Agreement for Sale is executed between the Promoter and Applicant/s, after payment of Booking Amount by the Applicant.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>5.</b></td>
+                                <td>The Applicant/s shall come forward to execute the Agreement for Sale, within 30 (Thirty) days of the payment of Booking Amount, as aforesaid, and subject to the application being accepted by Promoter. The Applicant/s further agree to abide by the terms and conditions laid down in the Agreement for Sale.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>6.</b></td>
+                                <td>The Applicant/s have voluntarily approached the Promoter/agent after comparing with products available from other developers and have applied for purchase of the Plot in the Project with free consent. The Applicant/s undertake that no such promises/offer of buy back, investment return or short term gain has been made by the Promoter and/or its representatives.</td>
+                            </tr>
+                            <tr>
+                                <td style="width:30px; vertical-align:top;"><b>7.</b></td>
+                                <td>The Applicant/s declare that the price of the plot is based on negotiations and hereafter the Applicant will not question the sale price of any other purchaser nor will the Applicant/s be entitled to compare the same with other purchasers.</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+    
+        </table>
+        
+    </div>
+    <div style="page-break-after:auto;">
+        <table width="100%" style="font-size:12px; margin-top:5px;padding-top:60px;">
+            <tr>
+                <td style="padding-left:20px; text-align: justify;">
+                    <table style="width:100%; border-spacing: 0 3px;">
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>8.</b></td>
+                            <td>In the event the Agreement for Sale is not executed within the period set out in the manner aforesaid, 
+                                this application shall stand <b>cancelled automatically</b> and the amounts paid by the Applicant shall be 
+                                forfeited as earnest money deposit and administrative fee along with interest, tax and cess as applicable.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>9.</b></td>
+                            <td>The Applicant/s has verified the title documents, sanction plan and other approvals of the project/phase 
+                                and upon being satisfied with the same, the Applicant has made an application to acquire the Plot.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>10.</b></td>
+                            <td>The Applicant(s) agree and acknowledge that any notice sent to the First Applicant at the address given by 
+                                the Applicant in the application shall be sufficient proof of service for all the Applicants.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>11.</b></td>
+                            <td>The Applicant is aware that the Promoter is developing Zuari Garden City in Phases and certain amenities 
+                                (clubhouse, swimming pool, etc.) shall be developed at a later stage.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>12.</b></td>
+                            <td>The Application made by the Applicant/s is not transferable unless consented by the Promoter.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>13.</b></td>
+                            <td>Request from the Applicant(s) for shifting from one plot number to another plot number either in the same 
+                                or another project may be entertained at the sole discretion of the Promoter.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>14.</b></td>
+                            <td>All statutory charges, taxes, etc. shall be paid by the Applicant, as applicable from time to time.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>15.</b></td>
+                            <td>The applicable Stamp duty &amp; Registration expenses on the agreement/s and sale deed/s to be borne by 
+                                Applicant/s separately at the time of Registration, in addition to the amounts payable to the Promoter.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>16.</b></td>
+                            <td>All disputes relating to/arising out of the application are subject to the exclusive jurisdiction of the 
+                                courts at Bangalore.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>17.</b></td>
+                            <td>If Applicant is NRI/PIO: I/We hereby declare that I/We confirm that I/we is/are non-resident Indian/Person 
+                                of Indian origin and shall comply with all statutory compliances applicable by laws and rules in India 
+                                applicable for purchase of plots sold by the Company. The Company shall not be liable for any 
+                                non-compliance on my/our part, if any.</td>
+                        </tr>
+                        <tr>
+                            <td style="width:30px; vertical-align:top;"><b>18.</b></td>
+                            <td>All pictorial representations are conceptual and subject to change</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+ <table style="width:100%; font-size:12px;">
+            <tr>
+                <td><b>Declaration</b></td>
+            </tr>
+            
+            <tr>
+                <td style="padding-top:8px;">
+                    I/We, the Applicant(s), declare our understanding / satisfaction on the following:
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <ol style="margin-left:20px; padding-left:15px;text-align: justify">
+                        <li>
+                            The details pertaining to the project viz, location, specification, amenities and apartment 
+                            layout, sanction plans, payment and completion schedule etc have been explained by the 
+                            Promoter and are satisfied of information provided during visit to the project site / website 
+                            of the Promoter and RERA. The Promoter has offered to provide a site visit to the Project and 
+                            the Plot.
+                        </li>
+                        <li>
+                            That all communications (majorly electronic mode) shall be sent to the email id / communication 
+                            address of the first applicant.
+                        </li>
+                        <li>
+                            That I / We, the Applicant(s) shall be solely responsible for updating any change in communication 
+                            address / personal details to the Promoter, failing which any communication or information based 
+                            on the details furnished in the Application shall be deemed to have been received by the 
+                            Applicant(s) or shall be deemed valid.
+                        </li>
+                        <li>
+                            The deposits, charges, taxes and levies payable to government agencies, as applicable from time 
+                            to time shall be borne by me /us.
+                        </li>
+                        <li>
+                            No parking spaces shall be provided outside the Plot.
+                        </li>
+                        <li>
+                            In case I/ We, the Applicant(s), is/are desirous of changing/substituting the names of purchasers/
+                            applicants after the execution and registration of the agreement to sell, all charges, costs and 
+                            expenses associated therewith, including but not limited to procuring, embossing, franking of 
+                            relevant document and purchase of stamp papers shall be borne exclusively by the applicant(s).
+                        </li>
+                        <li>
+                            That if the Application is rejected and/or cancelled in accordance with the Terms contained herein, 
+                            The Promoter shall be within its rights and entitled to allot the Plot to any third party at its 
+                            sole discretion. I/ we, the Applicant(s), will thereafter have no further rights or claims against 
+                            the Company / Promoter for allotment / possession / ownership of the Plot.
+                        </li>
+                        <li>
+                            I/ We, the Applicant(s), are solely responsible for the payment of TDS, as applicable for this 
+                            transaction.
+                        </li>
+                    </ol>
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="padding-top:5px;text-align: justify">
+                    I/We, the Applicant(s), same shall be applicable on me/us, our legal heirs and successors. I/we, the 
+                    Applicant(s), fully understood the contents thereof, have obtained legal advice on the same, and 
+                    I/we, the Applicant(s), expressly agree to strictly abide by and adhere to these terms and conditions.
+                </td>
+            </tr>
+        </table>
+        <table width="100%">
+                                <tr>
+                                    <td style="vertical-align: bottom;">
+                                        Date:
+                                        <span style="display:inline-block; border-bottom:1px dashed #000; width:100px;"></span>
+                                    </td>
+                                    </tr>
+                                </table>
+                            
+    </div>
+</apex:page>

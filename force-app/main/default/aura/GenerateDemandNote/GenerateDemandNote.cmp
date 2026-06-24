@@ -1,0 +1,72 @@
+<aura:component controller="DemandRaisedSave" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="bookingRecord" type="Object" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="vfPageUrl" type="String" />
+    <aura:attribute name="emailContent" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="buttonstate" type="Boolean" default="false"/>
+
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .panel.slds-modal > .modal-container{
+        width: 75%;
+        max-width: 70rem;
+        }
+        .panel.slds-modal {
+        margin-top:2%;
+        }
+    </aura:html>
+    <section class="slds-modal slds-fade-in-open">
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">Generate Demand Note</h2>
+        </header>  
+        
+        <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+            <div class ="slds-grid slds-p-bottom_x-small slds-grid_vertical-align-center slds-align_absolute-center">
+                <lightning:buttonStateful
+                                          labelWhenOff="Document View"
+                                          labelWhenOn="Email View"
+                                          labelWhenHover="Email"
+                                          iconNameWhenOff="utility:page"
+                                          iconNameWhenOn="utility:email"
+                                          iconNameWhenHover="utility:close"
+                                          state="{! v.buttonstate }"
+                                          onclick="{! c.handleClick }"
+                                          />
+            </div>
+            
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <!-- Show Email content when viewMode is 'email' -->
+                    <aura:if isTrue="{!v.buttonstate == false}">
+                        <lightning:inputRichText class="custom-textarea" aura:id="emailContent"
+                                                 placeholder="Review and edit email content"
+                                                 value="{!v.emailContent}" />
+                    </aura:if>
+                    
+                    <!-- Show Document when viewMode is 'document' -->
+                    <aura:if isTrue="{!v.buttonstate == true}">
+                        <iframe src="{!v.vfPageUrl}" width="100%" height="440px;" frameBorder="0" />
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.close}">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick="{!c.sendtoCustomer}">Send to Customer</button>
+            <aura:if isTrue="{!v.bookingRecord.Funding_Type__c == 'Loan'}">
+                <button class="slds-button slds-button_brand" onclick="{!c.sendtoBank}">Send to Bank</button>
+            </aura:if>
+        </footer>
+    </section>
+</aura:component>

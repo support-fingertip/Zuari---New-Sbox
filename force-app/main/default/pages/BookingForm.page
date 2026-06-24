@@ -1,0 +1,1126 @@
+<apex:page standardController="Booking__c" extensions="BookingPDFController"  renderAs="pdf" applyHtmlTag="false" showHeader="false" standardStylesheets="false"  >
+    <head>
+        <style type="text/css" media="print">
+            *{
+            font-size:11.5px;
+            font-family: Arial Unicode MS;
+            }
+            
+            @page {
+            size: A4;
+            margin: 0px;
+            border: 1px solid black;
+            }
+            table{
+            margin:0px;
+            line-height: 2;
+            
+            }
+            
+            .page-break { page-break-before: always; } /* Ensures a new page starts */
+            .no-break { page-break-inside: avoid; } /* Prevents breaking within a section */
+            
+            table { page-break-inside:auto; }
+            tr{ page-break-inside:avoid; page-break-after:auto; }
+            div.Ending { page-break-after: always; }
+            td{
+            padding: 15px;
+            line-height: 1.5;
+            color:#2D5080
+            
+            }
+            .rows1{
+            width:1%; 
+            vertical-align: top;
+            text-align:justify; 
+            line-height:1.5; 
+            font-size:11.5px;
+            padding:15px;
+            }
+            .rows2{
+            width:99%;
+            text-align:justify; 
+            line-height:1.5; 
+            font-size:11.5px;
+            padding:10px;
+            
+            }
+            .page-section {
+            page-break-inside: avoid; /* Prevents div from splitting */
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+            }
+            .checkbox-container {
+                    font-family: "Arial Unicode MS", Arial, sans-serif;
+                    font-size: 14px;
+                    margin-bottom: 10px;
+                }
+                .checkbox-option {
+                    display: inline-block;
+                    margin-right: 20px;
+                    white-space: nowrap;
+                }
+                .checkbox {
+                    font-size: 16px;
+                    margin-right: 5px;
+                }
+            
+        </style>
+    </head>
+    <!--
+    <div class="no-break">       
+        
+        <table style="width: 100%; border: 1px solid black; border-bottom: none; margin-left: auto; margin-right: 10px;">
+            <tr style="text-align: right;">
+                <td style="width: 100%; padding: 8px;">
+                    <strong>APPLICATION NUMBER:</strong>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 100%; padding: 8px; text-align: right; padding-right: 10px;">
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:right; width: 30%;">{!Booking__c.Name}</span>
+                </td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+        </table>
+        
+        
+        <table width="100%" style="border: 1px solid black; border-bottom: none; border-top: none; margin-left: auto; margin-right: 10px; border-spacing: 0; border-collapse: collapse;">
+            
+            <tr style="height: 10px; background-color: #204F73; width: 100%; margin: 0; padding: 0;">
+                <td style="margin: 0; padding: 0;"></td>
+            </tr>
+            
+            <tr style="height: 50px; background-color: #EFEFF0; color: #204F73; text-align: center; margin: 0; padding: 0;">
+                <td style="margin: 0; padding: 0;font-size:18px; ">APPLICATION FOR ALLOTMENT</td>
+            </tr>
+            
+            <tr style="height: 400px; background-color: #204F73; width: 100%;">
+                <td style="width: 100%; height: 400px; text-align: center; vertical-align: middle;">
+                    <apex:image value="{!URLFOR($Resource.MantriLogo)}" alt="My Image" 
+                                style="display: inline-block; text-align:center; max-width: 100%; height: auto;"/>
+                    <br/>
+                    <span style="color: #FFFFFF;font-family: Verdana, Geneva, sans-serif;font-size:88px; ">Mantri</span>   
+                </td>  
+            </tr>
+            
+            <tr style="height: 80px; background-color: #204F73; width: 100%; margin: 0; padding: 0; border: none;">
+                <td style="margin: 0; padding: 0; color: #FFFFFF; text-align: center;font-size:20px;"> www.mantri.in</td>
+            </tr>
+        </table>
+        
+        
+        
+        <table width="100%" style="border: 1px solid black;  margin-left: auto; margin-right: 10px;border-top: none;">
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            
+            
+            
+            <tr style="height: 30px;  color: #204F73; text-align: center; margin: 0; padding: 0;text-align:center"><td><b><span style="font-size:30px;">Mantri Developers</span></b><br/>
+                <span style="font-size:18px;">Bengaluru | Chennai | Hyderabad | Pune</span>
+                </td>
+            </tr>
+            
+            
+        </table>
+    </div>
+    
+    <div class="page-break"></div>
+    <br/>
+    <div class="no-break">
+        <table width="100%"  style="border: 1px solid black; border-bottom: none; margin-left: auto; margin-right: 10px;" cellpadding="0" cellspacing="0">
+            <tr style="height: 30px; color: #FFFFFF; background-color: #B1063A; text-align: center;">
+                <td  style="padding: 0; margin: 0;"><span style="color:#FFFFFF">PERSONAL INFORMATION (to be filled in block letters)</span></td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; color:#2D5080; border-spacing: 0; border-top: none; border-bottom: none;" cellpadding="0" cellspacing="0">
+            <tr style=" text-align: left;">
+                <td style="margin: 0; color:#2D5080; font-size: 15px; line-height: 1.7; padding: 8px 0; padding-left: 20px;">Applicants Details</td>
+            </tr>
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    <span style="color:#2D5080; font-size: 15px;">a)</span> &emsp;Mr. / Ms.&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:86.5%; text-align:left;">
+                        <apex:outputText value="{!Booking__c.SLead__r.Salutation}"/> 
+                        <apex:outputText value=" "/> 
+                        <apex:outputText value="{!Booking__c.SLead__r.FirstName}"/> 
+                        <apex:outputText value=" "/> 
+                        <apex:outputText value="{!Booking__c.SLead__r.LastName}"/> 
+                    </span>&emsp;
+                </td>
+            </tr>
+            <tr>
+                <td style="line-height: 1.6; padding:4px 0; padding-left: 20px;">
+                    S/o / D/o / W/o:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:86.2%;">{!Booking__c.Son_Daughter_Wife_of1__c}</span>&emsp;
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="line-height: 1.7; padding: 10px 0; padding-left: 20px;">
+                    Date of Birth: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:35%;">
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!Booking__c.Date_of_Birth1__c}"/>
+                        </apex:outputText>
+                    </span>&emsp;
+                    Anniversary Date:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:36%; text-align: left;">
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!Booking__c.Anniverssary_Date1__c}"/>
+                        </apex:outputText>
+                    </span>
+                </td>
+            </tr>   
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Email ID: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:38%;">{!Booking__c.Email__c}</span>&emsp;
+                    Mobile No:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:41.5%; text-align: left;">{!Booking__c.Mobile__c}</span>
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    PAN No: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:38%;">{!Booking__c.PAN_Number__c}</span>&emsp;
+                    Passport No:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:40%; text-align: left;">{!Booking__c.Passport_PI_no__c}</span>
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Nationality: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:36.5%;">{!Booking__c.Nationality1__c}</span>&emsp;
+                    Res. Status: Resident / Non-Resident&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:23%; text-align: left;">{!Booking__c.Residential_Status__c}</span>
+                </td>
+            </tr> 
+            
+            <tr style="height: ; color: ; text-align: left;">
+                <td style="margin: 0; color:#2D5080; font-size: 15px; line-height: 1.7; padding: 8px 0; padding-left: 20px;">Professional Details</td>
+            </tr>
+            
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0;padding-left: 20px;">
+                    Profession: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:36.5%;">{!Booking__c.Profession__c}</span>&emsp;
+                    Industry:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:43%; text-align: left;">{!Booking__c.Industry__c}</span>
+                </td>
+            </tr> 
+            
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Employed at: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:34%;">{!Booking__c.Industry__c}</span>&emsp;
+                    Designation:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:40.5%; text-align: left;">{!Booking__c.Designation__c}</span>
+                </td>
+            </tr>
+            
+            <tr><td style="line-height: 1.7; padding: 8px 0;">
+                ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                </td>
+            </tr>
+            
+            <tr>
+                <td style="line-height: 1.5; padding: 2px 0; padding-left: 20px;">
+                    <span style="color:#2D5080; font-size:15px;"> b)</span>&emsp;Mr. / Ms.&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:87.5%;">
+                        <apex:outputText value="{!firstCoApplicant.Salutation__c} {!firstCoApplicant.Name}" />
+                        
+                        
+                    </span>&emsp;
+                </td>
+            </tr>
+            <tr>
+                <td style="line-height: 1.5; padding: 2px 0; padding-left: 20px;">
+                    S/o / D/o / W/o:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:86.2%;">
+                        <apex:outputText value="{!firstCoApplicant.Son_Daughter_Wife_of__c} " />
+                    </span>&emsp;
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.5; padding: 2px 0; padding-left: 20px;">
+                    Date of Birth: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:35%;">
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!firstCoApplicant.Date_of_Birth__c}"/>
+                        </apex:outputText>
+                    </span>&emsp;
+                    Anniversary Date:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:37%; text-align: left; ">
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!firstCoApplicant.Anniverssary_Date__c}"/>
+                        </apex:outputText>
+                    </span>
+                </td>
+            </tr>   
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Email ID:  &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:38%;">
+                        <apex:outputText value="{!firstCoApplicant.Email__c}" />
+                    </span>&emsp;
+                    Mobile No:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:41.5%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.Primary_Phone__c}" />
+                    </span>
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    PAN No: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:38%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.PAN_Number__c}" />
+                    </span>&emsp;
+                    Passport No:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:40%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.Passport_Number__c}" />
+                    </span>
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Nationality: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:36.5%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.Nationality__c}" />
+                    </span>&emsp;
+                    Res. Status: Resident / Non-Resident&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:23%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.Residential_Status__c}" />
+                    </span>
+                </td>
+            </tr> 
+            <tr style="height: ; color: ; text-align: left;">
+                <td style="margin: 0; color:#2D5080; font-size: 15px; line-height: 1.7; padding: 8px 0; padding-left: 20px;">Professional Details</td>
+            </tr>
+            
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0;padding-left: 20px;">
+                    Profession: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:36.5%;">
+                    <apex:outputText value="{!firstCoApplicant.Profession__c}" />
+                    </span>&emsp;
+                    Industry:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:43%; text-align: left;">
+                    <apex:outputText value="{!firstCoApplicant.Industry__c}" />
+                    </span>
+                </td>
+            </tr> 
+            <tr>
+                <td style="line-height: 1.7; padding: 8px 0; padding-left: 20px;">
+                    Employed at: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: left; width:35%;">
+                        <apex:outputText value="{!firstCoApplicant.Employeed_at__c}" />
+                    </span>&emsp;
+                    Designation:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; width:39.5%; text-align: left;">
+                        <apex:outputText value="{!firstCoApplicant.Designation__c}" />
+                    </span>
+                </td>
+            </tr>
+            
+        </table>
+        
+        <table width="100%" style=" table-layout: auto; border: 1px solid black; border-spacing: 0;" cellpadding="0" cellspacing="0">
+            <tr style="line-height:1.7;   text-align:left ;">
+                <th  style="padding: 8px;font-size: 14px; margin: 0; border-right: 1px solid black; width:50%; padding-left:20px; color:#2D5080"><strong>Correspondence Address:</strong></th>
+                <th  style="padding: 8px;font-size: 14px; margin: 0; width:50%; padding-left:20px;color:#2D5080"><strong>Permanent Address:</strong></th>
+            </tr>
+            
+            <tr style="line-height: 1.9; color:#2D5080;">
+                <th style="padding: 8px; margin: 0; width: 50%; padding-left: 20px; border-right: 1px solid black; ">
+                    <span style="border-bottom: 1px solid #2D5080;   width: 25%;">
+                        <apex:outputText value="{!SUBSTITUTE(Booking__c.Address__c, '\n', '<br/>')}" escape="false"/>
+                    </span>
+                    
+                </th>
+                <th style="padding: 8px; margin: 0; width: 50%; padding-left: 20px; border-right: 1px solid black; ">
+                    <span style="border-bottom: 1px solid #2D5080;  width: 25%; text-align: left;">
+                        <apex:outputText value="{!SUBSTITUTE(Booking__c.Permanent_Address1__c, '\n', '<br/>')}" escape="false"/>
+                    </span>
+                </th>
+            </tr>
+            
+            
+            
+            <tr style="line-height: 1.7; color:#2D5080;">
+                <th style="border-right: 1px solid #2D5080; padding: 4px; width: 50%; padding-left:20px;">
+                    Pin : <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 30%;">
+                    {!Booking__c.Pincode__c}
+                    </span>&emsp;
+                    Tel. : &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width: 43%; text-align: center;">
+                    {!Booking__c.Contact_Telephone_Number__c}
+                    </span>&emsp;
+                </th>
+                <th style="border-right: 1px solid #2D5080; padding: 4px; border-right: none; width: 50%; padding-left:20px">
+                    Pin : <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 30%;">
+                    {!Booking__c.Pincode1__c}
+                    </span>&emsp;
+                    Tel. : &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 43%;">
+                    {!Booking__c.Contact_Telephone_Number1__c}
+                    </span>&emsp;
+                </th>
+            </tr>
+            
+            
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none; " cellpadding="0" cellspacing="0">
+            <tr style="height: 30px;">
+                <td style="line-height: 2;">
+                    <div><strong>Power of Attorney holder’s name (if required): (a)</strong> Mr. / Ms.&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:56.5%; text-align:center;"> </span></div>
+                    <div><strong>Power of Attorney holder’s address</strong>&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:72.5%;"> </span></div>
+                    <div><span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:98%;"> </span></div><br/>
+                    <div>Email ID:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:40%;"> </span>&emsp;Mobile No:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; width:39.7%;"> </span></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    
+    <div class="no-break">
+        
+        <table width="100%" style=" table-layout: auto; border: 1px solid #2D5080; border-spacing: 0;margin-left: auto; margin-right: 10px;" cellpadding="0" cellspacing="0">
+            <tr style="height:30px; color: #FFFFFF; background-color: #B1063A; text-align: center;">
+                <td colspan="4" style="padding: 0; margin: 0; color:#FFFFFF"><span style="color:#FFFFFF">UNIT AND COST DETAILS</span></td>
+            </tr>
+            <tr style="line-height:1.7; border-top: 1px solid black; border-bottom: 1px solid black;color:#2D5080;  ">
+                <td style="border-right: 1px solid black; line-height:1.7; padding: 8px; padding-left:20px; width: 30%; color:#2D5080;">Bldg./Tower/Block No.&emsp;<apex:outputText value="{!Booking.Plot__r.Block_Lookup__r.Name}"/> </td>
+                <td style="border-right: 1px solid black; padding: 8px; width: 40%; color:#2D5080">RERA No:&emsp;{!Booking__c.Project1__r.RERA_NO__c}</td>
+                <td style="border-right: 1px solid black; padding: 8px; width: 15%; color:#2D5080">Unit No:&emsp;{!Booking__c.Plot__r.Name}</td>
+                <td style=" padding: 8px; width: 15%; font-color:#2D5080">Floor No:&emsp;{!Booking__c.Plot__r.Floor__c} </td>
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid #2D5080;color:#2D5080;margin-left: auto; margin-right: 10px; border-spacing: 0; border-top: none;border-right: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid #2D5080;">
+                <td colspan="2" style="border-right: 1px solid black; line-height:1.2; padding: 6px; padding-left:20px; padding-left:20px; width: 33.33%;">SBUA:<br/>
+                    <span style="border-bottom: 1px solid black; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c != Null}">{!Booking__c.Plot__r.Super_Built_up_Area__c}</apex:outputText> </span>&emsp;sq. ft* <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c != Null}">{!Booking__c.Quote__r.Super_Built_Up_Area_Sq_mt__c}</apex:outputText> </span>&emsp;sq. mt*
+                    
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.2; padding: 8px; padding-left:20px; width: 33.33%;">Carpet Area:<br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c != Null}">{!Booking__c.Plot__r.Carpet_Area__c}</apex:outputText> </span>&emsp;sq. ft* <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c != Null}">{!Booking__c.Quote__r.Carpet_Area_Sq_mt__c}</apex:outputText> </span>&emsp;sq. mt*
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.2; padding: 8px; padding-left:20px; width: 33.33%;">Exclusive Balcony:<br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c != Null}">{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c}</apex:outputText> </span>&emsp;sq. ft* <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c != Null}">{!Booking__c.Quote__r.Balcony_Area_Sq_mt__c}</apex:outputText> </span>&emsp;sq. mt*
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;">
+            <tr style="height: 30px; border-top: 1px solid #2D5080; border-bottom: 1px solid #2D5080;">
+                <td  style="border-right: 1px solid black; line-height:1.2; padding: 6px; padding-left:20px; width: 50%;">Base Rate<br/>
+                    per sq. ft:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c != Null}">{!Booking__c.Quote__r.Rate_per_sqft__c}</apex:outputText> </span>&emsp;per sq. mt:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c != Null}">{!Booking__c.Quote__r.Rate_Sq_mt_on_SBUA__c}</apex:outputText></span> </td>
+                <td  style="line-height:1.2; padding: 6px; padding-left:20px; width: 50%; ">Floor Rise Charges<br/>
+                    per sq. ft:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Quote__r.Floor_Rise_Charges_Rate__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Floor_Rise_Charges_Rate__c != Null}">{!Booking__c.Quote__r.Floor_Rise_Charges_Rate__c}</apex:outputText></span>&emsp;per sq. mt:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Quote__r.Floor_Rise_Charges_Rate__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Floor_Rise_Charges_Rate__c != Null}">{!Booking__c.Quote__r.Floor_Rise_Charges_Rate_per_Sq_mt__c}</apex:outputText></span> 
+                </td>
+            </tr>
+            
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid #2D5080;">
+                <td  style="border-right: 1px solid black; line-height:1.3; padding: 8px; padding-left:20px; width: 55%;">Preferred Location<br/>
+                    per sq. ft:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 30%;">NA</span>&emsp;per sq. mt:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:30%;">NA</span> </td>
+                <td  style="line-height:1.3; padding: 8px; padding-left:20px; width: 45%;">Total Rate<br/>
+                    Charges per sq. ft: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block;  text-align:center; width: 20%;">{!Booking__c.Quote__r.Rate_sq_Ft_Discount__c}</span>&emsp;per sq. mt:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:20%;">NA</span> 
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto;color:#2D5080; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style=" border-top: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black">
+               <td style="line-height:1.5; padding: 6px; padding-left:20px;">
+    Basic cost of the apartment: &emsp;
+    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;">
+        <apex:outputText rendered="{!ISBLANK(Booking__c.Quote__r.Base_Value_Discount__c)}" 
+            value="NA" />
+        <apex:outputText rendered="{!NOT(ISBLANK(Booking__c.Quote__r.Base_Value_Discount__c))}" 
+            value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Base_Value_Discount__c}" />
+        </apex:outputText>
+    </span>
+</td>
+ 
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 40%;">No. of covered car parks: 
+                    &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 40%;">NA</span></td>
+                <td  style="line-height:1.5; padding: 8px; padding-left:20px; width: 60%;  ">Total Cost of covered car park: 
+                    &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">
+        <apex:outputText rendered="{!ISBLANK(Booking__c.Quote__r.Car_Parking__c)}" 
+            value="NA" />
+        <apex:outputText rendered="{!NOT(ISBLANK(Booking__c.Quote__r.Car_Parking__c))}" 
+            value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Car_Parking__c}" />
+        </apex:outputText>
+    </span>&emsp;
+                </td>
+            </tr>
+        </table>
+        
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;border-right: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid #2D5080; line-height:1.5; padding: 8px; padding-left:20px; width: 25%;">Terrace area:&emsp; 
+                   <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">
+        <apex:outputText rendered="{!ISBLANK(Booking__c.Quote__r.Terrace_Area_Sq_ft__c)}" 
+            value="NA" />
+        <apex:outputText rendered="{!NOT(ISBLANK(Booking__c.Quote__r.Terrace_Area_Sq_ft__c))}" 
+            value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Terrace_Area_Sq_ft__c}" />
+        </apex:outputText>
+    </span> 
+                    &emsp;
+                    
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 45%;">Rate per sq. ft: 
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;">NA </span>&emsp;per sq. mt:  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"> NA</span>&emsp;
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width:30%;">Cost: 
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 50%;">
+        <apex:outputText rendered="{!ISBLANK(Booking__c.Quote__r.Terrace_Value__c)}" 
+            value="NA" />
+        <apex:outputText rendered="{!NOT(ISBLANK(Booking__c.Quote__r.Terrace_Value__c))}" 
+            value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Terrace_Value__c}" />
+        </apex:outputText>
+    </span>
+                    &emsp;
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;border-right: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td colspan="2" style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 25%;">Garden area: &emsp; 
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 40%;">NA </span>
+                    &emsp;
+                    
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 45%;">Rate per sq. ft:  
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;">NA </span>&emsp;per sq. mt:  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;">NA </span>&emsp;
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width:30%;">Cost: 
+                    <span style="border-bottom: 1px solid black; display: inline-block; text-align:center; width: 50%;">NA </span>&emsp;
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black">
+                <td style="line-height:1.5; padding: 8px; padding-left:20px;"><b>Agreement value:</b>  &emsp;
+                  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;">
+        <apex:outputText rendered="{!ISBLANK(Booking__c.Quote__r.Agreement_Value_after_GST_Discount__c)}" 
+            value="NA" />
+        <apex:outputText rendered="{!NOT(ISBLANK(Booking__c.Quote__r.Agreement_Value_after_GST_Discount__c))}" 
+            value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Agreement_Value_after_GST_Discount__c}" />
+        </apex:outputText>
+    </span></td>
+                
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 11.5px; table-layout: auto;color:#2D5080; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style="height: 30px; border-top: 1px  black; border-bottom: 1px solid black; border-top: 1px solid black">
+                <td style="line-height:1.5; padding: 8px; padding-left:20px;"><b>One time charge</b>  &emsp;</td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto;color:#2D5080; border: 1px solid black; border-spacing: 0; border-top: none;border-right: none;">
+            <tr style=" border-top: 1px  black; border-bottom: 1px solid #2D5080;">
+                <td  style="border-right: 1px solid black; line-height:1.2; padding: 8px; padding-left:20px; width: 33.33%;">Club membership<br/>
+                    per sq. ft:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;">
+                    <apex:outputText rendered="{!Booking__c.Plot__r.Clubhouse_Charges__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Clubhouse_Charges__c != Null}">{!Booking__c.Plot__r.Clubhouse_Charges__c}</apex:outputText>
+                    </span>
+                    
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.2; padding: 8px; padding-left:20px; width: 33.33%;">Infrastructure<br/>
+                    development charges:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 40%;">
+                    <apex:outputText rendered="{!Booking__c.Quote__r.Infrastructure_Charges_per_sqft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Infrastructure_Charges_per_sqft__c != Null}">{!Booking__c.Quote__r.Total_Infrastructure_Charges__c}</apex:outputText> 
+                    </span>&emsp;
+                </td>
+                <td style="border-right: 1px solid black; line-height:1.2; padding: 8px; padding-left:20px; width: 33.33%;">Generator<br/>
+                    charges:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 70%;">
+                    <apex:outputText rendered="{!Booking__c.Plot__r.Generator_Charges__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Generator_Charges__c != Null}">{!Booking__c.Plot__r.Generator_Charges__c}</apex:outputText>
+                    </span>&emsp;
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black;color:#2D5080; border-spacing: 0; border-top: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid #2D5080;">
+                <td  style="border-right: 1px solid #2D5080; line-height:1.5; padding: 8px; padding-left:20px; width: 50%;">Home Automation<br/>
+                    (If Applicable)&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 70%;">
+                    <apex:outputText rendered="{!Booking__c.Quote__r.Home_Automation__c == Null}">NA</apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Quote__r.Home_Automation__c != Null}">{!Booking__c.Quote__r.Home_Automation_Charge__c}</apex:outputText>
+                    </span>&emsp;</td>
+                <td  style="line-height:1.5; padding: 8px; padding-left:20px; width: 50%;">Pipe Gas Connection<br/>
+                    charges (If Applicable) &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;"><apex:outputText rendered="{!Booking__c.Plot__r.Piped_Gas__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Piped_Gas__c != Null}">{!Booking__c.Plot__r.Piped_Gas__c}</apex:outputText></span>&emsp;
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            <tr style=" border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid black; line-height:1.5; padding: 4px; padding-left:20px; width: 50%;">Water &amp; Electricity charges<br/>
+                    rate per sq. ft of SBUA:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;"><apex:outputText rendered="{!Booking__c.Plot__r.Water_Electricity_Charges__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Water_Electricity_Charges__c != Null}">{!Booking__c.Plot__r.Water_Electricity_Charges__c}</apex:outputText></span>&emsp;<br/>
+                    rate per sq. mt of SBUA: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;"><apex:outputText rendered="{!Booking__c.Quote__r.Water_Electricity_Charges__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Water_Electricity_Charges__c != Null}">{!Booking__c.Quote__r.Water_Electricity_Rate_Sq_mt__c}</apex:outputText></span>&emsp;
+                </td>
+                <td  style="line-height:1.5; padding: 4px; padding-left:20px; width: 50%;">Maintenance deposit/charges<br/>
+                    rate per sq. ft of SBUA:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;"><apex:outputText rendered="{!Booking__c.Quote__r.Maintenance_Charge__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Maintenance_Charge__c != Null}">{!Booking__c.Quote__r.Maintenance_Charge__c}</apex:outputText></span>&emsp;<br/>
+                    rate per sq. mt of SBUA: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;"><apex:outputText rendered="{!Booking__c.Quote__r.Maintenance_Charge__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Maintenance_Charge__c != Null}">{!Booking__c.Quote__r.Maintenance_Charge_Sq_mt__c}</apex:outputText></span>&emsp;
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none; border-right:none">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid black; line-height:1.9; padding: 8px; padding-left:20px; width: 100%;">Stamp duty, registration fee, legal expenses, taxes &amp; charges as applicable on the date of registration of the sale deed 
+                    shall be extra.&emsp;<br/>
+                    I / We request you to allot the above apartment. I / We hereby pay a sum of&emsp; <span style="border-bottom: 1px solid black; display: inline-block; text-align:center; width: 45%;"> {!Booking__c.Booking_Amount__c}</span> <br/>
+                    towards the booking amount, subject to terms and conditions which we have read and agreed.<br/>
+                    Payment is made by Wire Transfer / DD / Cheque No.&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 30%;"> {!Booking__c.Transaction_ID__c} </span>&emsp;dated&emsp;<span style="border-bottom: 1px solid black; display: inline-block; text-align:center; width: 23%;">
+                    <apex:outputText value="{0,date,dd/MM/yyyy}">
+                        <apex:param value="{!Booking__c.Booking_Date__c}"/>
+                    </apex:outputText>
+                    </span><br/>
+                    Drawn on &emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 50%;"> {!Booking__c.Bank_Name__c}</span>&emsp;bank, branch&emsp;<span style="border-bottom: 1px solid black; display: inline-block; text-align:center; width: 27%;"> {!Booking__c.Branch_Name__c}</span>&emsp; <br/>
+                    We have applied for allotment of the apartment and are bound by the booking terms &amp; conditions printed overleaf.
+                    
+                </td>
+                
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+<tr style="border-top: 1px solid #2D5080; border-bottom: 1px solid #2D5080;">
+    <td style="line-height:1.2; padding: 4px; padding-left:20px;">
+        <strong><span style="font-size:15px">Source of Booking</span></strong> 
+        <span style="float:right;">Enquiry No. :&nbsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 100px;">{!Booking__c.SLead__r.Lead_ID__c}</span></span>
+        <br/><br/>
+        
+        <div style="white-space: nowrap; margin-top: 5px;">
+            <span style="display: inline-block; width: 120px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Advertisement', '☑', '□')}</span> Advertisement
+            </span>
+            <span style="display: inline-block; width: 100px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Associate', '☑', '□')}</span> Associate
+            </span>
+            <span style="display: inline-block; width: 80px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Digital', '☑', '□')}</span> Digital
+            </span>
+            <span style="display: inline-block; width: 100px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Exhibition', '☑', '□')}</span> Exhibition
+            </span>
+            <span style="display: inline-block; width: 80px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Outdoor', '☑', '□')}</span> Outdoor
+            </span>
+            <span style="display: inline-block; width: 80px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Source_Type__c == 'Referral', '☑', '□')}</span> Referral
+            </span>
+        </div>
+    </td>
+</tr>        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            <tr style=" border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 50%;">Associate Company<br/>
+                    
+                    Name:&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 70%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.SLead__r.Channel_Partner__r.Name}</apex:outputText>
+                    </span>&emsp;</td>
+                <td  style="padding: 8px; width: 50%;">Associate Signature:<br/>
+                    (If Applicable) &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 60%;">NA</span>&emsp;
+                </td>
+            </tr>
+        </table>
+        
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style="height: 20px; border-top: 1px  black; border-bottom: 1px solid #2D5080; border-top: 1px solid #2D5080">
+                <td style="line-height:1.2; padding: 4px; padding-left:20px;"><strong><span style=" font-size:15px">Source of Reference</span></strong>  &emsp;<br/><br/>
+                    <apex:outputText rendered="{!Booking__c.SLead__r.Source_Type__c == 'Referral'}">
+                        <span style="display: inline-block; width: 120px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Lead_source__c == 'Friend', '☑', '□')}</span> Friend   
+            </span>
+                          <span style="display: inline-block; width: 120px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Lead_source__c == 'Existing Customer', '☑', '□')}</span> Existing Customer    
+            </span>
+                        <span style="display: inline-block; width: 120px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Lead_source__c == 'Employee Referral', '☑', '□')}</span> Employee Referral    
+            </span>
+                        <span style="display: inline-block; width: 120px; vertical-align: middle;">
+                <span style="font-family: Arial Unicode MS; font-size: 14px; margin-right: 5px;">{!IF(Booking__c.SLead__r.Lead_source__c == 'Other', '☑', '□')}</span> Other
+            </span>
+            
+                        </apex:outputText>
+                
+                   
+                </td>
+                
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 11.5px; table-layout: auto;color:#2D5080; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style="height: 30px; border-top: 1px  black; border-bottom: 1px solid black; border-top: 1px solid black">
+                <td style="line-height:1.2; padding: 8px; padding-left:20px;"><b>Mantri Insignia Membership No. of the referrer:</b>  &emsp;</td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 11.5px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            <tr style="height: 20px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style=" line-height:1.2; padding: 4px; padding-left:20px; width: 50%; border-right:1px solid black;">Signature of<br/>
+                    First Applicant&emsp;<br/>
+                    Date: &emsp;
+                </td>
+                <td  style=" line-height:1.2; padding: 4px; padding-left:20px; width: 50%;">Signature of<br/>
+                    Second Applicant&emsp;<br/>
+                    Date: &emsp;
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            
+            <tr style=" border-top: 1px  black; border-bottom: 1px solid black; border-top: 1px solid black">
+                <td style="line-height:1.1; padding: 4px; padding-left:20px; text-align:center; "><strong><span style="font-size:14px">For office use only</span></strong> <br/> &emsp;
+                </td></tr>
+            <tr>
+                
+                <td style="line-height:1.1; padding: 4px; padding-left:20px;">
+                Scheme details (If any):&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 30%;">
+                    <apex:outputText rendered="{!Booking__c.Quote__r.Scheme__c == Null}">NA</apex:outputText>
+                    <apex:outputText rendered="{!Booking__c.Quote__r.Scheme__c != Null}">{!Booking__c.Quote__r.Scheme__c}</apex:outputText>
+                    </span>
+                    
+                    &emsp;&emsp;Sl. No. in Sales Register:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">{!Booking__c.Name}</span>
+                
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            <tr style="height: 30px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 33.33%;"> Sales converter:<br/>
+                </td>
+                <td  style="border-right: 1px solid black; line-height:1.5; padding: 8px; padding-left:20px; width: 33.33%;">DGM/GM’s/AVP’s:<br/>
+                    
+                </td>
+                <td  style=" line-height:1.5; padding: 8px; padding-left:20px; width: 33.33%;">FH.:<br/>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-break"></div>
+    <br/>
+    <div class="no-break">
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0;border-bottom:1px solid black" cellpadding="0" cellspacing="0">
+            <tr style="height: 30px; color: #FFFFFF; background-color: #B1063A; text-align: center;">
+                <td colspan="4" style="padding: 0; margin: 0; color:#FFFFFF"><span style="color:#FFFFFF">TERMS &amp; CONDITIONS</span></td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="rows1"><strong>1.</strong></td>
+                <td class="rows2">
+                    Booking amount will be 10% of the agreement value.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>2.</strong></td>
+                <td class="rows2">
+                    Cheques are subject to realization.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>3.</strong></td>
+                <td class="rows2">
+                    If the cheque issued by the Applicant towards the booking amount bounces, then in such an event this application shall
+                    not be considered for allotment.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>4.</strong></td>
+                <td class="rows2">
+                    The charges, taxes, government levies mentioned in this application are based on the current applicable rules / rates and
+                    may vary at the time of the actual payment and that any upward revision will be borne by the applicant and any downward
+                    revision will be adjusted against other payments due at that time.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>5.</strong></td>
+                <td class="rows2">
+                    If booking is made on behalf, Power of Attorney should be produced at the time of the execution of agreement with duly
+                    signed and notarized copy of POA to be submitted.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>6.</strong></td>
+                <td class="rows2">
+                    Cancellation charges will be 1% of the Agreement value of the unit booked alongwith the taxes discharged to the
+                    concerned department, franking charges (e-stamping), cost of modifications executed (if any) will be applicable and
+                    deducted accordingly from the Booking amount paid. Cancellation is at company’s sole discretion and is on case to case
+                    basis to consider/approve the cancellation. Mantri Developers is entitled to re-allot and re-sell the unit to any other
+                    person and on such terms and conditions as Mantri Developers deems fit and repay the applicant(s) the balance
+                    amount without interest in 30 days after the resale of the said unit.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>7.</strong></td>
+                <td class="rows2">
+                    In case of cancellation post availing housing loan - the bank loan availed on the unit to be closed (Loan closure letter
+                    and Agreements, NOC / Tripartite / other relevant documents issued by Mantri Developers to be returned by the Bank)
+                    and the balance after all the deduction will be paid as mentioned in clause 6.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>8.</strong></td>
+                <td class="rows2">
+                    In case if the applicant(s) fails to execute the Agreements for Sale and Agreements for Construction within the prescribed
+                    15 days or if any delay/default in payment continues for a period of one month, then Mantri Developers is entitled to
+                    cancel the booking and and forfeit the booking amount. In such a event, Mantri Developers is also entitled to re-allot and
+                    re-sell the unit to any other person.
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="rows1"><strong>9.</strong></td>
+                <td class="rows2">
+                    For all outstanding dues payable by the Applicants to Mantri Developers, Mantri Developers shall have the first lien
+                    on the said unit.
+                </td>
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;" cellpadding="0" cellspacing="0">
+            <tr style="height: 20px; text-align: left;">
+                <td style="padding-left: 50px; margin: 0; width: 50%; color: #2D5080; line-height: 1.9;font-size:15px;"> 
+                    <strong><span style=" font-size:15px">For Home Loans</span></strong> </td> </tr>
+            <tr style="text-align: left;"><td style="padding-left: 50px; margin: 0; width: 50%; color: #2D5080; line-height: 1.9;">
+                Planning to take a home loan: Yes/No &emsp;
+                <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 25%;"><apex:outputText rendered="{!Booking__c.Planning_to_take_a_home_loan__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Planning_to_take_a_home_loan__c != Null}">{!Booking__c.Planning_to_take_a_home_loan__c}</apex:outputText> </span>
+                <br/>
+                
+                Annual Income: &emsp;
+                <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 41%;"><apex:outputText rendered="{!Booking__c.Annual_Income__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Annual_Income__c == Null}">{!Booking__c.Annual_Income__c}</apex:outputText> </span>
+                <br/>
+                
+                Loan amount: &emsp;
+                <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 42.5%;"><apex:outputText rendered="{!Booking__c.Loan_amount__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Loan_amount__c != Null}">{!Booking__c.Loan_amount__c}</apex:outputText> </span>
+                <br/>
+                
+                From Bank/HFI: &emsp;
+                <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 41%;"><apex:outputText rendered="{!Booking__c.From_Bank_HFI__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.From_Bank_HFI__c != Null}">{!Booking__c.From_Bank_HFI__c}</apex:outputText> </span>
+                <br/>
+                
+                Serviced by: &emsp;
+                <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 43.5%;"><apex:outputText rendered="{!Booking__c.Serviced_by__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Serviced_by__c == Null}">{!Booking__c.Serviced_by__c}</apex:outputText> </span>
+                <br/>
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;" cellpadding="0" cellspacing="0">
+            <tr style="height: 20px; text-align: left;">
+                <td style="padding-left: 50px; width: 50%; color: #2D5080; line-height: 1.9; ">
+                    <strong><span style=" font-size:15px">Declaration</span></strong>
+                </td>
+            </tr>
+            <tr style="height: 5px; text-align: justify;"> 
+                <td style="padding-left: 50px; width: 50%; color: #2D5080; line-height: 1.9; padding-top: 3px;"> 
+                    I/we the undersigned applicant (Sole/First and Co/Second applicant), do hereby declare that the above-mentioned
+                    particulars/information given by me/us are irrevocable, true and correct to my/our knowledge, and no material fact has
+                    been concealed therefrom. I/We have gone through the terms and conditions written in this form and accept the same,
+                    which shall ipso-facto be applicable to my/our legal heirs and successors. I/We declare that in case of non-allotment
+                    of the apartment/unit, my/our claim shall be limited only to the extent of the amount paid by me/us in relation to this
+                    application form, subject to the cancellation charges mentioned above.
+                </td>
+            </tr>
+        </table>
+        
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;">
+            
+            <tr><td style=" padding: 8px; width: 50%; border-right:1px solid black;"></td></tr>
+            <tr><td style=" padding: 8px; width: 50%; border-right:1px solid black;"></td></tr>
+            <tr><td style=" padding: 8px; width: 50%; border-right:1px solid black;"></td></tr>
+            
+            <tr style="height: 50px; border-top: 1px solid black; border-bottom: 1px solid black;">
+                <td  style=" padding: 8px; padding-left: 50px; width: 50%; border-right:1px solid black;">Signature of
+                    First Applicant&emsp;<br/>
+                    Date: &emsp;
+                </td>
+                <td  style=" padding: 8px; width: 50%; padding-left: 50px;">Signature of
+                    Second Applicant&emsp;<br/>
+                    Date: &emsp;
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-break"></div>
+    <br/>
+    <div class="no-break">
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0;border-bottom:1px solid black" cellpadding="0" cellspacing="0">
+            <tr style="height: 30px; color: #FFFFFF; background-color: #B1063A; text-align: center;">
+                <td colspan="4" style="padding: 0; margin: 0; color:#FFFFFF"><span style="color:#FFFFFF">ASSOCIATE APPLICATION FORM</span></td>
+            </tr>
+        </table>
+        <table width="100%" style="font-size: 14px; table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none; border-right:none">
+            <tr  ><td style="border-right: 1px solid black;"></td></tr>
+            <tr style="height: 50px; border-top: 1px solid black; border-bottom: 1px solid black; line-height: 2;">
+                
+                <td  style="border-right: 1px solid black; line-height:2; padding: 8px; padding-left:20px; width: 100%; line-height: 1.9;">Dear Sir,<br/>
+                    I/We representing&emsp;
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 40%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.SLead__r.Channel_Partner__r.Name}</apex:outputText>
+                    </span>
+                    
+                    &emsp; 
+                    having registation number
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 54%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.SLead__r.Registraction_No__c}</apex:outputText>
+                    </span>
+                    
+                    have sold a unit in your scheme&emsp;
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Quote__r.Scheme__c}</apex:outputText>
+                    </span>
+                    &emsp;<br/>
+                    Pending the finalization of this application my client &emsp;
+                  
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 40%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">
+                            <apex:outputText value="{!Booking__c.SLead__r.Salutation}"/> 
+                    <apex:outputText value=" "/> 
+                    <apex:outputText value="{!Booking__c.SLead__r.FirstName}"/> 
+                    <apex:outputText value=" "/> 
+                    <apex:outputText value="{!Booking__c.SLead__r.LastName}"/>
+                         </apex:outputText>
+                    </span>
+                    
+                    
+                    &emsp;residing at
+                         <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 70%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.SLead__r.Address__c}</apex:outputText>
+                    </span>
+                    &emsp; has remitted here with a 
+                    sum of Rs.&emsp; 
+                    
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 30%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Booking_Amount__c}</apex:outputText>
+                    </span>
+                    
+                    
+                    by cash / Cheque No.&emsp;
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 23%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Transaction_ID__c}</apex:outputText>
+                    </span>
+                    
+                    
+                    &emsp;dated&emsp;
+                    
+                      <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 11%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}" value="{0,date,dd/MM/yyyy}"><apex:param value="{!Booking__c.Booking_Date__c}"/></apex:outputText>
+                    </span>
+                   
+                    
+                    
+                    drawn on&emsp; 
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Bank_Name__c}</apex:outputText>
+                    </span>
+                    
+                    &emsp; Bank 
+                    Branch&emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 23%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Branch_Name__c}</apex:outputText>
+                    </span>
+                    
+                    Which on execution of the Agreement for sale is to be
+                    considered as Booking Amount. 
+                    
+                </td>
+                
+            </tr>
+        </table>
+        
+        <table width="100%" style=" table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none; border-right:none">
+            <tr  ><td style="border-right: 1px solid black;line-height:2; padding: 10px; padding-left:20px; font-size:15px;">Details of Unit Sold by Associate</td></tr>
+            <tr style="height: 50px; border-top: 1px solid black; border-bottom: 1px solid black; line-height: 1.9;">
+                <td  style="border-right: 1px solid black; line-height:1.9; padding: 10px; padding-left:20px; width: 100%;">Scheme:&emsp;   
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 30%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Quote__r.Scheme__c}</apex:outputText>
+                    </span>
+                  
+                    
+                    &emsp;<br/>
+                    Flat No: &emsp;
+                       <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Plot__r.Name}</apex:outputText>
+                    </span>
+                  
+                    
+                    &emsp; Bldg. No:&emsp;  
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">NA</span>&emsp; 
+                    Floor:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Floor__c != Null}">{!Booking__c.Plot__r.Floor__c}</apex:outputText></span><br/>
+                    Super Built Up Area: &emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c != Null}">{!Booking__c.Plot__r.Super_Built_up_Area__c}</apex:outputText></span>&emsp; sq. ft: &emsp;  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c != Null}">{!Booking__c.Quote__r.Rate_per_sqft__c}</apex:outputText></span>&emsp; per sq. ft&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Super_Built_up_Area__c != Null}">{!Booking__c.Quote__r.Super_Built_Up_Area_Sq_mt__c}</apex:outputText></span> &emsp;sq. mt: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Quote__r.Rate_per_sqft__c != Null}">{!Booking__c.Quote__r.Rate_Sq_mt_on_SBUA__c}</apex:outputText></span>&emsp; per sq. mt&emsp;<br/>
+                    Carpet Area: &emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c != Null}">{!Booking__c.Plot__r.Carpet_Area__c}</apex:outputText></span>&emsp; sq. ft: &emsp;  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;">NA</span>&emsp; per sq. ft&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Carpet_Area__c != Null}">{!Booking__c.Quote__r.Carpet_Area_Sq_mt__c}</apex:outputText></span> &emsp;sq. mt: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;">NA</span>&emsp; per sq. mt&emsp; <br/>
+                    Exclusive Balcony:  &emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c != Null}">{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c}</apex:outputText></span>&emsp; sq. ft: &emsp;  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;">NA</span>&emsp; per sq. ft&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;"><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c == Null}">NA</apex:outputText><apex:outputText rendered="{!Booking__c.Plot__r.Balcony_Area_Sq_ft__c != Null}">{!Booking__c.Quote__r.Balcony_Area_Sq_mt__c}</apex:outputText></span> &emsp;sq. mt: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 10%;">NA</span>&emsp; per sq. mt&emsp; <br/>
+                    Basic Price of unit: &emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:60%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                    
+                     <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}" value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Base_Value_Discount__c}" /></apex:outputText>  
+                    </span>&emsp;<br/>
+                    Type of Car Parking:
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 20%;">
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Quote__r.Type_of_Car_Parking__c}</apex:outputText>
+                    </span>
+                  
+                    <br/>
+                    Terrace Area: &emsp; 
+                    
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:8%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Plot__r.Terrace_Area_Sq_ft__c}</apex:outputText></span>
+                    &emsp; sq. ft: &emsp; 
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 8%;">NA</span>&emsp; per sq. ft&emsp;
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:8%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Plot__r.Terrace_Area_Sq_mt__c}</apex:outputText></span>
+                   
+                    &emsp;sq. mt: &emsp;
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width: 8%;">NA</span>&emsp; per sq. mt&emsp;Amount:&emsp; 
+                     <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:8%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}">{!Booking__c.Plot__r.Terrace_Value__c}</apex:outputText></span>
+                     <br/>
+                    Total Agreement Value:&emsp; 
+                    
+                  <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:60%;"><apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c == Null}">NA</apex:outputText>
+                        <apex:outputText rendered="{!Booking__c.SLead__r.Channel_Partner__c != Null}" value="{0,number,#,##0}">
+            <apex:param value="{!Booking__c.Quote__r.Agreement_Value_after_GST_Discount__c}" /></apex:outputText></span>
+                       
+                    
+                </td></tr></table>
+        <table width="100%" style=" table-layout: auto; border: 1px solid black; border-spacing: 0; border-top: none;" cellpadding="0" cellspacing="0">
+            
+            <tr  ><td style="line-height:1.9; padding: 8px; padding-left:20px; font-size:15px;">NOTE:</td></tr>
+            <tr><td style="line-height:1.9; padding: 10px; padding-left:20px;">
+                In case of cancellation of the above said unit please note that payments made to the associate for rendering his services
+                will be deducted from the payment received from customer  prior to settlement.<br/><br/>
+                All the other terms and conditions are applicable as per the agreement executed between associate and the developer<br/><br/>
+                Has the associate given you complete overview of the project:&emsp;&emsp;&emsp;   Yes / No<br/>
+                Has the associate accompanied you for a site inspection:&emsp;&emsp;&emsp;&emsp; &emsp;   Yes / No<br/>
+                <br/>
+                </td></tr>
+            
+            
+            <tr><td><span style="padding-left:600px">Yours Faithfully,</span> </td></tr>
+            <tr><td style="line-height: 2;">
+                Date:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:28%;"></span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Purchaser:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:31.5%;"></span>&emsp;<br/>
+                
+                
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Associate:&emsp;<span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:32%;"></span>&emsp;<br/><br/>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <strong>Sales Converter&emsp;</strong><br/><br/>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Name:&emsp; <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align:center; width:34%;"></span>&emsp;<br/><br/>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Signature:&emsp;<br/>
+                
+                </td></tr>
+        </table>
+    </div>
+    <div class="page-break"></div>
+    <br/>
+    <div class="no-break">
+        
+        <table width="100%" style=" table-layout: auto; border: 1px solid black; border-spacing: 0;border-bottom:1px solid black" cellpadding="0" cellspacing="0">
+            <tr style="height: 30px; color: #FFFFFF; background-color: #B1063A; text-align: center;">
+                <td  style="padding: 0; margin: 0; color:#FFFFFF; font-size: 14px;"><span style="color:#FFFFFF">NOTES AND COMMENTS</span></td>
+            </tr>
+            
+            
+            <tr style="">
+                <td style="line-height:3; padding: 15px; padding-left:20px;">
+                    <apex:outputPanel ><apex:repeat value="{!textLines}" var="line">
+                    <span style="border-bottom: 1px solid #2D5080; width: 100%; ">{!line}</span><br/></apex:repeat></apex:outputPanel>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    <span style="border-bottom: 1px solid #2D5080; display: inline-block; text-align: center; width: 100%; "></span><br/>
+                    
+                    
+                </td>
+            </tr>
+            
+            
+        </table>
+    </div>
+    
+    
+    -->
+    
+</apex:page>

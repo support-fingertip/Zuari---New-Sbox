@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SV_Budget_of_Purchase__c</fullName>
+    <label>SV_Budget of Purchase</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1Cr.- 1.5Cr.</fullName>
+                <default>false</default>
+                <label>1Cr.- 1.5Cr.</label>
+            </value>
+            <value>
+                <fullName>Upto 35L</fullName>
+                <default>false</default>
+                <label>Upto 35L</label>
+            </value>
+            <value>
+                <fullName>40L-50L</fullName>
+                <default>false</default>
+                <label>40L-50L</label>
+            </value>
+            <value>
+                <fullName>50L-60L</fullName>
+                <default>false</default>
+                <label>50L-60L</label>
+            </value>
+            <value>
+                <fullName>60L-70L</fullName>
+                <default>false</default>
+                <label>60L-70L</label>
+            </value>
+            <value>
+                <fullName>70L-80L</fullName>
+                <default>false</default>
+                <label>70L-80L</label>
+            </value>
+            <value>
+                <fullName>80L-90L</fullName>
+                <default>false</default>
+                <label>80L-90L</label>
+            </value>
+            <value>
+                <fullName>90L-1Cr</fullName>
+                <default>false</default>
+                <label>90L-1Cr</label>
+            </value>
+            <value>
+                <fullName>1Cr-1.5Cr</fullName>
+                <default>false</default>
+                <label>1Cr-1.5Cr</label>
+            </value>
+            <value>
+                <fullName>1.5Cr-2Cr</fullName>
+                <default>false</default>
+                <label>1.5Cr-2Cr</label>
+            </value>
+            <value>
+                <fullName>2Cr-3Cr</fullName>
+                <default>false</default>
+                <label>2Cr-3Cr</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
