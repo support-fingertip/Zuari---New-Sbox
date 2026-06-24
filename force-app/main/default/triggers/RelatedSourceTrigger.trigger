@@ -595,8 +595,10 @@ profileNameForOTT == 'Minimum Access - API Only Integrations') {}
 
 */
             RelatedSourceHandler.enqueueMarketingCloudOTT(Trigger.new);
-            
-            
+
+            // Push new enquiries into MCube outbound campaign
+            System.enqueueJob(new MCubeCampaignQueueable(Trigger.new));
+
             // Update Channel Partner Lead Count
             Set<Id> cpIdsForLeadCount = new Set<Id>();
             for (Related_Source__c r : Trigger.new) {
