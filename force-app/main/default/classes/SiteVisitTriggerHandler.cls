@@ -936,6 +936,50 @@ if (String.isNotBlank(ccEmails)) {
         }
     }
 
+    public static void shareSiteVisitWithRelatedSourceOwner(List<Site_Visit__c> newList, Map<Id, Site_Visit__c> oldMap, Boolean isInsert){
+        Set<Id> svIdsToProcess = new Set<Id>();
+        for(Site_Visit__c sv : newList){
+            if(sv.Related_Source__c == null) continue;
+            if(isInsert){
+                svIdsToProcess.add(sv.Id);
+            } else if(oldMap != null && sv.OwnerId != oldMap.get(sv.Id).OwnerId){
+                svIdsToProcess.add(sv.Id);
+            }
+        }
+        if(svIdsToProcess.isEmpty()) return;
+
+        Map<Id, Id> svMap = new Map<Id, Id>();
+        for(Site_Visit__c sv : [
+            SELECT Id, OwnerId, Related_Source__r.OwnerId
+            FROM Site_Visit__c
+            WHERE Id IN :svIdsToProcess
+        ]){
+            Id rsOwnerId = sv.Related_Source__r != null ? sv.Related_Source__r.OwnerId : null;
+            if(rsOwnerId == null) continue;
+            if(rsOwnerId == sv.OwnerId) continue;
+            svMap.put(sv.Id, rsOwnerId);
+        }
+        if(svMap.isEmpty()) return;
+
+        Set<String> existingPairs = new Set<String>();
+        for(Site_Visit__Share existing : [
+            SELECT ParentId, UserOrGroupId
+            FROM Site_Visit__Share
+            WHERE ParentId IN :svMap.keySet() AND RowCause = 'Manual'
+        ]){
+            existingPairs.add(existing.ParentId + '-' + existing.UserOrGroupId);
+        }
+        Map<Id, Id> toShare = new Map<Id, Id>();
+        for(Id svId : svMap.keySet()){
+            Id userId = svMap.get(svId);
+            if(existingPairs.contains(svId + '-' + userId)) continue;
+            toShare.put(svId, userId);
+        }
+        if(!toShare.isEmpty()){
+            manulaSharingClass.manualShareSiteVisit(toShare);
+        }
+    }
+
     public Static void testCoverage(){
         
         
