@@ -18,6 +18,7 @@ trigger SiteVisitTrigger on Site_Visit__c (before insert, after insert, after up
         // stamps First_Site_Visit_Date_Time__c, so the service's null-probe holds.
         CPEmailNotificationService.sendFirstSiteVisitScheduled(Trigger.new);
         SiteVisitTriggerHandler.updateChannelPartnerSiteVisitDates(Trigger.new);
+        SiteVisitTriggerHandler.shareSiteVisitWithRelatedSourceOwner(Trigger.new, null, true);
     }
 
     if(Trigger.IsUpdate && Trigger.IsAfter){
@@ -40,6 +41,8 @@ trigger SiteVisitTrigger on Site_Visit__c (before insert, after insert, after up
         // for Creating Reward
         
         SiteVisitTriggerHandler.createReward(Trigger.new, Trigger.oldMap);
+
+        SiteVisitTriggerHandler.shareSiteVisitWithRelatedSourceOwner(Trigger.new, Trigger.oldMap, false);
     }
-    
+
 }
