@@ -988,6 +988,10 @@ LEAD VISIBILITY BASED ON Is_Locked__c Rule:
            
                 }
             }
+
+            // Share each record with the user in every User lookup field (Private OWD).
+            RelatedSourceUserLookupSharing.shareOnInsert(Trigger.new);
+
             System.debug('================ AFTER INSERT COMPLETED =================');
         }
         
@@ -1017,7 +1021,10 @@ LEAD VISIBILITY BASED ON Is_Locked__c Rule:
            
                 }
             }
-           
+
+            // Keep user-lookup shares in sync when any lookup field changes.
+            RelatedSourceUserLookupSharing.reshareOnUpdate(Trigger.new, Trigger.oldMap);
+
             RelatedSourceHandler.sendReassignNotifications(Trigger.new, Trigger.oldMap);
             RelatedSourceHandler.handleLeadLostAfterSV(Trigger.new, Trigger.oldMap);
             
